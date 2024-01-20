@@ -1,9 +1,34 @@
-import React from 'react'
+import React,{useState} from 'react'
 import bg from "../../assets/imgbg.png"
 import { IoMdClose } from "react-icons/io";
 import { Link } from 'react-router-dom';
+import { authApi } from '../api/auth';
+import { ClipLoader } from 'react-spinners';
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+     const [credentail,setCred]=useState({})
+     const [loader,setLoader]=useState(false)
+     let navigate = useNavigate();
+     console.log(credentail,"cred")
+
+     const signup=async()=>{
+        try{
+            setLoader(true)
+            const user=await authApi.register(credentail?.email,credentail?.password,credentail?.name)
+
+          
+            setLoader(false)
+            localStorage.clear();
+            localStorage.setItem('user',JSON.stringify(user));
+
+            user?.id.length >0&& navigate(`/`)
+
+        }catch(e){
+          console.log(e)
+          setLoader(false)
+        }
+     }
   return (
     <div className='w-full h-screen relative'>
          <img
@@ -12,6 +37,8 @@ export default function Signup() {
           />
 
           <div className='absolute top-0 w-full h-full '>
+
+               
               <div className='w-full h-full flex items-center justify-center relative z-30'>
                    <div className='bg-white w-1/4  rounded-lg  relative z-30 px-6 py-4'>
                             <div className='flex justify-end '>
@@ -34,17 +61,23 @@ export default function Signup() {
                                           [ 
                                             {
                                                 label:"Full name",
-                                                 desc:"Enter your name"
+                                                 desc:"Enter your name",
+                                                 value:credentail?.name,
+                                                 click:(e)=>setCred({...credentail,name:e.target.value})
 
                                             },
                                             {
                                                 label:"Email",
-                                                desc:"Enter your email"
+                                                desc:"Enter your email",
+                                                value:credentail?.email,
+                                                click:(e)=>setCred({...credentail,email:e.target.value})
 
                                             },
                                             {
                                                 label:"Password",
-                                                desc:"Enter your password"
+                                                desc:"Enter your password",
+                                                value:credentail?.password,
+                                                click:(e)=>setCred({...credentail,password:e.target.value})
 
                                             }
                                             
@@ -55,6 +88,7 @@ export default function Signup() {
                                                     <input 
                                                        placeholder={item?.desc}
                                                        className="outline-none border py-3 px-2 rounded-xl "
+                                                       onChange={(e)=>item?.click(e)}
                                                     />
                                                 </div>
                                             )
@@ -67,10 +101,21 @@ export default function Signup() {
 
 
                                   <div className='flex flex-col w-full pt-3 space-y-6 items-center pb-2'>
-                                       <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}>
-                                                     <span>Sign up</span>
+                                       {!loader?
+                                            <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}
+                                              onClick={signup}
+                                            >
+                                              <span>Sign up</span>
 
-                                        </button>
+                                            </button>
+                                               :
+                                               <ClipLoader 
+                                                 color="#C74A1F"
+                                                 loading={true}
+                                               />
+
+                                       }
+                                 
 
                                         <div className='flex items-center'>
                                              <h5>Already have an account?</h5>

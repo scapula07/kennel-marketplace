@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import { FiSearch } from "react-icons/fi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { Link } from 'react-router-dom';
@@ -6,7 +6,21 @@ import logo from "../../assets/logo-b.png"
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { IoIosNotificationsOutline } from "react-icons/io";
 
+
 export default function Header() {
+     const [currentUser,setcurrentUser]=useState({id:""})
+     const user = localStorage.getItem("user");
+     console.log(JSON.parse(user),"user")
+  useEffect( ()=>{
+      
+    console.log(JSON.parse(user),"user")
+    JSON.parse(user)
+    setcurrentUser(JSON.parse(user))
+
+    },[])
+
+    console.log(currentUser,"uswr")
+
   return (
       <div className='w-full '>
 
@@ -56,13 +70,13 @@ export default function Header() {
                            
 
                              <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
-                             {true?
+                             {currentUser?.id?.length >0?
                                 <div className='flex items-center space-x-2'>
                                        <Link to={"/account"}>
                                       <h5 className='rounded-full bg-blue-600 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
                      >
-                                            {/* {currentUser?.firstName?.slice(0,1) +currentUser?.lastName?.slice(0,1)} */}
-                                            B0
+                                            {currentUser?.name?.split(' ')[0]?.slice(0,1) +currentUser?.name?.split(' ')[1]?.slice(0,1) }
+                                          
                           
                                         </h5>
                                         </Link>
