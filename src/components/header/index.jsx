@@ -3,7 +3,8 @@ import { FiSearch } from "react-icons/fi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import logo from "../../assets/logo-b.png"
-
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { IoIosNotificationsOutline } from "react-icons/io";
 
 export default function Header() {
   return (
@@ -50,10 +51,37 @@ export default function Header() {
 
                              }
 
+                            
+
+                           
+
                              <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
-                             <Link to={"/login"}>
-                             <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Login</button>
-                             </Link>
+                             {true?
+                                <div className='flex items-center space-x-2'>
+                                       <Link to={"/account"}>
+                                      <h5 className='rounded-full bg-blue-600 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
+                     >
+                                            {/* {currentUser?.firstName?.slice(0,1) +currentUser?.lastName?.slice(0,1)} */}
+                                            B0
+                          
+                                        </h5>
+                                        </Link>
+                                        <Link to={"/messages"}>
+                                          <IoChatbubbleEllipsesOutline 
+                                              className="text-2xl font-light text-slate-500"
+                                          />
+                                     </Link>
+                                     <IoIosNotificationsOutline
+                                          className="text-2xl font-light text-slate-500"
+                                      />
+
+                                </div>
+                                :
+                              <Link to={"/login"}>
+                              <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Login</button>
+                              </Link>
+
+                              }
                              
                              <Link to={"/cart"}>
                              <MdOutlineShoppingCart 

@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '../../layout'
 import breeder from "../../assets/breeder.png"
 import { RxArrowRight } from "react-icons/rx";
-
+import { Link } from 'react-router-dom';
 export default function Accoount() {
   return (
     <Layout>
@@ -38,21 +38,23 @@ export default function Accoount() {
                                     },
                                     {
                                       label:"Saved ",
-                                      link:""
+                                      link:"/saved"
                                     },
                                     {
                                       label:"Account information ",
-                                      link:""
+                                      link:"/account"
                                     },
                                     {
                                       label:"Payment methods ",
-                                      link:""
+                                      link:"/payment"
                                     },
                                     {
-                                      label:"My wallet "
+                                      label:"My wallet ",
+                                      link:"/wallet"
                                     },
                                     {
-                                      label:"Settings "
+                                      label:"Settings ",
+                                      link:"/settings"
 
                                     }
 
@@ -60,9 +62,12 @@ export default function Accoount() {
                                      return(
                                         <div className='flex justify-between py-2 px-4 rounded-lg shadow-lg '>
                                            <h5>{item?.label}</h5>
-                                           <RxArrowRight  
-                                              className='text-blue-600 text-xl'
-                                           />
+                                           <Link to={item?.link}>
+                                            <RxArrowRight  
+                                                className='text-blue-600 text-xl'
+                                            />
+                                           </Link>
+                                         
 
 
 

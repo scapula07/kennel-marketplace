@@ -17,6 +17,7 @@ export default function Signup() {
                             <div className='flex justify-end '>
                                 <IoMdClose 
                                 className='text-3xl'
+                                onClick={()=>window.history.go(-1)}
                                 />
 
                             </div>
@@ -33,7 +34,7 @@ export default function Signup() {
                                           [ 
                                             {
                                                 label:"Full name",
-                                                desc:"Enter your name"
+                                                 desc:"Enter your name"
 
                                             },
                                             {

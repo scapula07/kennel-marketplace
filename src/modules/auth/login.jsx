@@ -18,6 +18,7 @@ export default function Login() {
                             <div className='flex justify-end '>
                                 <IoMdClose 
                                 className='text-3xl'
+                                onClick={()=>window.history.go(-1)}
                                 />
 
                             </div>
