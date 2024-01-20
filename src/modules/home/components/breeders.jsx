@@ -1,7 +1,8 @@
 import React from 'react'
 import { MdOutlineStar } from "react-icons/md";
-
+import { FiArrowRight } from 'react-icons/fi';
 import breeder from "../../../assets/breeder.png"
+import card from "../../../assets/card.png"
 
 export default function Breeders() {
   return (
@@ -27,6 +28,33 @@ export default function Breeders() {
                        )
                   })}
 
+
+                </div>
+
+                <div className='bg-white rounded-lg flex w-full px-8 py-4 shadow justify-between'>
+                      <div className='flex flex-col space-y-4 w-1/3'>
+                           <h5 className='text-2xl font-semibold'>Want to become a breeder?</h5>
+                           <h5 className='text-xs font-light '>Join Kennel Breeders and grow your breeding business with us. Sell products and services along with animal breeding activity</h5>
+
+                           <button className='text-blue-600 py-3 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
+                                                        <span>Become a breeder</span>
+                                                        <FiArrowRight
+                                                            className='text-xl' 
+                                                        />
+                                                
+
+                                                    </button>
+
+
+                      </div>
+
+
+                      <div className='w-1/2'>
+                           <img 
+                              src={card}
+                           />
+
+                      </div>
 
                 </div>
 
