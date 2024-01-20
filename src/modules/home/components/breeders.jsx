@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdOutlineStar } from "react-icons/md";
-import breeder from "../../../assets/breeder.png"
 
+import breeder from "../../../assets/breeder.png"
 
 export default function Breeders() {
   return (

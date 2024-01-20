@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../components/header'
-
+import Footer from '../components/footer'
 export default function Layout({children}) {
   return (
     <div className='w-full h-full relative'>
@@ -14,6 +14,7 @@ export default function Layout({children}) {
         <div className='w-full py-24 h-full' style={{background:"#fbfbfb"}}>
             {children}
         </div>
+        <Footer />
     </div>
   )
 }

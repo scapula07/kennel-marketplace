@@ -1,7 +1,7 @@
 import React from 'react'
 import bg from "../../assets/imgbg.png"
 import { IoMdClose } from "react-icons/io";
-
+import { Link } from 'react-router-dom';
 
 export default function Signup() {
   return (
@@ -73,7 +73,9 @@ export default function Signup() {
 
                                         <div className='flex items-center'>
                                              <h5>Already have an account?</h5>
+                                             <Link to={"/login"}>
                                              <h5 className='text-blue-500'>Login</h5>
+                                             </Link>
 
                                         </div>
                                                                         

@@ -12,6 +12,12 @@ import Login from './modules/auth/login'
 import Seller from './modules/seller'
 import Accoount from './modules/account'
 import Wallet from './modules/wallet'
+import Payment from './modules/payment'
+import Saved from './modules/saved'
+import Settings from './modules/settings'
+import Messages from './modules/messages'
+import Cart from './modules/cart'
+
 
 function App() {
 
@@ -29,6 +35,11 @@ function App() {
               <Route exact path="/seller"  element={<Seller/>} />
               <Route exact path="/account"  element={<Accoount/>} />
               <Route exact path="/wallet"  element={<Wallet/>} />
+              <Route exact path="/payment"  element={<Payment/>} />
+              <Route exact path="/saved"  element={<Saved/>} />
+              <Route exact path="/settings"  element={<Settings/>} />
+              <Route exact path="/messages"  element={<Messages/>} />
+              <Route exact path="/cart"  element={<Cart/>} />
 
               
               

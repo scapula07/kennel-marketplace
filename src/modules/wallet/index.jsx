@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from '../../layout'
+import Transactions from './components/transactions'
 
 export default function Wallet() {
   return (
@@ -13,9 +14,8 @@ export default function Wallet() {
 
                             </div>
 
-                     </div>
 
-                     <div className='flex items-center'>
+                            <div className='flex items-center space-x-6'>
                           {[
                             {
                                 label:"Balance",
@@ -35,10 +35,11 @@ export default function Wallet() {
                        
 
 
-                           ].map(()=>{
+                           ].map((item)=>{
                               return(
-                                  <div className='flex flex-col'>
-                                      <h5></h5>
+                                  <div className='flex flex-col bg-white py-4 px-4 rounded-lg space-y-2'>
+                                      <h5 className='text-sm text-slate-600 '>{item?.label}</h5>
+                                      <h5 className='text-xl font-semibold'>${item?.amount}</h5>
                                       
                                    
                                   </div>
@@ -48,6 +49,12 @@ export default function Wallet() {
                           }
  
                      </div>
+
+                     <Transactions />
+
+                </div>
+
+              
         </div>
 
     </Layout>

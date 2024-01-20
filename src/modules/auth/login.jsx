@@ -1,6 +1,7 @@
 import React from 'react'
 import bg from "../../assets/imgbg.png"
 import { IoMdClose } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
 
 export default function Login() {
@@ -69,7 +70,10 @@ export default function Login() {
 
                                         <div className='flex items-center'>
                                              <h5>Don't have an account?</h5>
+                                             <Link to={"/signup"}>
+
                                              <h5 className='text-blue-500'>Signup</h5>
+                                             </Link>
 
                                         </div>
                                                                         
