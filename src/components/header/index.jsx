@@ -2,6 +2,8 @@ import React from 'react'
 import { FiSearch } from "react-icons/fi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { Link } from 'react-router-dom';
+import logo from "../../assets/logo-b.png"
+
 
 export default function Header() {
   return (
@@ -9,7 +11,14 @@ export default function Header() {
 
 
            <div className='flex items-center w-full px-10'>
-                 <div className='w-1/2 flex justify-center'>
+                 <div className='w-1/2 flex justify-center space-x-6'>
+                    <div>
+                        <img 
+                          src={logo}
+                          className="w-26 h-10"
+                        />
+
+                    </div>
                      <div className='border py-2 px-3 rounded-lg flex w-1/2 justify-between'>
                         <input
                            placeholder='Search'

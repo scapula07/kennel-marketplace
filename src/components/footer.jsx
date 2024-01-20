@@ -46,26 +46,26 @@ export default function Footer() {
                <div className='w-full flex justify-between'>
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Main menu</h5>
-                        <h5 className='font-light'>Home</h5>
-                        <h5 className='font-light'>Marketplace</h5>
-                        <h5 className='font-light'>Sellers</h5>
+                        <h5 className='font-extralight'>Home</h5>
+                        <h5 className='font-extralight'>Marketplace</h5>
+                        <h5 className='font-extralight'>Sellers</h5>
 
                    </div>
 
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Personal</h5>
-                        <h5 className='font-light'>My profile</h5>
-                        <h5 className='font-light'>Cart</h5>
-                        <h5 className='font-light'>Settings</h5>
+                        <h5 className='font-extralight'>My profile</h5>
+                        <h5 className='font-extralight'>Cart</h5>
+                        <h5 className='font-extralight'>Settings</h5>
 
                    </div>
 
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Socials</h5>
-                        <h5 className='font-light'>Facebook</h5>
-                        <h5 className='font-light'>Instagram</h5>
-                        <h5 className='font-light'>Twitter</h5>
-                        <h5 className='font-light'>Linked in</h5>
+                        <h5 className='font-extralight'>Facebook</h5>
+                        <h5 className='font-extralight'>Instagram</h5>
+                        <h5 className='font-extralight'>Twitter</h5>
+                        <h5 className='font-extralight'>Linked in</h5>
 
                    </div>
 

@@ -17,6 +17,7 @@ import Saved from './modules/saved'
 import Settings from './modules/settings'
 import Messages from './modules/messages'
 import Cart from './modules/cart'
+import Checkout from './modules/checkout'
 
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
               <Route exact path="/settings"  element={<Settings/>} />
               <Route exact path="/messages"  element={<Messages/>} />
               <Route exact path="/cart"  element={<Cart/>} />
+              <Route exact path="/checkout"  element={<Checkout/>} />
+
 
               
               
