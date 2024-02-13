@@ -5,12 +5,12 @@ import gal3 from "../../../assets/gal3.png"
 import gal4 from "../../../assets/gal4.png"
 import gal5 from "../../../assets/gal5.png"
 
-export default function Gallery() {
+export default function Gallery({images}) {
   return (
     <div className='flex w-full space-x-8 justify-between'>
          <div className='w-1/2'>
               <img 
-                src={gal5}
+                src={images[0]}
                 className="rounded-lg w-full"
               />
 
@@ -18,10 +18,10 @@ export default function Gallery() {
 
          
          <div  className='grid grid-flow-row grid-cols-2 gap-x-4 gap-y-2 w-1/2'>
-                  {[gal1,gal2,gal3,gal4].map((image)=>{
+                  {images?.map((image)=>{
                       return(
                         <img 
-                          src={image}
+                            src={image}
                             className="rounded-lg w-full"
                         />
                        )

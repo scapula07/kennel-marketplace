@@ -3,8 +3,15 @@ import Layout from '../../layout'
 import Gallery from './components/gallery'
 import Details from './components/details'
 import Actionsection from './components/actionsection'
+import { useLocation,useParams} from "react-router-dom";
+
 
 export default function Product() {
+      const location =useLocation()
+
+      const product=location?.state?.product
+
+      console.log(product,"prodyct ")
   return (
     <Layout>
             <div className='h-full w-full flex flex-col px-28 py-10'>
@@ -13,14 +20,20 @@ export default function Product() {
                   </div>
 
                   <div className=''>
-                      <Gallery />
+                      <Gallery 
+                         images={product?.images}
+                      />
 
                   </div>
 
                   <div className='flex w-full space-x-8 '>
-                         <Details />
+                         <Details
+                            product={product} 
+                         />
 
-                         <Actionsection />
+                         <Actionsection
+                                product={product} 
+                          />
 
                   </div>
 

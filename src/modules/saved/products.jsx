@@ -1,20 +1,25 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
 import comb from "../../assets/comb.png"
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FaBookmark } from "react-icons/fa";
 import { MdOutlineStar } from "react-icons/md";
 
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
+import { db } from '../firebase';
 
 
 
-export default function Products() {
+export default function Products({saved}) {
+       
   return (
     <div className='w-full'>
          
          <div  className='grid grid-flow-row grid-cols-4  gap-4 gap-y-8 h-full w-full py-6'>
-                  {[1,2,3,4,5,6].map(()=>{
+                  {saved?.map((save)=>{
                       return(
-                         <Card />
+                         <Card
+                           id={save} 
+                         />
                        )
                   })}
 
@@ -29,12 +34,23 @@ export default function Products() {
 
 
 
-const Card=()=>{
+const Card=({id})=>{
+  const [product,setProduct]=useState({images:[]})
+  useEffect(()=>{
+   
+   if(id?.length != undefined){
+     const unsub = onSnapshot(doc(db,"products",id), (doc) => {
+       console.log(doc.data(),"daa")
+   
+       setProduct({...doc.data(),id:doc?.id})
+      });
+     }
+    },[])
     return(
       <div className='flex flex-col w-full space-y-4'>
           <div className='relative h-72 w-full'>
               <img 
-                src={comb}
+                src={product?.images[0]}
                 className="w-full h-full rounded-lg"
  
               />
@@ -66,9 +82,9 @@ const Card=()=>{
           </div>
  
           <div className='flex flex-col space-y-3'>
-             <h5 className='text-slate-500 text-xl font-semibold'>Brush for dogs</h5>
-             <h5 className='text-slate-400 text-sm '>Classic dog brush to take care or dog fur. Best for long haired dog breeds</h5>
-             <h5 className=' text-2xl font-semibold'>12 USD</h5>
+             <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
+             <h5 className='text-slate-400 text-sm '>{product?.description}</h5>
+             <h5 className=' text-2xl font-semibold'>{product?.price} USD</h5>
  
           </div>
  

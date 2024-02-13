@@ -1,15 +1,69 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
+import axios from "axios"
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc}  from "firebase/firestore";
+import {getStorage, ref, uploadBytes } from "firebase/storage"
+import { db } from '../firebase';
+import Select from 'react-select';
 
-export default function Delivery() {
+
+
+export default function Delivery({delivery,setDelivery}) {
+     const [cities, setSelectedCity] = useState();
+
+     const [city,selectCity]=useState()
+     useEffect(() => {
+          getCountries();
+        }, []);
+      
+        async function getCountries() {
+          await axios
+            .get("https://countriesnow.space/api/v0.1/countries/")
+            .then(async(response) => {
+               console.log(response?.data?.data,"data")
+                setSelectedCity(response?.data?.data[218]?.cities)
+
+
+            });
+        }
+
+
+        console.log(city,delivery)
+    
   return (
     <div className='w-full flex flex-col space-y-5'>
            <div className='flex flex-col space-y-2'>
                 <h5 className='text-slate-500 font-light '>Enter city name</h5>
 
-                <select className='bg-white rounded-lg border outline-none py-2 px-4 text-slate-500 font-light'>
-                     <option>Houston,Dallas</option>
+                                 <Select
+                                        // styles={style}
+                                        placeholder="Select your City, State"
+                                        options={cities?.length >0 &&
+                                          cities?.slice(0, 20)?.map((item, index) => ({
+                                              label: item,
+                                              value: item
+                                            
+                                          }))}
+                                        value={city}
+                                        menuPlacement="auto"
+                                        menuPosition="fixed"
+                                        noOptionsMessage={(opt) => {
+                                          if (opt.inputValue === "") {
+                                            return "Select your City, State";
+                                          } else {
+                                            return "no search results for " + opt.inputValue;
+                                          }
+                                        }}
+                                        components={{
+                                          IndicatorSeparator: () => null,
+                                        }}
+                                        onChange={(opt) => {
+                                          selectCity(opt?.value);
+                                          setDelivery({...delivery,city:opt?.value})
+                                        }}
+                                      />
 
-                </select>
+                                    
+                                         
 
            </div>
 
@@ -19,9 +73,9 @@ export default function Delivery() {
                        <h5 className='text-slate-600'>Choose option</h5>
 
                         <div className='rounded-full border w-1/3 px-4 py-1 flex items-center space-x-3'> 
-                            <input 
+                              <input 
                                 type={"radio"}
-                            />
+                             />
 
                             <h5 className='font-light text-slate-700 '>{"FedEx Office"}</h5>
                       </div>

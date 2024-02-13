@@ -1,8 +1,10 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Layout from '../../layout'
 import Transactions from './components/transactions'
+import Modal from '../../components/modal'
 
 export default function Wallet() {
+     const [trigger,setTrigger]=useState(false)
   return (
     <Layout>
          <div className='w-full h-full flex justify-center py-10'>
@@ -10,7 +12,7 @@ export default function Wallet() {
                             <div className='flex w-full justify-between '>
                                 <h5 className='text-4xl font-semibold '>My Wallet</h5>
 
-                                <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>Deposit</button>
+                                <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}} onClick={()=>setTrigger(true)}>Deposit</button>
 
                             </div>
 
@@ -56,6 +58,10 @@ export default function Wallet() {
 
               
         </div>
+
+        <Modal trigger={trigger}  cname="w-full py-2 h-full  px-4 rounded-lg overflow-y-scroll ">
+
+        </Modal>
 
     </Layout>
 

@@ -1,8 +1,13 @@
-import React from 'react'
+import React ,{useEffect,useState} from 'react'
 import prod from "../../assets/prod.png"
 import Delivery from './delivery'
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
+import { db } from '../firebase';
+import { accountTypeState } from '../recoil/state';
+import { useRecoilValue } from 'recoil';
 
-export default function Order() {
+export default function Order({products,delivery,setDelivery}) {
+      const currentUser=useRecoilValue(accountTypeState)
   return (
     <div className='w-full flex flex-col rounded-lg py-6 px-6 space-y-3'
         style={{background: "#F3F3F3"}}
@@ -13,9 +18,9 @@ export default function Order() {
             <div className='flex flex-col space-y-4'>
                    <h5 className='text-lg font-semibold'>1. Contact information</h5>
                    <div className='flex flex-col'>
-                       <h5 className='text-sm font-light'>Carter Curtis</h5>
-                       <h5 className='text-sm font-light'>+4(123) 232 34 34</h5>
-                       <h5 className='text-sm font-light'>frankie201970@gmail.com</h5>
+                       <h5 className='text-sm font-light'>{currentUser?.name}</h5>
+                       <h5 className='text-sm font-light'>{currentUser?.phone}</h5>
+                       <h5 className='text-sm font-light'>{currentUser?.email}</h5>
 
                    </div>
 
@@ -25,7 +30,17 @@ export default function Order() {
 
               <div className='flex flex-col space-y-4'>
                    <h5 className='text-lg font-semibold'>2. Order information</h5>
-                   <Product />
+                   {products?.map((item)=>{
+                      return(
+                        <Product
+                           item={item}
+                          
+                         />
+                      )
+                   })
+
+                   }
+                
                  
 
               </div>
@@ -33,7 +48,10 @@ export default function Order() {
 
               <div className='flex flex-col space-y-4 w-full'>
                    <h5 className='text-lg font-semibold'>3. Delivery</h5>
-                   <Delivery />
+                   <Delivery 
+                          delivery={delivery}
+                          setDelivery={setDelivery}
+                   />
                  
 
               </div>
@@ -59,7 +77,7 @@ export default function Order() {
                 </div>
 
                 <div className='flex flex-col space-y-4 w-full'>
-                   <h5 className='text-lg font-semibold'>5. Opder recipient contact information </h5>
+                   <h5 className='text-lg font-semibold'>5. Order recipient contact information </h5>
                   
                  
 
@@ -77,19 +95,32 @@ export default function Order() {
 
 
 
-const Product=()=>{
+const Product=({item})=>{
+  const [product,setProduct]=useState({images:[]})
+  useEffect(()=>{
+   
+   if(item?.id?.length != undefined){
+     const unsub = onSnapshot(doc(db,"products",item?.id), (doc) => {
+       console.log(doc.data(),"daa")
+   
+       setProduct({...doc.data(),id:doc?.id})
+      });
+     }
+    },[])
+
+    console.log(product,"prod")
       return(
     <div className='flex w-full bg-white rounded-lg px-4 space-x-6 h-28 py-4'>
         <img 
-          src={prod}
+          src={product?.images[0]}
           className="w-20 h-20"
         />
 
         <div className='flex w-full justify-between'>
             <div className='flex flex-col'>
                   <div className='flex flex-col space-y-3'>
-                       <h5 className='text-lg text-slate-700 font-light'>“My dog” kit</h5>
-                       <h5 className='text-sm text-slate-500 '>Starter kit to buy when there is new dog friend in your family</h5>
+                       <h5 className='text-lg text-slate-700 font-light'>{product?.name}</h5>
+                       <h5 className='text-sm text-slate-500 '>{product?.description}</h5>
                   </div>
 
                   <div className='flex items-center'>

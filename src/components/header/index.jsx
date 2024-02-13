@@ -5,21 +5,44 @@ import { Link } from 'react-router-dom';
 import logo from "../../assets/logo-b.png"
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { IoIosNotificationsOutline } from "react-icons/io";
-
-
+import { collection,  onSnapshot,
+  doc, getDocs,
+  query, orderBy, 
+  limit,getDoc,setDoc ,
+ updateDoc,addDoc } from 'firebase/firestore'
+import { db } from '../../modules/firebase';
+import { saveTypeState } from '../../modules/recoil/state';
+import { useRecoilState } from 'recoil';
 export default function Header() {
      const [currentUser,setcurrentUser]=useState({id:""})
+     const [misc,setMisc]=useState({})
+     const [saved,setSaved]=useRecoilState(saveTypeState)
      const user = localStorage.getItem("user");
-     console.log(JSON.parse(user),"user")
+   
   useEffect( ()=>{
       
-    console.log(JSON.parse(user),"user")
+ 
     JSON.parse(user)
     setcurrentUser(JSON.parse(user))
 
     },[])
 
-    console.log(currentUser,"uswr")
+
+
+    useEffect(()=>{
+      if(JSON.parse(user)?.id?.length >0){
+         const ref =doc(db,"misc",JSON.parse(user)?.id)
+         const unsub = onSnapshot(ref, (doc) => {
+         setMisc(doc?.data())
+         setSaved(doc?.data()?.saved)
+         });
+
+
+      }
+    },[])
+
+
+
 
   return (
       <div className='w-full '>
@@ -97,10 +120,23 @@ export default function Header() {
 
                               }
                              
-                             <Link to={"/cart"}>
-                             <MdOutlineShoppingCart 
-                                className='text-2xl' 
-                             />
+                             <Link to={"/cart"}
+                                state={{
+                                  products:misc?.cart
+                                  }}
+                             >
+                               <div className='flex'>
+                                 <MdOutlineShoppingCart 
+                                    className='text-2xl' 
+                                />
+                                {misc?.cart?.length >0&&
+                                         <h5 className='text-xs bg-orange-600 rounded-full flex items-center justify-center h-4 w-4 text-white '>{misc?.cart?.length}</h5>
+
+
+                                }
+                           
+                               </div>
+                           
                             </Link>
 
 

@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.admin{
+    /* Set background color to white */
+    background-color: rgba(242, 242, 242, 0.6);
+    /* Create a linear gradient */
+    background-image: linear-gradient(to bottom,#fb923c 30%, rgba(242, 242, 242, 0.6) 25%);
+    /* Ensure the gradient covers the entire viewport */
+    background-size: 100% 100vh;
+    /* Disable background repeat */
+    background-repeat: no-repeat;
+    /* Center the background horizontally */
+    background-position: center top;
+}

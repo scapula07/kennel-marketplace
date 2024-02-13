@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -18,10 +18,29 @@ import Settings from './modules/settings'
 import Messages from './modules/messages'
 import Cart from './modules/cart'
 import Checkout from './modules/checkout'
+import {accountTypeState} from "./modules/recoil/state"
+import { useRecoilState } from 'recoil'
+import { doc,getDoc}  from "firebase/firestore";
+import Admin from './modules/admin'
+import CreateProduct from './modules/admin/createProduct'
+import ProductList from './modules/admin/productList'
+import OrderList from './modules/admin/orderlist'
+import ProductDetails from './modules/admin/product'
+import Orders from './modules/orders'
+import Active from './modules/orders/active'
 
 
 function App() {
-
+  const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
+  const user = localStorage.getItem("user");
+  useEffect( ()=>{ 
+    console.log(JSON.parse(user),"user")
+    if(JSON.parse(user)?.id?.length >0){
+      setcurrentUser(JSON.parse(user))
+    
+  }
+ 
+  },[user])
 
   return (
     <>
@@ -42,6 +61,20 @@ function App() {
               <Route exact path="/messages"  element={<Messages/>} />
               <Route exact path="/cart"  element={<Cart/>} />
               <Route exact path="/checkout"  element={<Checkout/>} />
+
+              <Route exact path="/admin"  element={<Admin/>} >
+                  <Route exact path="new-product"  element={<CreateProduct/>} />
+                  <Route exact path="products"  element={<ProductList/>} />
+                  <Route exact path="orders"  element={<OrderList/>} />
+                  <Route exact path="product"  element={<ProductDetails/>} />
+
+              </Route>
+
+
+              <Route exact path="/orders"  element={<Orders/>} >
+                  <Route exact path=""  element={<Active/>} />
+               
+              </Route>
 
 
               

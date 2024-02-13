@@ -1,8 +1,34 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Layout from '../../layout'
 import Order from './order'
+import { Link, useLocation,useParams,useNavigate} from "react-router-dom";
+import { accountTypeState } from '../recoil/state';
+import { useRecoilValue } from 'recoil';
+import { orderApi } from '../api/order';
+import { ClipLoader } from 'react-spinners';
 
 export default function Checkout() {
+      const navigate=useNavigate()
+       const [isLoading,setLoader]=useState(false)
+       const currentUser=useRecoilValue(accountTypeState)
+       const location =useLocation()
+       const [delivery,setDelivery]=useState({})
+
+       const products=location?.state?.products
+      
+        console.log(products,"prodyct ")
+
+        const create=async()=>{
+              setLoader(true)
+              try{
+                  const res=await orderApi.create(products,currentUser,delivery)
+                  setLoader(false)
+                  res&&  navigate("/orders", { state:res?.id});
+               }catch(e){
+                  console.log(e)
+                  setLoader(false)
+               }
+        }
   return (
     <Layout>
              <div className='w-full h-full flex justify-center py-10'>
@@ -17,7 +43,11 @@ export default function Checkout() {
 
                             <div className='flex w-full space-x-10 '>
                                    <div className='w-3/4'> 
-                                       <Order />
+                                       <Order 
+                                         products={products}
+                                         delivery={delivery}
+                                         setDelivery={setDelivery}
+                                       />
 
                                    </div>
 
@@ -46,9 +76,19 @@ export default function Checkout() {
                                                            <h5 className='text-blue-600 text-sm'>$130</h5>
 
                                                  </div>
+                                                {isLoading?
+                                                       <div className='w-full flex justify-center'>
+                                                             <ClipLoader 
+                                                                color='#C74A1F'
+                                                             />
+                                                      </div>
+                                                       :
+                                                     <button className='text-white py-2 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}} onClick={create}>Confirm order</button>
 
-                                                 <button className='text-white py-2 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>Confirm order</button>
 
+
+                                                }
+                                         
                                           </div>
 
                                      </div>

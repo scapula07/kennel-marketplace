@@ -15,7 +15,7 @@ export default function Signup() {
      const signup=async()=>{
         try{
             setLoader(true)
-            const user=await authApi.register(credentail?.email,credentail?.password,credentail?.name)
+            const user=await authApi.register(credentail?.email,credentail?.password,credentail?.name,)
 
           
             setLoader(false)

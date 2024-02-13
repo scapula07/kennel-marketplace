@@ -5,13 +5,13 @@ import breeder from "../../../assets/breeder2.png"
 import { FiArrowRight } from "react-icons/fi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
-export default function Actionsection() {
+export default function Actionsection({product}) {
   return (
     <div className='flex w-1/2 flex-col py-6 space-y-6'>
 
          <div className='flex flex-col'>
                 <div className='flex items-center justify-between'> 
-                    <h5 className='font-semibold text-3xl'>35 USD</h5>
+                    <h5 className='font-semibold text-3xl'>{product?.price} {product?.currency}</h5>
                     <h5 className='bg-white flex items-center justify-center p-1.5 rounded-full'>
                             <FaRegBookmark 
                                 className='text-blue-600 text-xl'
