@@ -1,11 +1,116 @@
-import React from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import Layout from '../../layout'
 import { FiSearch,FiArrowRight,FiSmile } from "react-icons/fi";
 import breeder from "../../assets/breeder.png"
 import { MdOutlineAttachment } from "react-icons/md";
-
+import {doc,setDoc,
+     addDoc,collection,
+     getDoc,getDocs,
+     query, where,updateDoc,orderBy,onSnapshot} from "firebase/firestore"
+import { useRecoilValue } from 'recoil';
+import { accountTypeState } from '../recoil/state';
+import { db } from '../firebase';
+import { BeatLoader } from 'react-spinners';
 
 export default function Messages() {
+     const currentUser=useRecoilValue(accountTypeState)
+     const [currentChat,setCurrentChat] =useState()
+     const [conversations,setConversations]=useState([])
+
+
+     const [textsubmit,setTextsubmit]=useState(false)
+     const [isLoading,setLoader]=useState(false)
+     const [newMessage, setNewMessage] = useState("");
+     const [areContacts,setContacts]=useState("")
+
+
+
+   useEffect(()=>{
+     const getConversations = async () => {
+         try{
+         
+           console.log(currentUser?.id,"cur conv")
+           const q = query(collection(db, "conversations"), where("members", "array-contains",currentUser?.id),orderBy("lastMessage", "desc"));
+           const unsubscribe = onSnapshot(q, (querySnapshot) => {
+             const convs= [];
+             querySnapshot.forEach((doc) => {
+                  console.log("qqqqqqqqqq")
+                 convs.push({...doc?.data(),id:doc?.id});
+                 console.log(doc?.id,"id")
+              
+             });
+                console.log(convs,"convssssss")
+                convs?.length===0 &&setContacts("No contact")
+                convs?.length >0 &&setContacts("")
+             setConversations(convs)
+           })
+           
+     
+        
+          }catch(error){
+           console.log(error)
+         }
+       };
+
+       if(currentUser?.id?.length >0){
+         getConversations();
+       }
+       
+  
+      },[currentUser?.id])  
+
+
+      const send=async (e)=>{
+          console.log(newMessage,"sending")
+          if (newMessage?.length == 0) {
+            return;
+          }
+          e.preventDefault();
+          setLoader(true)
+  
+          console.log(currentUser,"user >.>>>")
+          
+          const message = {
+            sender:currentUser?.id,
+            text: newMessage,
+            conversationid:currentChat.id,
+            date:Number(Date.now()),
+            time:new Date()
+          };
+          const receiverId = currentChat?.members.find(
+            (member) => member !== currentUser.id
+          );
+   
+            setTextsubmit(false)
+          try{
+            
+              const docRef = await addDoc(collection(db, "messages"),message);
+          
+               const docSnap = await getDoc(docRef);
+               console.log(docSnap?.data(),"came")
+               docSnap?.exists()&& setNewMessage("")
+               docSnap?.exists()&& setLoader(false)
+               const receiver= currentChat?.members?.find((member)=>member !=currentUser?.id )
+               console.log(receiver,"reci")
+               const result = await updateDoc(doc(db,"unseen",receiver), {
+                   messages:true
+                 })
+              await updateDoc(doc(db,"conversations",currentChat?.id), {
+                 lastMessage:Number(new Date()),
+                 unseen:true,
+                 lastSender:currentUser?.id
+                })
+  
+         
+        
+              }catch (err) {
+                console.log(err)
+                setLoader(false)
+            }
+        }
+  
+
+        console.log(currentChat,"chat")
   return (
     <Layout>
                 <div className='w-full flex justify-center h-screen py-8'>
@@ -26,32 +131,14 @@ export default function Messages() {
                                         </div>
                                     
                                     <div className='flex flex-col py-4 space-y-8'>
-                                         {[1,2].map(()=>{
+                                         {conversations?.map((conv,index)=>{
+                                                  console.log(index,"")
                                                  return(
-                                                    <div className='w-full flex flex-col space-y-1'>
-                                                           <div className='w-full flex items-center space-x-3'>
-                                                                <div className='flex items-center space-x-2'>
-                                                                     <h5 className='h-2 w-2 rounded-full bg-green-900'></h5>
-                                                                      <img
-                                                                        src={breeder} 
-                                                                       className="h-10 w-10 rounded-full"
-                                                                      />
-                                                                </div>
-
-                                                                <div className='flex flex-col '>
-                                                                     <h5 className='text-slate-700 text-sm font-semibold'>Phoenix Baker</h5>
-                                                                     <h5 className='text-xs font-light text-slate-600'>Dog breeder</h5>
-                                                                     
-                                                                </div>
-                                                             
-
-                                                           </div>
-
-                                                           <div className='w-full'>
-                                                             <p className=' text-xs font-light text-slate-800'>Hey Olivia, can you sent me over the la test doc. I just have a quick questio...</p>
-                                                           </div>
-
-                                                    </div>
+                                                   <Contact 
+                                                       conv={conv}
+                                                       setCurrentChat={setCurrentChat}
+                                                       index={index}
+                                                    />
                                                  )
                                             })
                                          }
@@ -64,12 +151,17 @@ export default function Messages() {
                            <div className='w-full h-full flex flex-col relative  '>
                                   <div className='flex items-center justify-between absolute top-0 py-4 border-b w-full px-5 '>
                                         <div className='flex items-center space-x-6'>
-                                            <img
-                                                src={breeder} 
-                                                className="rounded-full w-14 h-14"
-                                            />
+                                        {currentChat?.img?.length !=undefined?
+                                             <img
+                                                 src={currentChat?.img} 
+                                                 className="h-10 w-10 rounded-full"
+                                             />
+                                                  :
+                                                  <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
+                                                       }
+                                             
 
-                                            <h5 className='text-lg font-light'>Phoenix Baker</h5>
+                                            <h5 className='text-lg font-light'>{currentChat?.name}</h5>
 
 
                                         </div>
@@ -95,13 +187,20 @@ export default function Messages() {
 
                                     <div className=' h-full pt-20 flex flex-col   '>
                                           <div className=' h-4/5 w-full'>
+                                                <ChatBox
+                                                    currentChat={currentChat}
+                                                 />
+
+                                                 
 
                                           </div>
                                           <div className=' h-1/5 w-full px-6 py-3'>
                                               <div className='flex flex-col border rounded-xl bg-white h-full px-6 py-2 space-y-1' >
-                                                   <textarea 
-                                                     placeholder='Enter a message'
-                                                      className='outline-none'
+                                                   <input 
+                                                      placeholder='Enter a message'
+                                                      className='outline-none text-black'
+                                                      value={newMessage}
+                                                      onChange={(e)=>setNewMessage(e.target.value)}
                                                       
                                                    />
                                                    <div className='flex justify-end'>
@@ -114,9 +213,21 @@ export default function Messages() {
                                                                     className='text-slate-700 text-2xl'
                                                                />
 
-                                                              <button className='py-2 px-4 text-sm rounded-lg text-white bg-green-900 rounded-lg'>
+                                                  {isLoading?
+                                                                 <BeatLoader
+                                                                 color={"rgba(62, 51, 221, 1)"}
+                                                                 loading={true}
+                                                                 size="6"
+                                                                 
+                                                                 />
+                                                                 :
+
+                                                              <button className='py-2 px-4 text-sm rounded-lg text-white bg-green-900 rounded-lg'
+                                                              onClick={send}
+                                                              >
                                                                  Send
                                                               </button>
+                                                            }
 
                                                         </div>
 
@@ -138,4 +249,159 @@ export default function Messages() {
     </Layout>
 
   )
+}
+
+
+
+
+
+
+const Contact=({conv,setCurrentChat,index})=>{
+     const [receiver,setReceiver]=useState({})
+     const [products,setProducts]=useState([])
+
+     console.log(index,"convvv")
+    
+       useEffect(()=>{
+       
+         if(conv?.members?.length != undefined){
+           const unsub = onSnapshot(doc(db,"users",conv?.members[1]), (doc) => {
+             console.log(doc.data(),"daa")
+         
+             setReceiver({...doc.data(),id:doc?.id})
+
+
+            });
+           }
+          },[])
+
+          // if(index==0){
+          //      console.log("here")
+          //      setCurrentChat({...conv,...receiver})
+          //   }
+
+
+      return(
+
+          <div className='w-full flex flex-col space-y-1' 
+            onClick={()=>setCurrentChat({...conv,...receiver})}
+          >
+          <div className='w-full flex items-center space-x-3'>
+               <div className='flex items-center space-x-2'>
+                    <h5 className='h-2 w-2 rounded-full bg-green-900'></h5>
+                    {receiver?.img?.length !=undefined?
+                          <img
+                          src={receiver?.img} 
+                         className="h-10 w-10 rounded-full"
+                        />
+                        :
+                        <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{receiver?.name?.slice(0,1)}</h5>
+                         }
+                   
+               </div>
+
+               <div className='flex flex-col '>
+                    <h5 className='text-slate-700 text-sm font-semibold'>{receiver?.name}</h5>
+                    <h5 className='text-xs font-light text-slate-600'></h5>
+                    
+               </div>
+            
+
+          </div>
+
+          <div className='w-full'>
+            {/* <p className=' text-xs font-light text-slate-800'>No message</p> */}
+          </div>
+
+   </div>
+
+
+      )
+}
+
+
+
+
+
+
+const ChatBox=({currentChat})=>{
+     const chatRef= useRef(null);
+     const [msgs,setMsg]=useState([])
+
+     useEffect(()=>{
+          if(currentChat?.id?.length >0){
+            console.log(currentChat?.id,"chat id")
+             const q = query(collection(db, "messages"), where("conversationid", "==", currentChat?.id),orderBy("date", "asc"));
+            // const q = query(collection(db, "messages"), where("conversationid", "==", currentChat?.id));
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const msgs= [];
+                querySnapshot.forEach((doc) => {
+                    msgs.push({...doc?.data(),id:doc?.id});
+                });
+              
+                setMsg(msgs)
+              });
+            return () => {
+                unsubscribe()
+   
+            };
+        }
+        
+     
+    }
+
+    ,[currentChat])  
+
+
+      return(
+          <div className='flex flex-col'>
+               {msgs?.map((msg)=>{
+                     return(
+
+                         <div className='flex justify-start w-full'>
+                                  <Msg
+                                      msg={msg}
+                                      currentChat={currentChat}
+                                   />
+                         </div>
+                       
+                     )
+               })
+
+               }
+
+          </div>
+      )
+}
+
+
+
+
+
+const Msg=({msg,currentChat})=>{
+        
+
+         
+      return(
+          <div className='flex px-4'>
+               {currentChat?.img?.length != undefined?
+                    <img 
+                    src={currentChat?.img}
+                    className="h-10 w-10 rounded-full"
+                    />
+                    :
+                    <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
+               
+
+
+               }
+
+
+                <div>
+                    {msg?.text}
+
+                </div>
+
+          </div>
+      )
 }

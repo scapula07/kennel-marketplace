@@ -12,16 +12,17 @@ export default function Checkout() {
        const [isLoading,setLoader]=useState(false)
        const currentUser=useRecoilValue(accountTypeState)
        const location =useLocation()
-       const [delivery,setDelivery]=useState({})
+       const [delivery,setDelivery]=useState({dispatch:"FedEx Office",payment:"Kennel Breeders wallet"})
 
        const products=location?.state?.products
+       const total=location?.state?.total
       
         console.log(products,"prodyct ")
 
         const create=async()=>{
               setLoader(true)
               try{
-                  const res=await orderApi.create(products,currentUser,delivery)
+                  const res=await orderApi.create(products,currentUser,delivery,total)
                   setLoader(false)
                   res&&  navigate("/orders", { state:res?.id});
                }catch(e){
@@ -58,8 +59,8 @@ export default function Checkout() {
                                                <div className='flex flex-col space-y-1'>
 
                                                      <div className='flex items-center w-full justify-between'>
-                                                           <h5 className='font-light text-slate-800 text-sm'>Items price</h5>
-                                                           <h5 className='text-blue-600 text-sm'>$130</h5>
+                                                           <h5 className='font-light text-slate-800 text-sm'>{products?.length} Items price</h5>
+                                                           <h5 className='text-blue-600 text-sm'>${total}</h5>
 
                                                      </div>
                                                      <div className='flex items-center w-full justify-between'>
@@ -73,10 +74,10 @@ export default function Checkout() {
 
                                                <div className='flex items-center w-full justify-between'>
                                                            <h5 className='  text-sm font-semibold'>Total price</h5>
-                                                           <h5 className='text-blue-600 text-sm'>$130</h5>
+                                                           <h5 className='text-blue-600 text-sm'>${total + 130}</h5>
 
                                                  </div>
-                                                {isLoading?
+                                                  {isLoading?
                                                        <div className='w-full flex justify-center'>
                                                              <ClipLoader 
                                                                 color='#C74A1F'

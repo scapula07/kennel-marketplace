@@ -52,7 +52,7 @@ export const productApi= {
             const ref =doc(db,"misc",user?.id)
             const docSnap = await getDoc(ref);
                await updateDoc(doc(db,"misc",user?.id), {
-                   cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1}]
+                   cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1,price:product?.price}]
                 })
 
                return true
@@ -78,6 +78,22 @@ export const productApi= {
             console.log(e)
          }
 
-    }
+    },
+    editProduct:async function (user,product,file) {
+      try{
+          // const img=await uploadFile(file)
+
+          console.log(profile,"save cha")
+
+          const ref =doc(db,"users",user?.id)
+          const docSnap = await getDoc(ref);
+             const doc=await updateDoc(doc(db,"products",product?.id),product)
+             console.log(doc,"cooo")
+              return true
+
+          }catch(e){
+        console.log(e)
+      }
+  }
 }
 

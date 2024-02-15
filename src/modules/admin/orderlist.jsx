@@ -1,8 +1,39 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
 import { FiSearch } from "react-icons/fi";
+import { db } from '../firebase';
+import { useRecoilValue } from 'recoil';
+import { accountTypeState,saveTypeState } from '../recoil/state';
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy}  from "firebase/firestore";
+import {getStorage, ref, uploadBytes } from "firebase/storage"
+
+
+const monthNames = [
+  "January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"
+];
 
 
 export default function OrderList() {
+  const [orders,setOrders]=useState([])
+  
+
+useEffect(()=>{
+
+    const q = query(collection(db, "orders"),orderBy('time', 'desc'));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          const products = []
+          querySnapshot.forEach((doc) => {
+            products.push({ ...doc.data(), id: doc.id })
+
+          });
+
+
+     setOrders(products)
+    });
+ 
+},[])
+
+console.log(orders,"orooo")
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
@@ -36,7 +67,9 @@ export default function OrderList() {
 
                         </div>
 
-                        <Table />
+                        <Table 
+                           orders={orders}
+                        />
 
                 </div>
 
@@ -51,7 +84,7 @@ export default function OrderList() {
 
 
 
-const Table=()=>{
+const Table=({orders})=>{
       return(
         <div>
             <table class="table-auto w-full border-separate border-spacing-0.5">
@@ -62,13 +95,13 @@ const Table=()=>{
                               "Date",
                             "Status",
                             "Customer",
-                            "Product",
+                            "Products",
                             "Price",
                           
 
                             ].map((text)=>{
                                 return(
-                                <th className='py-1 text-xs text-slate-500 text-start'>{text}</th>
+                                <th className='py-1 text-xs text-slate-400 text-start'>{text}</th>
                             )
                             })
                         }
@@ -76,20 +109,14 @@ const Table=()=>{
                         
                     </thead>
 
-                    <tbody className='w-full '>
+                    <tbody className='w-full py-4'>
                         
-                        {[1,2,3,4]?.map(()=>{
-                            return(
-                                  <tr className='border-b '>
-                                       <td>1</td>
-                                       <td>2</td>
-                                       <td>3</td>
-                                       <td>4</td>
-                                       <td>5</td>
-                                       <td>6</td>
-                                     
-
-                                  </tr>
+                        {orders?.map((order,index)=>{
+                             
+                              return(
+                                  <Row 
+                                     order={order}
+                                  />
 
                               )
                           })
@@ -104,4 +131,93 @@ const Table=()=>{
 
         </div>
       )
+}
+
+
+const Row=({order})=>{
+  const [customer,setCustomer]=useState({})
+  const [products,setProducts]=useState([])
+ 
+    useEffect(()=>{
+    
+      if(order?.creator?.length != undefined){
+        const unsub = onSnapshot(doc(db,"users",order?.creator), (doc) => {
+          console.log(doc.data(),"daa")
+      
+          setCustomer({...doc.data(),id:doc?.id})
+         });
+        }
+       },[])
+
+       useEffect(()=>{
+  
+          if(order?.products?.length >0){
+            const ids = order?.products?.map(obj => obj.id);
+            
+            const q = query(collection(db, "products"),where('id', 'in',ids ))
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+              const products= [];
+              querySnapshot.forEach((doc) => {
+                products.push({...doc?.data(),id:doc?.id});
+               
+              });
+     
+            
+              setProducts(products)
+            });
+
+            }
+         },[])
+  
+
+       console.log(order?.products,"prod")
+
+      const date = new Date(order?.time);
+
+      const day = date.getDate();
+      const month = date.getMonth() + 1; // Month is zero-based, so adding 1
+      const year= date.getFullYear()
+      const formattedDate = `${day},${monthNames[month]},${year}`;
+
+      console.log(formattedDate);
+
+    return(
+      <tr className='border-b '>
+      <td className='flex items-center space-x-4'>
+          <input
+             type={"checkbox"}
+             className="py-2 px-2"
+           />
+           <span className='text-sm font-light text-slate-500'>#{order?.id?.slice(0,4)}</span>
+
+      </td>
+      <td className='text-sm font-light text-slate-500'>{formattedDate}</td>
+      <td className='text-sm font-light text-slate-500'>
+       {order?.status=="active"?
+          <span className='text-yellow-500'>{"Pending"}</span>
+          :
+          <span>{order?.status}</span>
+       }
+      </td>
+      <td className='text-sm font-light text-slate-500 flex items-center space-x-1'>
+        <span className='rounded-full bg-orange-400 text-white text-xs font-semibold h-4 w-4 flex items-center justify-center'>{customer?.name?.slice(0,1)}</span>
+       <span> {customer?.name}</span>
+        </td>
+      <td className='text-sm font-light text-slate-500'>
+            <select className='outline-none' >
+                {products?.map((product)=>{
+                    return(
+                      <option>{product?.name}</option>
+                    )
+                })
+
+                }
+            </select>
+      </td>
+      <td className='text-sm font-light text-slate-500'>${order?.total}</td>
+    
+
+ </tr>
+
+    )
 }

@@ -1,11 +1,48 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import { FaRegBookmark,FaRegStar } from "react-icons/fa";
 import { MdOutlineStar,MdOutlineShoppingCart  } from "react-icons/md";
 import breeder from "../../../assets/breeder2.png"
 import { FiArrowRight } from "react-icons/fi";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy}  from "firebase/firestore";
+import {getStorage, ref, uploadBytes } from "firebase/storage"
+import { Link } from 'react-router-dom';
+import { messageApi } from '../../api/message';
+import { db } from '../../firebase';
+import { ClipLoader } from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
+import { accountTypeState } from '../../recoil/state';
+import { useRecoilValue } from 'recoil';
 
 export default function Actionsection({product}) {
+      const currentUser=useRecoilValue(accountTypeState)
+      const [seller,setSeller]=useState({})
+      const [products,setProducts]=useState([])
+      const [isLoading,setLoader]=useState(false)
+      const navigate=useNavigate()
+        useEffect(()=>{
+        
+          if(product?.creator?.length != undefined){
+            const unsub = onSnapshot(doc(db,"users",product?.creator), (doc) => {
+              console.log(doc.data(),"daa")
+          
+              setSeller({...doc.data(),id:doc?.id})
+            });
+            }
+          },[])
+
+
+          const startMsg=async()=>{
+            setLoader(true)
+              try{
+                const res=await messageApi.startConversation(seller,currentUser)
+                setLoader(false)
+                res&&navigate("/messages")
+              }catch(e){
+                console.log(e)
+              }
+          }
+        
   return (
     <div className='flex w-1/2 flex-col py-6 space-y-6'>
 
@@ -43,20 +80,33 @@ export default function Actionsection({product}) {
          <div className='flex flex-col space-y-4'>
                     <div className='bg-white rounded-lg py-3 px-4 flex items-center rounded-xl shadow-sm justify-between'>
                             <div className='flex items-center space-x-4'>
-                                    <img 
-                                        src={breeder}
-                                        className="w-10 h-10 rounded-full"
-                                    />
+                                  {seller?.img?.length !=undefined?
+                                            <img 
+                                            src={breeder}
+                                            className="w-10 h-10 rounded-full"
+                                        />
+                                        :
+                                        <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{seller?.name?.slice(0,1)}</h5>
+
+
+                                  }
+                               
                                     <div className='flex flex-col'>
-                                        <h5 className='text-xl font-semibold text-slate-600'>Richard Williamson</h5>
-                                        <h5 className='text-sm text-slate-400 font-light'>Dog breeder</h5>
+                                        <h5 className='text-xl font-semibold text-slate-600'>{seller?.name}</h5>
+                                        <h5 className='text-sm text-slate-400 font-light'>{""}</h5>
 
                                     </div>
                               </div>
-
-                              <FiArrowRight
-                                className='text-blue-500 text-3xl '
-                               />
+                              <Link to="/seller"
+                                       state={{
+                                        seller
+                                   }}
+                                >
+                                <FiArrowRight
+                                    className='text-blue-500 text-3xl '
+                                  />
+                            </Link>
+                          
 
 
                     </div>
@@ -119,14 +169,28 @@ export default function Actionsection({product}) {
 
                             </button>
 
-                            <button className='text-blue-600 py-3 space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center w-full border border-blue-600 ' >
-                                <span>Send message to seller</span>
-                                <FiArrowRight
-                                    className='text-xl' 
-                                />
-                        
+                            {isLoading?
+                               <div className='w-full flex justify-center'>
+                                     <ClipLoader
+                                        color="#C74A1F"
+                                      />
+                                </div>
+                                :
+                                <button className='text-blue-600 py-3 space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center w-full border border-blue-600 ' 
+                                      onClick={startMsg}
+                                  >
+                                      <span>Send message to seller</span>
+                                      <FiArrowRight
+                                          className='text-xl' 
+                                      />
+                         
+ 
+                              </button>
 
-            </button>
+
+                            }
+
+                       
 
                     </div>
 

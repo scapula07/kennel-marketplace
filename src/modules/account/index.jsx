@@ -38,7 +38,7 @@ export default function Accoount() {
                                  {[
                                     {
                                       label:"My orders ",
-                                      link:""
+                                      link:"/orders"
                                     },
                                     {
                                       label:"Saved ",
@@ -46,7 +46,7 @@ export default function Accoount() {
                                     },
                                     {
                                       label:"Account information ",
-                                      link:"/account"
+                                      link:"/profile"
                                     },
                                     {
                                       label:"Payment methods ",

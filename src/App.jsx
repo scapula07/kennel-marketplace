@@ -28,7 +28,9 @@ import OrderList from './modules/admin/orderlist'
 import ProductDetails from './modules/admin/product'
 import Orders from './modules/orders'
 import Active from './modules/orders/active'
-
+import Profile from './modules/profile'
+import EditProduct from './modules/admin/editProduct'
+import Order from './modules/admin/order'
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -67,6 +69,8 @@ function App() {
                   <Route exact path="products"  element={<ProductList/>} />
                   <Route exact path="orders"  element={<OrderList/>} />
                   <Route exact path="product"  element={<ProductDetails/>} />
+                  <Route exact path="edit"  element={<EditProduct/>} />
+                  <Route exact path="order"  element={<Order/>} />
 
               </Route>
 
@@ -75,6 +79,8 @@ function App() {
                   <Route exact path=""  element={<Active/>} />
                
               </Route>
+
+              <Route exact path="/profile"  element={<Profile/>} />
 
 
               

@@ -45,11 +45,6 @@ export default function SidePanel() {
                                     
    
                                    },
-                                   {
-                                    name:"Breeders",
-                                    
-   
-                                   }
                                   ]
    
    

@@ -6,14 +6,16 @@ import {getStorage, ref, uploadBytes } from "firebase/storage"
 
 
 export const orderApi= {
-    create:async function (products,user,delivery) {
+    create:async function (products,user,delivery,total) {
            try{
                     const  snap = await addDoc(collection(db, "orders"),{
                         products:products,
                         creator:user?.id,
                         status:"active",
+                        total:total,
+                        paid:false,
                         contract:"waiting",
-                        time:Date(),
+                        time:Number(new Date()),
                         delivery
                         })
         

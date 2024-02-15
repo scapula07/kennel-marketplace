@@ -1,8 +1,42 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
 import { FiSearch } from "react-icons/fi";
+import { db } from '../firebase';
+import { useRecoilValue } from 'recoil';
+import { accountTypeState,saveTypeState } from '../recoil/state';
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy}  from "firebase/firestore";
+import {getStorage, ref, uploadBytes } from "firebase/storage"
+import { Link } from 'react-router-dom';
+
+const monthNames = [
+  "January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"
+];
+
+
+
 
 
 export default function ProductList() {
+
+        const [products,setProducts]=useState([])
+        
+
+        useEffect(()=>{
+        
+            const q = query(collection(db, "products"));
+                const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                  const products = []
+                  querySnapshot.forEach((doc) => {
+                    products.push({ ...doc.data(), id: doc.id })
+        
+                  });
+        
+        
+               setProducts(products)
+            });
+        
+        },[])
+        console.log(products,"pp")
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
@@ -36,7 +70,9 @@ export default function ProductList() {
 
                         </div>
 
-                        <Table />
+                        <Table 
+                           products={products}
+                        />
 
                 </div>
 
@@ -51,7 +87,7 @@ export default function ProductList() {
 
 
 
-const Table=()=>{
+const Table=({products})=>{
       return(
         <div>
             <table class="table-auto w-full border-separate border-spacing-0.5">
@@ -78,18 +114,9 @@ const Table=()=>{
 
                     <tbody className='w-full '>
                         
-                        {[1,2,3,4]?.map(()=>{
+                        {products?.map((product)=>{
                             return(
-                                  <tr className='border-b '>
-                                       <td>1</td>
-                                       <td>2</td>
-                                       <td>3</td>
-                                       <td>4</td>
-                                       <td>5</td>
-                                       <td>6</td>
-                                       <td>7</td>
-
-                                  </tr>
+                                  <Row product={product}/>
 
                               )
                           })
@@ -104,4 +131,90 @@ const Table=()=>{
 
         </div>
       )
+}
+
+
+
+
+
+
+
+const Row=({product})=>{
+  // const [customer,setCustomer]=useState({})
+  // const [products,setProducts]=useState([])
+ 
+  //   useEffect(()=>{
+    
+  //     if(order?.creator?.length != undefined){
+  //       const unsub = onSnapshot(doc(db,"users",order?.creator), (doc) => {
+  //         console.log(doc.data(),"daa")
+      
+  //         setCustomer({...doc.data(),id:doc?.id})
+  //        });
+  //       }
+  //      },[])
+
+      //  useEffect(()=>{
+  
+      //     if(order?.products?.length >0){
+      //       const ids = order?.products?.map(obj => obj.id);
+            
+      //       const q = query(collection(db, "products"),where('id', 'in',ids ))
+      //       const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      //         const products= [];
+      //         querySnapshot.forEach((doc) => {
+      //           products.push({...doc?.data(),id:doc?.id});
+               
+      //         });
+     
+            
+      //         setProducts(products)
+      //       });
+
+      //       }
+      //    },[])
+  
+
+      //  console.log(order?.products,"prod")
+
+      // const date = new Date(product?.time);
+
+      // const day = date.getDate();
+      // const month = date.getMonth() + 1; // Month is zero-based, so adding 1
+      // const year= date.getFullYear()
+      // const formattedDate = `${day},${monthNames[month]},${year}`;
+
+      // console.log(formattedDate);
+
+    return(
+      <tr className='border-b '>
+      <td className='flex items-center space-x-8'>
+          <input
+             type={"checkbox"}
+             className="py-2 px-2"
+           />
+            <Link to="/admin/edit" state={{product}}>
+                <span className='font-semibold text-slate-400 hover:underline '>
+                      {product?.name}
+                  </span>
+            </Link>
+     
+    </td>  
+    
+ 
+      <td className='text-sm font-light text-slate-500'>{product?.category}</td>
+      <td className='text-sm font-light text-slate-500'>${product?.price}</td>
+      <td className='text-sm font-light text-slate-500'>{product?.sku}</td>
+      <td className='text-sm font-light text-slate-500'>{""}</td>
+  
+      <td className='text-xs font-semibold  px-2  rounded-lg  '>
+             <span className='font-semibold text-slate-500 text-green-600 bg-green-300 px-4 py-1 rounded-sm'>
+                  {product?.status}
+              </span>
+      </td>
+    
+
+ </tr>
+
+    )
 }

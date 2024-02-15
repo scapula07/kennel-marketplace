@@ -13,7 +13,7 @@ export default function Admin() {
                       <SidePanel />
 
                 </div>
-                <div className='lg:w-4/5 w-full relative pt-8 lg:px-8 px-4 h-full'>
+                <div className='lg:w-5/6 w-full relative pt-8 lg:px-2 px-4 h-full'>
                        <div>
                            <Header />
                        </div>

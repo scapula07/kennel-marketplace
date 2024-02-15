@@ -5,15 +5,17 @@ import prod from "../../assets/prod.png"
 import { Link, useLocation,useParams} from "react-router-dom";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
-
+import { BsDash } from "react-icons/bs";
+import { IoMdAdd } from "react-icons/io";
 
 export default function Cart() {
 
-      const location =useLocation()
+       const location =useLocation()
+       const [total,setTotal]=useState(0)
 
-      const products=location?.state?.products
+       const products=location?.state?.products
 
-      console.log(products,"prodyct ")
+       console.log(products,"prodyct ")
   return (
     <Layout>
         <div className='w-full h-full flex justify-center py-10'>
@@ -36,6 +38,8 @@ export default function Cart() {
                               return(
                                  <Card 
                                    item={product}
+                                   setTotal={setTotal}
+                                   total={total}
                                  />
                               )
                            })
@@ -44,10 +48,11 @@ export default function Cart() {
 
                     <div className='flex w-3/5 justify-end'>
                              <div className='flex items-center space-x-4'>
-                                 <h5>Total:$0</h5>
+                                 <h5>Total:${total}</h5>
                                  <Link to="/checkout"
                                     state={{
-                                      products
+                                      products,
+                                      total:total
                                       }}
                                  >
                                
@@ -77,8 +82,9 @@ export default function Cart() {
 
 
 
-const Card=({item})=>{
+const Card=({item,setTotal,total})=>{
      const [product,setProduct]=useState({images:[]})
+     const [qty,setQty]=useState(1)
      useEffect(()=>{
       
       if(item?.id?.length != undefined){
@@ -86,19 +92,20 @@ const Card=({item})=>{
           console.log(doc.data(),"daa")
       
           setProduct({...doc.data(),id:doc?.id})
+           setTotal((total+Number(doc.data()?.price)))
          });
         }
-       },[])
+       },[qty])
 
        console.log(product,"prod")
    return(
-    <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4'>
+    <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4 px-4 shadow'>
     <img 
       src={product?.images[0]}
       className="w-20 h-20"
     />
 
-    <div className='flex w-full justify-between'>
+    <div className='flex w-full items-center justify-between'>
         <div className='flex flex-col'>
               <div className='flex flex-col space-y-3'>
                    <h5 className='text-lg text-slate-700 font-light'>{product?.name}</h5>
@@ -110,11 +117,31 @@ const Card=({item})=>{
         </div>
       
 
-      <div>
-      </div>
-        <MdOutlineDeleteOutline 
-            className='text-slate-500 text-2xl'
-        />
+         <div className='flex items-center w-1/4'>
+               <div className='flex items-center space-x-5'>
+                     <BsDash
+                        className='text-3xl font-semibold text-slate-600'
+                        onClick={()=>qty !=1&&setQty(qty -1)}
+                      />
+                     <input 
+                         className='h-10 w-10 rounded-lg border px-3'
+                         value={qty}
+                     />
+                     <IoMdAdd
+                         className='text-3xl font-semibold text-slate-600'
+                         onClick={()=>setQty(qty + 1)}
+
+                      />
+
+               </div>
+         </div>
+         <div>
+              <MdOutlineDeleteOutline 
+                 className='text-slate-500 text-2xl'
+             />
+
+         </div>
+       
 
     </div>
    

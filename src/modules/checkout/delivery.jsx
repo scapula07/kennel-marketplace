@@ -4,13 +4,15 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc}  from "firebase/firest
 import {getStorage, ref, uploadBytes } from "firebase/storage"
 import { db } from '../firebase';
 import Select from 'react-select';
-
+import { IoMdRadioButtonOff } from "react-icons/io";
+import { IoMdRadioButtonOn } from "react-icons/io";
 
 
 export default function Delivery({delivery,setDelivery}) {
      const [cities, setSelectedCity] = useState();
-
      const [city,selectCity]=useState()
+     const [radio,setRadio]=useState("FedEx Office")
+     
      useEffect(() => {
           getCountries();
         }, []);
@@ -57,7 +59,7 @@ export default function Delivery({delivery,setDelivery}) {
                                           IndicatorSeparator: () => null,
                                         }}
                                         onChange={(opt) => {
-                                          selectCity(opt?.value);
+                                          selectCity(opt);
                                           setDelivery({...delivery,city:opt?.value})
                                         }}
                                       />
@@ -73,9 +75,17 @@ export default function Delivery({delivery,setDelivery}) {
                        <h5 className='text-slate-600'>Choose option</h5>
 
                         <div className='rounded-full border w-1/3 px-4 py-1 flex items-center space-x-3'> 
-                              <input 
-                                type={"radio"}
-                             />
+                           {radio==="FedEx Office"?
+                              <IoMdRadioButtonOn 
+                                className='text-blue-400'
+                                
+                              />
+                              :
+                              <IoMdRadioButtonOff 
+                                 className='text-blue-400'
+                                 onClick={()=>setRadio("FedEx Office") || setDelivery({...delivery,dispatch:"FedEx Office"})}
+                              />
+                           }
 
                             <h5 className='font-light text-slate-700 '>{"FedEx Office"}</h5>
                       </div>
@@ -97,9 +107,17 @@ export default function Delivery({delivery,setDelivery}) {
                      {["United States Postal Service","UPS (United Parcel Service)","Blue Dart Shipping","Directly from seller"].map((text)=>{
                           return(
                             <div className='rounded-full border w-1/2 px-4 py-1 flex items-center space-x-3'> 
-                            <input 
-                                type={"radio"}
-                            />
+                         {radio===text?
+                              <IoMdRadioButtonOn 
+                                className='text-blue-400'
+                                
+                              />
+                              :
+                              <IoMdRadioButtonOff 
+                                 className='text-blue-400'
+                                 onClick={()=>setRadio(text) || setDelivery({...delivery,dispatch:text})}
+                              />
+                           }
 
                             <h5 className='font-light text-slate-700 '>{text}</h5>
                          </div>

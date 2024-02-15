@@ -5,10 +5,13 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onS
 import { db } from '../../firebase';
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilValue } from 'recoil';
-export default function Order() {
+
+
+export default function Order({order}) {
+       console.log(order,"order ")
       const [open,setOpen]=useState(false)
   return (
-    <div className="bg-slate-200 w-4/5 py-4 px-4 flex flex-col rounded-xl space-y-4"
+    <div className="bg-slate-200 w-4/5 py-4 px-4 flex flex-col rounded-xl space-y-6"
         style={{background:"#F3F3F3"}}
     >
               <div className='flex w-full justify-between'>
@@ -56,9 +59,53 @@ export default function Order() {
 
 
            
-              <div>
+                <div className='flex flex-col'>
+                     {order?.products?.map((item)=>{
+                        return(
+                          <Product 
+                            item={item}
+                      />
+                        )
+                     })
 
-              </div>
+                     }
+                     
+
+               </div>
+
+              {open&&
+                  <div className='w-full flex flex-col space-y-4'>
+                         <h5 className='text-lg font-semibold text-slate-700'>Details</h5>
+                         
+                               <ol className='flex flex-col font-light text-slate-500 space-y-1 text-sm'>
+                                  <li>Customer delivery address & service / Seller address:{order?.delivery?.city} </li>
+                                  <li>Delivery time:</li>
+                                  <li>Customer name:</li>
+                                  <li>Seller name:</li>
+                                  <li>Customer email:</li>
+                                  <li>Customer phone number:</li>
+                               </ol>
+                  
+                           <div className='flex flex-col space-y-4'> 
+                                <div className='flex items-center w-1/2 justify-between'> 
+                                     <h5 className='text-lg font-semibold text-slate-700'>Payment:</h5>
+                                     <h5 className='text-semibold text-slate-900 f'>via:{order?.delivery?.payment}</h5>
+                                </div>
+
+                                <div className='flex items-center w-1/2 justify-between'> 
+                                     <h5  className='text-lg font-semibold text-slate-700 '>Delivery price:</h5>
+                                     <h5 className='text-light text-slate-400'>$</h5>
+                                </div>
+
+                                <div className='flex items-center w-1/2 justify-between'> 
+                                     <h5  className='text-lg font-semibold text-slate-700'>Total price:{order?.total}</h5>
+                                     <h5 className='text-light text-slate-400'>${order?.total}</h5>
+                                </div>
+                          </div>
+
+                  </div>
+
+              } 
 
 
               <div className='flex flex-col w-full space-y-2'>
@@ -88,12 +135,12 @@ export default function Order() {
 
 
 
-const Product=({id})=>{
+const Product=({item})=>{
     const [product,setProduct]=useState({images:[]})
     useEffect(()=>{
      
-     if(id?.length != undefined){
-       const unsub = onSnapshot(doc(db,"products",id), (doc) => {
+     if(item?.id?.length != undefined){
+       const unsub = onSnapshot(doc(db,"products",item?.id), (doc) => {
          console.log(doc.data(),"daa")
      
          setProduct({...doc.data(),id:doc?.id})

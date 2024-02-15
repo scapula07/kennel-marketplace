@@ -12,9 +12,9 @@ import {getStorage, ref, uploadBytes } from "firebase/storage"
 export default function Active() {
         const currentUser=useRecoilValue(accountTypeState)
         const [orders,setOrders]=useState([])
-          
+          console.log(currentUser,"user active")
         useEffect(()=>{
-          if(currentUser?.id?.length >0){
+       if(currentUser?.id?.length >0){
             const q = query(collection(db, "orders"),where('creator', '==', currentUser?.id));
                 const unsubscribe = onSnapshot(q, (querySnapshot) => {
                   const products = []
@@ -35,12 +35,16 @@ export default function Active() {
          
         },[])
 
+        console.log(orders,"order")
+
         
   return (
     <div className='w-full flex flex-col'>
-          {orders?.map(()=>{
+          {orders?.map((order)=>{
               return(
-                <Order />
+                <Order
+                   order={order}
+                 />
               )
           })
 

@@ -5,9 +5,13 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onS
 import { db } from '../firebase';
 import { accountTypeState } from '../recoil/state';
 import { useRecoilValue } from 'recoil';
+import { IoMdRadioButtonOff } from "react-icons/io";
+import { IoMdRadioButtonOn } from "react-icons/io";
+
 
 export default function Order({products,delivery,setDelivery}) {
       const currentUser=useRecoilValue(accountTypeState)
+      const [payment,setPayment]=useState("Kennel Breeders wallet")
   return (
     <div className='w-full flex flex-col rounded-lg py-6 px-6 space-y-3'
         style={{background: "#F3F3F3"}}
@@ -63,9 +67,17 @@ export default function Order({products,delivery,setDelivery}) {
                      {["Kennel Breeders wallet","Cashless transfer","Cash"].map((text)=>{
                           return(
                             <div className='rounded-full border w-1/2 px-4 py-1 flex items-center space-x-3'> 
-                            <input 
-                                type={"radio"}
-                            />
+                          {payment===text?
+                              <IoMdRadioButtonOn 
+                                className='text-blue-400'
+                                
+                              />
+                              :
+                              <IoMdRadioButtonOff 
+                                 className='text-blue-400'
+                                  onClick={()=>setPayment(text) ||setDelivery({...delivery,payment:text})}
+                              />
+                           }
 
                             <h5 className='font-light text-slate-700 '>{text}</h5>
                          </div>
