@@ -45,8 +45,10 @@ export default function Order() {
                              </div>
 
 
-                             <div className='flex w-full justify-between py-6 border-b '>
-                                     <Product />
+                             <div className='flex w-full items-center justify-between py-6 border-b '>
+                                     <Product 
+                                       item={ordered?.products}
+                                     />
 
                                     <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs '>Message customer</button>
                
@@ -81,6 +83,10 @@ export default function Order() {
 
                                       <div className='w-1/4'>
                                             <h5 className='text-slate-500 font-semibold'>Order summary</h5>
+                                            <div className='flex flex-col py-6'>
+                                                 <h5 className='text-slate-500 font-light'>Product Price:        ${order?.total}</h5>
+
+                                            </div>
                                     
                                     </div>
 
@@ -100,9 +106,33 @@ export default function Order() {
 
 
 
-const Product=()=>{
+const Product=({item})=>{
+       const [product,setProduct]=useState({images:[]})
+       console.log(item,"iii")
+       useEffect(()=>{
+      
+        if(item[0]?.id?.length != undefined){
+          const unsub = onSnapshot(doc(db,"products",item[0]?.id), (doc) => {
+            console.log(doc.data(),"daa")
+        
+            setProduct({...doc.data(),id:doc?.id})
+           });
+          }
+         },[])
+
+         console.log(product,"prod")
+           
       return(
-        <div>
+        <div className='flex space-x-4'>
+             <img 
+               src={product?.images[0]}
+               className="h-36"
+             />
+             <div className='flex flex-col'>
+                  <h5 className='font-semibold text-slate-600 text-lg'>{product?.name}</h5>
+                  <h5 className='font-light'>{product?.description}</h5>
+
+             </div>
 
         </div>
       )

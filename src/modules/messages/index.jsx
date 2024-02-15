@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import { db } from '../firebase';
 import { BeatLoader } from 'react-spinners';
+import { Link } from 'react-router-dom';
 
 export default function Messages() {
      const currentUser=useRecoilValue(accountTypeState)
@@ -92,9 +93,9 @@ export default function Messages() {
                docSnap?.exists()&& setLoader(false)
                const receiver= currentChat?.members?.find((member)=>member !=currentUser?.id )
                console.log(receiver,"reci")
-               const result = await updateDoc(doc(db,"unseen",receiver), {
-                   messages:true
-                 })
+               // const result = await updateDoc(doc(db,"unseen",receiver), {
+               //     messages:true
+               //   })
               await updateDoc(doc(db,"conversations",currentChat?.id), {
                  lastMessage:Number(new Date()),
                  unseen:true,
@@ -172,6 +173,8 @@ export default function Messages() {
                                                 
 
                                                     </button>
+                                                  
+                                                   
                                                     <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
                                                         <span>Go to seller page</span>
                                                         <FiArrowRight
@@ -180,6 +183,7 @@ export default function Messages() {
                                                 
 
                                                     </button>
+                                             
 
                                         </div>
                                     
@@ -189,6 +193,7 @@ export default function Messages() {
                                           <div className=' h-4/5 w-full'>
                                                 <ChatBox
                                                     currentChat={currentChat}
+                                                    currentUser={currentUser}
                                                  />
 
                                                  
@@ -324,7 +329,7 @@ const Contact=({conv,setCurrentChat,index})=>{
 
 
 
-const ChatBox=({currentChat})=>{
+const ChatBox=({currentChat,currentUser})=>{
      const chatRef= useRef(null);
      const [msgs,setMsg]=useState([])
 
@@ -352,16 +357,23 @@ const ChatBox=({currentChat})=>{
 
     ,[currentChat])  
 
+    useEffect(() => {
+     if (chatRef.current) {
+       chatRef.current.scrollTop = chatRef.current.scrollHeight;
+     }
+   },[msgs])
+
 
       return(
-          <div className='flex flex-col'>
+          <div className='flex flex-col py-4 overflow-y-scroll space-y-4 '  ref={chatRef}>
                {msgs?.map((msg)=>{
                      return(
 
-                         <div className='flex justify-start w-full'>
+                         <div className={`flex ${msg?.sender==currentUser?`justify-start` :`justify-end`} w-full`}>
                                   <Msg
                                       msg={msg}
                                       currentChat={currentChat}
+                                      currentUser={currentUser}
                                    />
                          </div>
                        
@@ -378,26 +390,32 @@ const ChatBox=({currentChat})=>{
 
 
 
-const Msg=({msg,currentChat})=>{
+const Msg=({msg,currentChat,currentUser})=>{
         
-
+        console.log(msg?.sender)
          
       return(
           <div className='flex px-4'>
-               {currentChat?.img?.length != undefined?
-                    <img 
-                    src={currentChat?.img}
-                    className="h-10 w-10 rounded-full"
-                    />
-                    :
-                    <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
-               
-
+               {msg?.sender ===currentUser&&
+                     <> 
+                     {currentChat?.img?.length >0?
+                         <img 
+                         src={currentChat?.img}
+                         className="h-10 w-10 rounded-full"
+                         />
+                         :
+                         <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
+                    
+     
+     
+                    }
+                    </>
 
                }
+            
 
 
-                <div>
+                <div className={`flex ${msg?.sender==currentUser?'bg-slate-100 px-6 py-1.5 rounded-lg text-slate-600 font-light':"bg-blue-100 px-6 py-1.5 rounded-lg text-slate-600 font-light"}`}>
                     {msg?.text}
 
                 </div>
