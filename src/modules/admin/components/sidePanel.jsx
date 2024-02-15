@@ -8,6 +8,7 @@ import { BiSolidMessageSquareDots } from "react-icons/bi";
 import { useState } from 'react';
 import { MdKeyboardArrowDown ,MdKeyboardArrowUp} from "react-icons/md";
 import { ImUsers } from "react-icons/im";
+import { Link } from 'react-router-dom';
 
 
 export default function SidePanel() {
@@ -29,6 +30,7 @@ export default function SidePanel() {
                             {
                                 title:"Overview",
                                 icon:<IoGrid/>,
+                                link:""
 
                             },
                             {
@@ -37,11 +39,13 @@ export default function SidePanel() {
                                 items:[
                                    {
                                     name:"Customers",
+                                    link:""
 
    
                                    },
                                    {
                                     name:"Sellers",
+                                    link:""
                                     
    
                                    },
@@ -54,11 +58,13 @@ export default function SidePanel() {
                              icon:<IoBagHandleSharp />,
                              items:[
                                 {
-                                 name:"New product"
+                                 name:"New product",
+                                 link:"new-product"
 
                                  },
                                 {
-                                    name:"Product List"
+                                    name:"Product List",
+                                    link:"products"
    
                                 }
                                ]
@@ -70,7 +76,8 @@ export default function SidePanel() {
                                 icon:<IoCart />,
                                 items:[
                                    {
-                                    name:"Order List"
+                                    name:"Order List",
+                                    link:"orders"
    
                                    }
                                   ]
@@ -80,6 +87,7 @@ export default function SidePanel() {
                             {
                                 title:"Messages",
                                 icon:<BiSolidMessageSquareDots />,
+                                link:"/messages"
                             },
 
                            ].map((item,index)=>{
@@ -110,11 +118,13 @@ const Card=({item,index})=>{
       return(
         <div className='flex flex-col w-full'>
                <div className='flex items-center w-full justify-between'>
+               <Link to={item?.link}>
                      <div className='flex items-center space-x-3'>
                           <h5 className={` text-lg ${colors[index]}`}>{item?.icon}</h5>
                           <h5 className='text-slate-800 text-sm font-light'>{item?.title}</h5>
 
                       </div>
+                  </Link>
                       {["Products","Orders","Users"]?.includes(item?.title)&&
                               <>
                               {drop?
@@ -145,7 +155,10 @@ const Card=({item,index})=>{
                     <div className='flex-col flex px-8 space-y-2 py-4'>
                          {item?.items?.map((tag)=>{
                               return(
-                                <h5 className='text-xs text-slate-500 font-light'>{tag?.name}</h5>
+                                <Link to={tag?.link}>
+                                     <h5 className='text-xs text-slate-500 font-light'>{tag?.name}</h5>
+                                </Link>
+
                               )
                          })
 

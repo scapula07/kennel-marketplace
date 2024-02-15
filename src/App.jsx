@@ -20,7 +20,7 @@ import Cart from './modules/cart'
 import Checkout from './modules/checkout'
 import {accountTypeState} from "./modules/recoil/state"
 import { useRecoilState } from 'recoil'
-import { doc,getDoc}  from "firebase/firestore";
+
 import Admin from './modules/admin'
 import CreateProduct from './modules/admin/createProduct'
 import ProductList from './modules/admin/productList'
@@ -31,6 +31,15 @@ import Active from './modules/orders/active'
 import Profile from './modules/profile'
 import EditProduct from './modules/admin/editProduct'
 import Order from './modules/admin/order'
+import SellerHome from './modules/seller/home'
+import SellerProducts from './modules/seller/products'
+import SellerServices from './modules/seller/services'
+import Information from './modules/seller/information'
+import {doc,setDoc,
+  addDoc,collection,
+  getDoc,getDocs,
+  query, where,updateDoc,orderBy,onSnapshot} from "firebase/firestore"
+import { db } from './modules/firebase'
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -38,7 +47,12 @@ function App() {
   useEffect( ()=>{ 
     console.log(JSON.parse(user),"user")
     if(JSON.parse(user)?.id?.length >0){
-      setcurrentUser(JSON.parse(user))
+      const unsub = onSnapshot(doc(db,"users",JSON.parse(user)?.id), (doc) => {
+        console.log(doc.data(),"daa")
+        setcurrentUser({...doc.data(),id:doc?.id})
+       });
+
+      // setcurrentUser(JSON.parse(user))
     
   }
  
@@ -54,7 +68,12 @@ function App() {
               <Route exact path="/product"  element={<Product/>} />
               <Route exact path="/signup"  element={<Signup/>} />
               <Route exact path="/login"  element={<Login/>} />
-              <Route exact path="/seller"  element={<Seller/>} />
+              <Route exact path="/seller"  element={<Seller/>} >
+                   <Route exact path=""  element={<SellerHome/>} />
+                   <Route exact path="products"  element={<SellerProducts/>} />
+                   <Route exact path="services"  element={<SellerServices/>} />
+                   <Route exact path="information"  element={<Information/>} />
+                </Route>
               <Route exact path="/account"  element={<Accoount/>} />
               <Route exact path="/wallet"  element={<Wallet/>} />
               <Route exact path="/payment"  element={<Payment/>} />

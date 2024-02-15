@@ -49,7 +49,10 @@ export default function ProductList() {
                               <h5 className='text-xl font-semibold text-black'>All Products</h5>
 
                               <div className='flex items-center'>
-                                  <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm'>+ New product</button>
+                              <Link to="/admin/new-product" >
+                              <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm'>+ New product</button>
+                              </Link>
+
 
                               </div>
 

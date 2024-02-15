@@ -136,7 +136,7 @@ export default function Profile() {
 
                                                     <div className='flex w-1/2 space-x-6 '>
                                                             <div className='flex flex-col w-1/2 space-y-2'>
-                                                                {url?.length ==0&&profile?.img?.length !=undefined?
+                                                                {url?.length ==0&&profile?.img?.length >0?
                                                                     <div>
                                                                         <img 
                                                                         src={profile?.img}

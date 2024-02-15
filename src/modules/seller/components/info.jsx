@@ -21,12 +21,12 @@ export default function Info({seller}) {
               <div className='flex items-center w-2/5 justify-between py-4'>
                   <div className='flex w-1/3 justify-between items-center'>
                      <h5 className='font-light'>Purchases</h5>
-                     <h5 className='text-blue-600'>77</h5>
+                     <h5 className='text-blue-600'>{"0"}</h5>
 
                   </div>
                   <div className='flex w-1/3 justify-between items-center'>
                      <h5 className='font-light'>Sales</h5>
-                     <h5 className='text-blue-600'>102</h5>
+                     <h5 className='text-blue-600'>{"0"}</h5>
 
                   </div>
 

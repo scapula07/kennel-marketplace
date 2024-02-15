@@ -11,21 +11,21 @@ import { collection,  onSnapshot,
   limit,getDoc,setDoc ,
  updateDoc,addDoc } from 'firebase/firestore'
 import { db } from '../../modules/firebase';
-import { saveTypeState } from '../../modules/recoil/state';
-import { useRecoilState } from 'recoil';
+import { saveTypeState ,accountTypeState} from '../../modules/recoil/state';
+import { useRecoilState ,useRecoilValue} from 'recoil';
 export default function Header() {
-     const [currentUser,setcurrentUser]=useState({id:""})
+     const currentUser=useRecoilValue(accountTypeState)
      const [misc,setMisc]=useState({})
      const [saved,setSaved]=useRecoilState(saveTypeState)
      const user = localStorage.getItem("user");
    
-  useEffect( ()=>{
+  // useEffect( ()=>{
       
  
-    JSON.parse(user)
-    setcurrentUser(JSON.parse(user))
+  //   JSON.parse(user)
+  //   setcurrentUser(JSON.parse(user))
 
-    },[])
+  //   },[])
 
 
 

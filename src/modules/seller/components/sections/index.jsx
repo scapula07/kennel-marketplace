@@ -1,4 +1,5 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 export default function Sections() {
   return (
@@ -13,6 +14,11 @@ export default function Sections() {
 
                 </div>
 
+           </div>
+
+
+           <div className='w-full '>
+                <Outlet />
            </div>
             
           

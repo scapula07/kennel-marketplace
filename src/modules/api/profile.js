@@ -61,8 +61,8 @@ export const profileApi= {
 
             const ref =doc(db,"users",user?.id)
             const docSnap = await getDoc(ref);
-               const doc=await updateDoc(doc(db,"users",user?.id),profile)
-               console.log(doc,"cooo")
+               await updateDoc(doc(db,"users",user?.id),profile)
+           
                 return true
 
             }catch(e){

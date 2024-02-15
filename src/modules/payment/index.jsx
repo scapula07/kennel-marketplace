@@ -11,9 +11,33 @@ import { IoMdAdd } from "react-icons/io";
 import Modal from '../../components/modal';
 import { IoMdClose } from "react-icons/io";
 import { BiTransfer } from "react-icons/bi";
-
+import { useRecoilValue } from 'recoil';
+import { accountTypeState } from '../recoil/state';
+import { IoWalletOutline } from "react-icons/io5";
+import { FaCreditCard } from "react-icons/fa";
+import { BsCash } from "react-icons/bs";
+import { BiSolidCreditCard } from "react-icons/bi";
+import { paymentApi } from '../api/payment';
+import { BeatLoader } from 'react-spinners';
 export default function Payment() {
        const [trigger,setTrigger]=useState(false)
+       const currentUser=useRecoilValue(accountTypeState)
+       const [payments,setPayment]=useState([])
+       const [isLoading,setLoader]=useState(false)
+      //  useEffect(()=>{
+      //    setPayment(currentUser?.payments)
+      //  },[])
+
+       const addCard=async()=>{
+        setLoader(true)
+          try{
+            const res=await paymentApi.addPayment(currentUser,payments)
+            setLoader(false)
+          }catch(e){
+            console.log(e)
+            setLoader(false)
+          }
+       }
   return (
     <Layout>
                 
@@ -22,43 +46,46 @@ export default function Payment() {
                             <div className='flex w-full justify-between '>
                                 <h5 className='text-4xl font-semibold '>Payment methods</h5>
 
-                            
-                                <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Save changes</button>
+                               {isLoading?
+                                <BeatLoader
+                                  size={"8"}
+                                   />
+                                :
+
+                               <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600' onClick={addCard}>Save changes</button>
+
+                               }
+                             
 
                             </div>
 
 
                             <div className='flex flex-col space-y-4 w-full'>
                                  <div className='py-4 '>
-                                    <h5 className='text-xl fonnt-semibold text-slate-600'>Credit cards</h5>
+                                    {/* <h5 className='text-xl fonnt-semibold text-slate-600'>Credit cards</h5> */}
 
                                  </div>
-                          {[
-                            {
-                                img:pay1,
-                                text:"Visa ending in 2533"
-
-                            },
-                            {
-                                img:pay2,
-                                text:"Mastercard ending in 2533"
-
-                            },
-
-
-                           ].map((item)=>{
+                          {currentUser?.payments?.length !=undefined&&[...payments,...currentUser?.payments]?.map((item)=>{
                               return(
                                   <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4'>
-                                      <img 
-                                        src={item?.img}
-                                        className="w-10 h-10"
-                                      />
+                                    {item==="Kennel wallet"&&<IoWalletOutline 
+                                         className='text-3xl  rounded-lg text-center '
+                                    />}
+                                    {item==="Cash"&&<BsCash 
+                                       className='text-3xl  rounded-lg text-center '
+                                    />}
+                                    {item==="Cashless Transfer"&&<BiTransfer 
+                                       className='text-3xl  rounded-lg text-center '
+                                    />}
+                                    {item==="Credit card"&&<FaCreditCard 
+                                       className='text-3xl  rounded-lg text-center '
+                                     />}
 
                                       <div className='flex w-full justify-between'>
                                           <div className='flex flex-col'>
                                                 <div className='flex flex-col'>
-                                                     <h5 className='text-lg text-slate-700 font-light'>{item?.text}</h5>
-                                                     <h5 className='text-sm text-slate-500 '>Expiry 06/2024</h5>
+                                                     <h5 className='text-lg text-slate-700 font-light'>{item}</h5>
+                                                     {/* <h5 className='text-sm text-slate-500 '>Expiry 06/2024</h5> */}
                                                 </div>
 
                                                 <div className='flex items-center'>
@@ -116,60 +143,24 @@ export default function Payment() {
                     <h5 className='text-lg text-slate-600 font-semibold'>Select:</h5>
                 
 
-                      <div className='flex flex-col bg-white w-full h-full space-y-6'>
-
-
-                      {[
-                            {
-                                img:pay4,
-                                text:"Kernel wallet"
-
-                            },
-                            {
-                                img:pay5,
-                                text:"Pay/receive cash"
-
-                            },
-                            {
-                                img:pay3,
-                                text:"Visa ending in 2533"
-
-                            }
-                       
-
-
-                           ].map((item)=>{
-                              return(
-                                  <div className='flex w-full justify-between bg-white rounded-lg px-4 space-x-6  py-2'>
-                                      <img 
-                                        src={item?.img}
-                                        className="w-20 h-8"
-                                      />
-
-                                      <div className='flex w-4/5'>
-                                          <div className='flex flex-col'>
-                                                <div className='flex flex-col'>
-                                                     <h5 className='text-lg text-slate-700 font-light'>{item?.text}</h5>
-                                                     <h5 className='text-sm text-slate-500 '>Expiry 06/2024</h5>
-                                                </div>
-
-                                                <div className='flex items-center'>
-                                                </div>
-                                          </div>
-
-                                         
-
-                                      </div>
-                                     
-                                   
-                                  </div>
-                              )
-                           })
-
-                          }
-
+                      <div className='flex flex-col bg-white w-full h-full space-y-2'>
 
                               {[
+                                 {
+                                  icon:<IoWalletOutline />,
+                                  text:"Kennel wallet"
+  
+                              },
+                              {
+                                  icon:<BsCash />,
+                                  text:"Cash"
+  
+                              },
+                              {
+                                  icon:<FaCreditCard />,
+                                  text:"Credit card"
+  
+                              },
 
                               {
                                   icon:<BiTransfer />,
@@ -180,13 +171,15 @@ export default function Payment() {
 
                               ].map((item)=>{
                                 return(
-                                    <div className='flex w-full justify-between bg-white rounded-lg px-4 space-x-6 h-28 py-4'>
-                                        <h5 className='text-xl border px-6 py-2 rounded-lg text-center '>{item?.icon}</h5>
+                                    <div className='flex w-full justify-between bg-white rounded-lg px-4 space-x-6 hover:bg-slate-100 py-4'
+                                      onClick={()=>setPayment((prev)=>[...prev,item?.text]) || setTrigger(false)}
+                                    >
+                                        <h5 className='text-3xl  rounded-lg text-center '>{item?.icon}</h5>
 
                                         <div className='flex w-4/5 justify-between'>
                                             <div className='flex flex-col'>
                                                   <div className='flex flex-col'>
-                                                      <h5 className='text-lg text-slate-700 font-light'>{item?.text}</h5>
+                                                      <h5 className='text- text-slate-700 font-light'>{item?.text}</h5>
                                                     
                                                   </div>
 

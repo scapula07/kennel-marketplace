@@ -79,16 +79,16 @@ export const productApi= {
          }
 
     },
-    editProduct:async function (user,product,file) {
+    editProduct:async function (product,file) {
       try{
           // const img=await uploadFile(file)
 
-          console.log(profile,"save cha")
+       
 
-          const ref =doc(db,"users",user?.id)
+          const ref =doc(db,"users",product?.id)
           const docSnap = await getDoc(ref);
-             const doc=await updateDoc(doc(db,"products",product?.id),product)
-             console.log(doc,"cooo")
+             await updateDoc(doc(db,"products",product?.id),product)
+         
               return true
 
           }catch(e){

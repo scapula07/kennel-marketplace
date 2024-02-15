@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { accountTypeState,saveTypeState } from '../recoil/state';
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy}  from "firebase/firestore";
 import {getStorage, ref, uploadBytes } from "firebase/storage"
-
+import { Link } from 'react-router-dom';
 
 const monthNames = [
   "January", "February", "March", "April", "May", "June", "July",
@@ -114,9 +114,11 @@ const Table=({orders})=>{
                         {orders?.map((order,index)=>{
                              
                               return(
+                              
                                   <Row 
                                      order={order}
                                   />
+                                  
 
                               )
                           })
@@ -183,6 +185,7 @@ const Row=({order})=>{
 
     return(
       <tr className='border-b '>
+          <Link to="/admin/order" state={{order}}>
       <td className='flex items-center space-x-4'>
           <input
              type={"checkbox"}
@@ -191,6 +194,7 @@ const Row=({order})=>{
            <span className='text-sm font-light text-slate-500'>#{order?.id?.slice(0,4)}</span>
 
       </td>
+      </Link>
       <td className='text-sm font-light text-slate-500'>{formattedDate}</td>
       <td className='text-sm font-light text-slate-500'>
        {order?.status=="active"?

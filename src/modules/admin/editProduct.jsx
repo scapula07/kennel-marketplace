@@ -4,6 +4,7 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onS
 import { db } from '../firebase';
 import Select from "react-select";
 import { productApi } from '../api/product';
+import { BeatLoader } from 'react-spinners';
 
 
 export default function EditProduct() {
@@ -30,7 +31,7 @@ export default function EditProduct() {
        const edit=async()=>{
           setLoading(true)
           try{
-            const res=await productApi.editProduct()
+            const res=await productApi.editProduct(product)
             setLoading(false)
           }catch(e){
             setLoading(false)
@@ -45,8 +46,15 @@ export default function EditProduct() {
                 <div className='w-full text-white py-6 px-4 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
                               <h5 className='text-2xl font-semibold text-white'>Make the changes below</h5>
+                              {isLoading?
+                                <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' >
+                                   <BeatLoader size={"8"}/>
+                                </button>
+                                :
+                                <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' onClick={edit}>Save</button>
 
-                              <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold'>Save</button>
+                              }
+                  
                         </div>
 
 

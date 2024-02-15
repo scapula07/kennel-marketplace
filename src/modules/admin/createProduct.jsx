@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 export default function CreateProduct() {
       const navigate=useNavigate()
       const [num,setNum]=useState(1)
@@ -38,6 +39,7 @@ export default function CreateProduct() {
     <div className='w-full'>
           <div className='flex flex-col space-y-3'>
             <h5 className='text-white font-light text-sm'>Admin/Product</h5>
+            
             <h5 className='text-lg font-semibold text-white'>New Product</h5>
 
           </div>

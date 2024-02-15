@@ -5,9 +5,28 @@ import { RxArrowRight } from "react-icons/rx";
 import { Link } from 'react-router-dom';
 import { accountTypeState } from '../recoil/state';
 import { useRecoilValue } from 'recoil';
+import { useNavigate } from "react-router-dom";
+import { authApi } from '../api/auth';
+
 export default function Accoount() {
     const currentUser =useRecoilValue(accountTypeState)
     console.log(currentUser,"accoount")
+    let navigate = useNavigate();
+  
+
+    const logout=async()=>{
+        localStorage.clear();
+        try{
+            const response =await authApi.logout()
+            console.log(response,"response")
+           
+            navigate(`/login`)
+
+        }catch(e){
+            console.log(e)
+        }
+
+    }
   return (
     <Layout>
             <div className='w-full h-full flex justify-center py-10'>
@@ -15,7 +34,7 @@ export default function Accoount() {
                           <div className='flex w-full justify-between '>
                               <h5 className='text-4xl font-semibold '>My account</h5>
 
-                              <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Log out</button>
+                              <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600' onClick={logout}>Log out</button>
 
                           </div>
 
@@ -27,7 +46,10 @@ export default function Accoount() {
 
                                <div className='flex flex-col space-y-4'>
                                   <h5 className='text-2xl font-semibold '>{currentUser?.name}</h5>
-                                 <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Edit profile</button>
+                                  <Link to="/profile">
+                                    <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>View profile</button>
+                                  </Link>
+                               
 
                                </div>
 
@@ -64,7 +86,7 @@ export default function Accoount() {
 
                                   ].map((item)=>{
                                      return(
-                                        <div className='flex justify-between py-2 px-4 rounded-lg shadow-lg '>
+                                        <div className='flex justify-between py-4 px-4 rounded-lg shadow-lg '>
                                            <h5>{item?.label}</h5>
                                            <Link to={item?.link}>
                                             <RxArrowRight  

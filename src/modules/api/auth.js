@@ -1,5 +1,5 @@
 import {
-       createUserWithEmailAndPassword,
+        createUserWithEmailAndPassword,
         signInWithEmailAndPassword ,
         GoogleAuthProvider,
         signInWithPopup,
@@ -16,7 +16,7 @@ export const authApi= {
             const credential = await createUserWithEmailAndPassword(auth,email,password)
             const user=credential.user
             const ref =doc(db,"users",user?.uid)
-            await setDoc(ref,{id:user?.uid,name:name,role:"user",email:email})
+            await setDoc(ref,{id:user?.uid,name:name,role:"user",email:email,img:"",payments:[]})
             const docSnap = await getDoc(ref);
             if (docSnap.exists()) {
                await setDoc(doc(db, "misc",user?.uid), {
@@ -250,43 +250,15 @@ export const authApi= {
              }
 
         },
-        linkedinAuth:async function (code) {
-         
+        logout: async function () {
+          try{
+              const response=await signOut(auth)
+              console.log(response,"logout")
+              return response
+          }catch(e){
+              console.log(e)
+          }
+        }
 
-
-            const url = `http://localhost:7000/api/linkedin-auth`
-            // const data = new URLSearchParams();
-            // data.append('grant_type', 'authorization_code');
-            // data.append('code', code); // Replace with your actual authorization code
-            // data.append('client_id', '77qrf2uomwidm7');
-            // data.append('client_secret', 'cMbWDEISFgzpzkK1');
-            // data.append('redirect_uri', 'http%3A%2F%2Flocalhost%3A3001%2Fregister');
-
-    
-
-              const config = {
-                  headers:{
-                      'Content-Type': 'application/json',
-                      },
-                      };
-      
-              
-              try{
-              
-                  const response= await axios.post(
-                          url,
-                          {code
-
-                          },
-                          config
-                    )
-                
-                  console.log(response,"response")
-                  }catch(e){
-                  console.log(e)
-                  throw new Error("You dont have permissions")
-                  }
-
-        },
 
 }

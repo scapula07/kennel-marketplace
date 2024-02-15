@@ -13,14 +13,14 @@ export default function Order() {
     const [order,setOrder]=useState({images:[]})
     const location =useLocation()
   
-    const id=location?.state
+    const ordered=location?.state.order
   
-    console.log(id)
+ 
   
     useEffect(()=>{
       
-        if(id?.length != undefined){
-          const unsub = onSnapshot(doc(db,"orders",id), (doc) => {
+        if(ordered?.id?.length != undefined){
+          const unsub = onSnapshot(doc(db,"orders",ordered?.id), (doc) => {
             console.log(doc.data(),"daa")
         
             setOrder({...doc.data(),id:doc?.id})
