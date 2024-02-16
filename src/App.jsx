@@ -40,6 +40,7 @@ import {doc,setDoc,
   getDoc,getDocs,
   query, where,updateDoc,orderBy,onSnapshot} from "firebase/firestore"
 import { db } from './modules/firebase'
+import Overview from './modules/admin/overview'
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -90,6 +91,7 @@ function App() {
                   <Route exact path="product"  element={<ProductDetails/>} />
                   <Route exact path="edit"  element={<EditProduct/>} />
                   <Route exact path="order"  element={<Order/>} />
+                  <Route exact path=""  element={<Overview/>} />
 
               </Route>
 
