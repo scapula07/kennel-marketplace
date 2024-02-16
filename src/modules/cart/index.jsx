@@ -27,9 +27,11 @@ export default function Cart() {
 
                        <div className='flex flex-col space-y-4 w-full '>
                                  <div className='py-4 '>
-                                    <h5 className='text-sm font-light text-blue-600'>You have {products?.length} items in your cart</h5>
+                                    <h5 className='text-lg font-light text-blue-600'>You have {products?.length} items in your cart</h5>
 
                                  </div>
+
+    
 
                      <div className='flex flex-col space-y-4'>
 
@@ -45,7 +47,7 @@ export default function Cart() {
                            })
 
                           }
-
+                    {products?.length >0&&
                     <div className='flex w-3/5 justify-end'>
                              <div className='flex items-center space-x-4'>
                                  <h5>Total:${total}</h5>
@@ -62,6 +64,7 @@ export default function Cart() {
                              </div>
 
                        </div>
+                          }
                        </div>
 
 

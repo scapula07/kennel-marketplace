@@ -10,10 +10,28 @@ export default function Login() {
 
   const [credentail,setCred]=useState({})
   const [loader,setLoader]=useState(false)
+  const [errorMsg, setErrorMsg] = useState(null)
   let navigate = useNavigate();
   console.log(credentail,"cred")
 
   const login=async()=>{
+    setErrorMsg(null)
+      if (credentail?.name?.length < 3) {
+        setErrorMsg(' Location is invalid ');
+        setLoader(false);
+        return;
+      }
+
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(credentail?.email)){
+          setErrorMsg( "email is invalid" );
+          setLoader(false);
+      }
+
+      if (credentail?.password.length < 8) {
+        setErrorMsg( "Password should be atleast 8 characters" );
+        setLoader(false);
+        return;
+      }
      try{
          setLoader(true)
          const user=await authApi.login(credentail?.email,credentail?.password)
@@ -23,12 +41,12 @@ export default function Login() {
          localStorage.clear();
          localStorage.setItem('user',JSON.stringify(user));
 
-         user?.id.length >0&& navigate(`/`)
+         user?.id.length >0&& navigate(`/market`)
 
      }catch(e){
-       console.log(e)
-       setLoader(false)
-     }
+         setLoader(false)
+         setErrorMsg(e?.message)
+      }
   }
   return (
     <div className='w-full h-screen relative'>
@@ -54,6 +72,11 @@ export default function Login() {
                                        <h5 className='text-slate-500'>Lorem ipsum dolor sit amet.</h5>
 
                                   </div>
+                                  {errorMsg && (
+                
+                                        <h5 className='text-xs font-semibold text-red-500'>{errorMsg}</h5>
+                                   )}
+                            
 
                                   <div className='flex flex-col space-y-3 py-4'>
                                         {
@@ -61,6 +84,7 @@ export default function Login() {
                                             {
                                                 label:"Email",
                                                 desc:"Enter your email",
+                                                type:"text",
                                                 value:credentail?.email,
                                                 click:(e)=>setCred({...credentail,email:e.target.value})
 
@@ -68,6 +92,7 @@ export default function Login() {
                                             {
                                                 label:"Password",
                                                 desc:"Enter your password",
+                                                type:"password",
                                                 value:credentail?.password,
                                                 click:(e)=>setCred({...credentail,password:e.target.value})
 
@@ -78,6 +103,7 @@ export default function Login() {
                                                 <div className='flex flex-col space-y-1'>
                                                     <label className='text-slate-500 text-lg font-light'>{item?.label}</label>
                                                     <input 
+                                                        type={item?.type}
                                                        placeholder={item?.desc}
                                                        className="outline-none border py-3 px-2 rounded-xl "
                                                        onChange={(e)=>item?.click(e)}

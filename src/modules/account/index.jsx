@@ -39,10 +39,20 @@ export default function Accoount() {
                           </div>
 
                           <div className='flex items-center space-x-8'>
-                              <img
-                                   src={breeder}
-                                   className="rounded-full"
-                               />
+                          {currentUser?.img?.length >0?
+
+                                <img 
+                                  src={currentUser?.img}
+                                  className="w-56 h-56 rounded-full"
+                            
+                                />
+                              :
+                                <div  className="w-44 h-44 rounded-full flex justify-center items-center" style={{background:"white"}}>
+                                      <h5 className='rounded-full bg-orange-400 text-white text-7xl font-semibold h-36 w-36 flex items-center justify-center'>{currentUser?.name?.slice(0,1)}</h5>
+                                </div>
+
+
+                            } 
 
                                <div className='flex flex-col space-y-4'>
                                   <h5 className='text-2xl font-semibold '>{currentUser?.name}</h5>

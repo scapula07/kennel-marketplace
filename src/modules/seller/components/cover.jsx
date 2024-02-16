@@ -41,10 +41,10 @@ export default function Cover({seller}) {
                 />
              <div className=' px-28 flex items-center '>
 
-                   {seller?.img?.length !=undefined?
+                   {seller?.img?.length >0?
 
                     <img 
-                      src={breeder}
+                      src={seller?.img}
                       className="w-56 h-56 rounded-full -mt-20 p-3"
                       style={{background:"white"}}
                    />

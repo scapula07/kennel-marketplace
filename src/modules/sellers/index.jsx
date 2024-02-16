@@ -14,7 +14,7 @@ export default function Sellers() {
                        <Filters />
  
                    </div>
-                    <div className='flex flex-col w-4/6 '>
+                    <div className='flex flex-col w-4/6 overflow-y-scroll '>
 
 
                           <Seller />

@@ -39,9 +39,19 @@ export default function Products() {
 
   return (
     <div className='w-full'>
+
+         {products?.length===0&&
+
+          <div className='flex w-full justify-center py-20'>
+              <ClipLoader 
+                 color='orange'
+              />
+
+          </div>
+        }
          
          <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
-                  {products?.map((product)=>{
+                  {products?.length>0&&products?.map((product)=>{
                       return(
                          <Card 
                             product={product}
@@ -50,7 +60,7 @@ export default function Products() {
                   })}
 
 
-         </div>
+          </div>
 
     </div>
   )
