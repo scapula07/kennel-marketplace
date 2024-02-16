@@ -9,9 +9,16 @@ import { IoDocumentTextSharp } from "react-icons/io5";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoMdCheckmark } from "react-icons/io";
 import { MdOutlineFileUpload } from "react-icons/md";
-
+import { BeatLoader } from 'react-spinners';
+import { orderApi } from '../api/order';
+import { Link } from 'react-router-dom';
+import { messageApi } from '../api/message';
+import { AiOutlineDownload } from "react-icons/ai";
 export default function Order() {
     const [order,setOrder]=useState({images:[]})
+    const [file,setFile]=useState({name:""})
+    const [isLoading,setLoader]=useState(false)
+    const hiddenFileInput = useRef()
     const location =useLocation()
   
     const ordered=location?.state.order
@@ -27,7 +34,7 @@ export default function Order() {
         console.log(dir,"dir")
         if (dir) {
       
-            setFiles(dir)
+            setFile(dir)
 
         }
 
@@ -35,6 +42,8 @@ export default function Order() {
 
         }
   
+
+    
  
   
     useEffect(()=>{
@@ -50,6 +59,19 @@ export default function Order() {
 
 
          console.log(ordered,"ooo")
+
+         const uploadContract=async()=>{
+            setLoader(true)
+
+              try{
+                  const res=await orderApi.uploadContract(ordered,file)
+                  setLoader(false)
+
+              }catch(e){
+                console.log(e)
+                setLoader(false)
+              }
+         }
   
        
   return (
@@ -72,8 +94,10 @@ export default function Order() {
                                      <Product 
                                        item={ordered?.products}
                                      />
-
-                                    <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs '>Message customer</button>
+                                    
+                                          <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs '>Message customer</button>
+                                     
+                   
                
                              </div>
 
@@ -114,6 +138,11 @@ export default function Order() {
                                           <div className='flex flex-col w-full space-y-2'>
                                               <h5 className='text-slate-500 font-semibold'>Contract</h5>
                                               {ordered?.contract==="waiting"?
+                                                   <>
+                                                   {file?.name?.length==0?
+
+
+                                               
                                                     <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
                                                       style={{background: "#F3F3F3"}}
                                                       onClick={handleClick}
@@ -133,7 +162,71 @@ export default function Order() {
                                                           
                                                     </div>
                                                     :
+                                                    <div className='flex space-x-4 items-center'>
+                                                            <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
+                                                                    style={{background: "#F3F3F3"}}
+                                                                    onClick={handleClick}
+                                                                >
+                                                                
+                                                                    <h5 className='text-slate-500 font-light text-sm'>{file?.name}</h5>
+
+                                                                    <input
+                                                                        type="file"
+                                                                        className='hidden'
+                                                                        ref={hiddenFileInput}
+                                                                        onChange={handleChange}
+                                                                        />
+
+                                                                        
+                                                                </div>
+                                                                {isLoading?
+
+                                                                    <BeatLoader 
+                                                                      size={"8"}
+                                                                    />
+                                                                      :
+
+                                                                    <h5 className='text-sm font-semibold text-orange-500' onClick={uploadContract}>Upload
+                                                                    </h5>
+
+                                                                }
+                                                          
+
+                                                    </div>
+                                       
+
+                                                   }
+                                                    </>
+                                                    :
                                                     <>
+                                                    {ordered?.contract==="sent"?
+                                                         <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-lg space-x-4'
+                                                               style={{background: "#F3F3F3"}}
+                                                           
+                                                             >
+                                                              
+                                                                  <h5 className='text-slate-500 font-light text-sm'>Contract sent</h5>
+                                                                  
+                                                                  <AiOutlineDownload className='text-xl'
+                                                                  />
+         
+                                                                  <input
+                                                                     type="file"
+                                                                     className='hidden'
+                                                                     ref={hiddenFileInput}
+                                                                     onChange={handleChange}
+                                                                     />
+
+
+         
+                                                                   
+                                                             </div>
+                                                       :
+                                                       <div>
+
+                                                       </div>
+
+                                                    }
                                                     </>
 
                                               }

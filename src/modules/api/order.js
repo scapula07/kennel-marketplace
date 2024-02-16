@@ -4,6 +4,17 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc}  from "firebase/firest
 import {getStorage, ref, uploadBytes } from "firebase/storage"
 
 
+const uploadFile=async(file)=>{
+    console.log("Uploading")
+    const storage = getStorage();
+    const fileId=Math.random().toString(36).substring(2,8+2);
+    const storageRef = ref(storage, `/${fileId}`);
+    console.log(storageRef,"shote")
+    const snapshot=await uploadBytes(storageRef, file)
+
+    return `https://firebasestorage.googleapis.com/v0/b/${snapshot?.metadata?.bucket}/o/${snapshot?.metadata?.name}?alt=media`
+
+}
 
 export const orderApi= {
     create:async function (products,user,delivery,total) {
@@ -29,6 +40,25 @@ export const orderApi= {
                 console.log(e)
             }
 
+       },
+       uploadContract:async function (order,file) {
+            try{
+                const url=await uploadFile(file)
+                 console.log(url,"uu")
+
+                const ref =doc(db,"order",order?.id)
+                const docSnap = await getDoc(ref);
+                 const res=  await updateDoc(doc(db,"orders",order?.id), {
+                        contract:"sent",
+                        file:url
+                    })
+                    console.log(res,"resss")
+    
+                    return true
+
+            }catch(e){
+                console.log(e)
+            }
        }
 
 }
