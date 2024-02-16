@@ -10,12 +10,12 @@ import {doc,setDoc,
 import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import { db } from '../firebase';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader, ClipLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 
 export default function Messages() {
      const currentUser=useRecoilValue(accountTypeState)
-     const [currentChat,setCurrentChat] =useState()
+     const [currentChat,setCurrentChat] =useState({})
      const [conversations,setConversations]=useState([])
 
 
@@ -142,7 +142,22 @@ export default function Messages() {
                                                     />
                                                  )
                                             })
-                                         }
+                                           }
+
+                                          {conversations?.length ===0&&areContacts?.length ==0&&
+                                             <div className='w-full flex justify-center py-10 '>
+                                                  <ClipLoader 
+                                                       color={"orange"}
+                                                       loading={true}
+                                                  />
+                                             </div>
+                                             }
+                                                       
+                                                       {conversations?.length ===0&&areContacts?.length >0&&
+                                                       <div className='w-full flex justify-center  py-10'>
+                                                       <h5 className="text-sm">No contacts</h5>
+                                                       </div>
+                                                       }
 
                                     </div>
 
@@ -151,6 +166,7 @@ export default function Messages() {
 
                            <div className='w-full h-full flex flex-col relative  '>
                                   <div className='flex items-center justify-between absolute top-0 py-4 border-b w-full px-5 '>
+                                  {currentChat?.id?.length >0&&
                                         <div className='flex items-center space-x-6'>
                                         {currentChat?.img?.length !=undefined?
                                              <img
@@ -159,7 +175,8 @@ export default function Messages() {
                                              />
                                                   :
                                                   <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
-                                                       }
+                                                       
+                                             }
                                              
 
                                             <h5 className='text-lg font-light'>{currentChat?.name}</h5>
@@ -167,13 +184,15 @@ export default function Messages() {
 
                                         </div>
 
-                                        <div className='flex items-center space-x-8 '>
+                                       }
+
+                                        <div className='flex items-center space-x-8 justify-end'>
                                                 <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
                                                         Archive
                                                 
 
                                                     </button>
-                                                  
+                                                    {currentChat?.id?.length >0&&
                                                    
                                                     <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
                                                         <span>Go to seller page</span>
@@ -183,6 +202,7 @@ export default function Messages() {
                                                 
 
                                                     </button>
+                                                            }
                                              
 
                                         </div>
@@ -381,6 +401,14 @@ const ChatBox=({currentChat,currentUser})=>{
                })
 
                }
+
+
+                    {msgs?.length===0&&
+                    <div className='flex justify-center py-6'>
+                         <h5 className='text-sm font-light '>No messages</h5>
+                    </div>
+
+                    }
 
           </div>
       )
