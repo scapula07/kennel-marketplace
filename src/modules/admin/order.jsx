@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import { useLocation,useParams} from "react-router-dom";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
@@ -8,12 +8,32 @@ import { FaHtml5 } from "react-icons/fa";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoMdCheckmark } from "react-icons/io";
+import { MdOutlineFileUpload } from "react-icons/md";
 
 export default function Order() {
     const [order,setOrder]=useState({images:[]})
     const location =useLocation()
   
     const ordered=location?.state.order
+
+      
+    const handleClick = event => {
+        hiddenFileInput.current.click()
+    }
+
+
+        const handleChange = async(e)=> {
+        const dir = e.target.files[0]
+        console.log(dir,"dir")
+        if (dir) {
+      
+            setFiles(dir)
+
+        }
+
+
+
+        }
   
  
   
@@ -27,6 +47,9 @@ export default function Order() {
            });
           }
          },[])
+
+
+         console.log(ordered,"ooo")
   
        
   return (
@@ -59,24 +82,61 @@ export default function Order() {
                                       <Tracker />
                                    </div>
 
-                                    <div className='w-2/4 flex flex-col px-4 space-y-8'>
-                                          <div className=''>
-                                              <h5 className='text-slate-500 font-semibold'>Customer details</h5>
-                                            
-                                          </div>
-                                         
-                                          <div className=''>
-                                              <h5 className='text-slate-500 font-semibold'>Delivery details</h5>
+                                    <div className='w-2/4 flex flex-col px-4 space-y-8'>                         
+                                          <div className='flex flex-col space-y-4'>
+                                               <h5 className='text-slate-500 font-semibold'>Customer & Delivery details</h5>
+                                               <div className='bg-slate-100 py-8 px-4'         style={{background: "#F3F3F3"}}>
+                                                  <Customer 
+                                                      order={ordered}
+                                                  />
+                                                  <div className='flex flex-col'>
+                                                      <h5 className='font-light text-slate-500 text-xs'>City :{ordered?.delivery?.city}</h5>
+                                                      <h5 className='font-light text-slate-500 text-xs'>Delivery service :{ordered?.delivery?.dispatch}</h5>
+                                                      <h5 className='font-light text-slate-500 text-xs'>Payment method :{ordered?.delivery?.payment}</h5>
+                                                      
+
+                                                  </div>
+
+                                              </div>
                                             
                                           </div>
 
                                           <div className=''>
-                                              <h5 className='text-slate-500 font-semibold'>Payment status</h5>
+                                              <h5 className='text-slate-500 font-semibold text-sm'>Payment status:{ordered?.paid?
+                                              <span className='text-green-500 text-xs'> Paid</span>
+                                              :
+                                              <span className='text-yellow-500 text-xs'>Pending</span>
+                                              
+                                            }</h5>
                                             
                                           </div>
 
-                                          <div className=''>
-                                              <h5 className='text-slate-500 font-semibold'>Upload contract</h5>
+                                          <div className='flex flex-col w-full space-y-2'>
+                                              <h5 className='text-slate-500 font-semibold'>Contract</h5>
+                                              {ordered?.contract==="waiting"?
+                                                    <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
+                                                      style={{background: "#F3F3F3"}}
+                                                      onClick={handleClick}
+                                                    >
+                                                         <MdOutlineFileUpload 
+                                                           className='text-xl font-light'
+                                                         />
+                                                         <h5 className='text-slate-500 font-light text-sm'>Upload contract</h5>
+
+                                                         <input
+                                                            type="file"
+                                                            className='hidden'
+                                                            ref={hiddenFileInput}
+                                                            onChange={handleChange}
+                                                            />
+
+                                                          
+                                                    </div>
+                                                    :
+                                                    <>
+                                                    </>
+
+                                              }
                                             
                                           </div>
                                     </div>
@@ -235,4 +295,37 @@ const Tracker=()=>{
         </div>
         
      )
+}
+
+
+
+
+
+
+const Customer=({order})=>{
+    const [customer,setCustomer]=useState({})
+ 
+   
+      useEffect(()=>{
+      
+        if(order?.creator?.length != undefined){
+          const unsub = onSnapshot(doc(db,"users",order?.creator), (doc) => {
+            console.log(doc.data(),"daa")
+        
+            setCustomer({...doc.data(),id:doc?.id})
+           });
+          }
+         },[])
+  
+      return(
+        <div className='flex flex-col'>
+             <h5 className='text-lg font-semibold'>{customer?.name}</h5>
+             <div className='flex flex-col py-4 '>
+                 <h5 className='font-light text-slate-500 text-xs'>Email address:{customer?.email}</h5>
+                 <h5 className='font-light text-slate-500 text-xs'>Phone number:{customer?.phone}</h5>
+
+             </div>
+
+        </div>
+      )
 }

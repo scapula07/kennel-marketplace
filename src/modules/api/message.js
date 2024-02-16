@@ -3,7 +3,7 @@ import { collection,  onSnapshot,
     query, orderBy, 
     limit,getDoc,setDoc ,
    updateDoc,addDoc ,where} from 'firebase/firestore'
-import { db } from '../Firebase';
+import { db } from '../firebase'
 
 
 
