@@ -17,12 +17,34 @@ export default function Messages() {
      const currentUser=useRecoilValue(accountTypeState)
      const [currentChat,setCurrentChat] =useState({})
      const [conversations,setConversations]=useState([])
+     const [url,setUrl]=useState("")
+     const [file,setFile]=useState({})
 
 
      const [textsubmit,setTextsubmit]=useState(false)
      const [isLoading,setLoader]=useState(false)
      const [newMessage, setNewMessage] = useState("");
      const [areContacts,setContacts]=useState("")
+
+     const hiddenFileInput = useRef()
+     
+     const handleClick = event => {
+          hiddenFileInput.current.click()
+     }
+
+
+     const handleChange = async(e)=> {
+          const dir = e.target.files[0]
+          console.log(dir,"dir")
+          if (dir) {
+          setUrl(URL.createObjectURL(dir))
+     
+
+          }
+          setFile(dir)
+     
+
+     }
 
 
 
@@ -95,14 +117,7 @@ export default function Messages() {
                docSnap?.exists()&& setLoader(false)
                const receiver= currentChat?.members?.find((member)=>member !=currentUser?.id )
                console.log(receiver,"reci")
-               // const result = await updateDoc(doc(db,"unseen",receiver), {
-               //     messages:true
-               //   })
-          //     await updateDoc(doc(db,"conversations",currentChat?.id), {
-          //        lastMessage:Number(new Date()),
-          //        unseen:true,
-          //        lastSender:currentUser?.id
-          //       })
+             
   
          
         
@@ -224,13 +239,25 @@ export default function Messages() {
                                           </div>
                                           <div className=' h-1/5 w-full px-6 py-3'>
                                               <div className='flex flex-col border rounded-xl bg-white h-full px-6 py-2 space-y-1' >
-                                                   <input 
-                                                      placeholder='Enter a message'
-                                                      className='outline-none text-black'
-                                                      value={newMessage}
-                                                      onChange={(e)=>setNewMessage(e.target.value)}
-                                                      
-                                                   />
+                                                  {url?.length==0?
+                                                          <input 
+                                                          placeholder='Enter a message'
+                                                          className='outline-none text-black'
+                                                          value={newMessage}
+                                                          onChange={(e)=>setNewMessage(e.target.value)}
+                                                          
+                                                       />
+                                                       :
+                                                       <div className='flex items-center'>
+                                                            <h5 className='text-sm font-semibold'>
+                                                              {file?.name}
+
+                                                            </h5>
+                                                          
+                                                       </div>
+
+                                                  }
+                                               
                                                    <div className='flex justify-end'>
                                                         <div className='flex items-center space-x-2'>
                                                               <FiSmile 
@@ -239,9 +266,16 @@ export default function Messages() {
                                                                />
                                                               <MdOutlineAttachment
                                                                     className='text-slate-700 text-2xl'
+                                                                    onClick={handleClick}
                                                                />
+                                                                     <input
+                                                                           type="file"
+                                                                           className='hidden'
+                                                                           ref={hiddenFileInput}
+                                                                           onChange={handleChange}
+                                                                           />
 
-                                                  {isLoading?
+                                                      {isLoading?
                                                                  <BeatLoader
                                                                  color={"rgba(62, 51, 221, 1)"}
                                                                  loading={true}
@@ -312,7 +346,7 @@ const Contact=({conv,setCurrentChat,index,currentUser})=>{
        console.log(conv,"oo")
       return(
 
-          <div className='w-full flex flex-col space-y-1' 
+          <div className='w-full flex flex-col space-y-1 hover:bg-slate-100 rounded-lg px-2 py-1' 
             onClick={()=>setCurrentChat({...conv,...receiver})}
           >
           <div className='w-full flex items-center space-x-3'>
