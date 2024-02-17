@@ -29,6 +29,7 @@ export default function Header() {
      console.log(part)
    
     useEffect(()=>{
+    
       if(JSON.parse(user)?.id?.length >0){
          const ref =doc(db,"misc",JSON.parse(user)?.id)
          const unsub = onSnapshot(ref, (doc) => {

@@ -47,6 +47,10 @@ function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
   const user = localStorage.getItem("user");
   useEffect( ()=>{ 
+    setcurrentUser(JSON.parse(user))
+    },[])
+  useEffect( ()=>{ 
+      setcurrentUser(JSON.parse(user))
     console.log(JSON.parse(user),"user")
     if(JSON.parse(user)?.id?.length >0){
       const unsub = onSnapshot(doc(db,"users",JSON.parse(user)?.id), (doc) => {

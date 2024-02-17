@@ -63,6 +63,25 @@ export const productApi= {
            }
 
       },
+      removeFromCart:async function (product,user) {
+        try{
+          const ref =doc(db,"misc",user?.id)
+          const docSnap = await getDoc(ref);
+          console.log(docSnap?.data()?.cart,"old")
+          const newCart=docSnap?.data()?.cart?.filter(i=>i?.id !=product?.id)
+          console.log(newCart,"new")
+             await updateDoc(doc(db,"misc",user?.id), {
+                 cart:[...newCart]
+              })
+
+             return newCart
+
+
+         }catch(e){
+            console.log(e)
+         }
+
+    },
       save:async function (product,user) {
         try{
           const ref =doc(db,"misc",user?.id)
