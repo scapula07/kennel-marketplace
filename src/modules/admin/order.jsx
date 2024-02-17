@@ -84,7 +84,7 @@ export default function Order() {
          const startMsg=async()=>{
             setLoading(true)
               try{
-                const res=await messageApi.startConversation(customer,currentUser)
+                const res=await messageApi.startConversation({id:customer?.id},currentUser)
                 setLoading(false)
                 res&&navigate("/messages")
               }catch(e){

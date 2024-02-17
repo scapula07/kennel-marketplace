@@ -82,7 +82,7 @@ export default function Messages() {
             (member) => member !== currentUser.id
           );
 
-          console.log(message,"mmmm?>>>>>")
+       
    
             setTextsubmit(false)
           try{
@@ -113,7 +113,7 @@ export default function Messages() {
         }
   
 
-        console.log(currentChat,"chat")
+      
   return (
     <Layout>
                 <div className='w-full flex justify-center h-screen py-8'>
@@ -141,6 +141,7 @@ export default function Messages() {
                                                        conv={conv}
                                                        setCurrentChat={setCurrentChat}
                                                        index={index}
+                                                       currentUser={currentUser}
                                                     />
                                                  )
                                             })
@@ -283,16 +284,17 @@ export default function Messages() {
 
 
 
-const Contact=({conv,setCurrentChat,index})=>{
+const Contact=({conv,setCurrentChat,index,currentUser})=>{
      const [receiver,setReceiver]=useState({})
      const [products,setProducts]=useState([])
 
-     console.log(index,"convvv")
+   
     
        useEffect(()=>{
        
          if(conv?.members?.length != undefined){
-           const unsub = onSnapshot(doc(db,"users",conv?.members[1]), (doc) => {
+              const id=conv?.members?.filter(u=>u !=currentUser?.id)
+           const unsub = onSnapshot(doc(db,"users",id[0]), (doc) => {
              console.log(doc.data(),"daa")
              const { id, ...rest } = doc.data()
              setReceiver({...rest,receiverId:doc?.id})
@@ -306,8 +308,8 @@ const Contact=({conv,setCurrentChat,index})=>{
           //      console.log("here")
           //      setCurrentChat({...conv,...receiver})
           //   }
-
-          console.log(receiver,"reeeeeeee")
+         
+       console.log(conv,"oo")
       return(
 
           <div className='w-full flex flex-col space-y-1' 
@@ -385,7 +387,6 @@ const ChatBox=({currentChat,currentUser})=>{
      }
    },[msgs])
 
-   console.log(msgs,"msg>>>>")
 
 
       return(
@@ -425,7 +426,7 @@ const ChatBox=({currentChat,currentUser})=>{
 
 const Msg=({msg,currentChat,currentUser,index})=>{
         
-        console.log(msg?.sender===currentUser?.id,index,"sender")
+      
          
       return(
           <div className='flex px-4 space-x-2'>

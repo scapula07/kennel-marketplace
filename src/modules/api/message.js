@@ -31,14 +31,15 @@ export const messageApi = {
     
             const payload={
                 members:[
-                    currentUser?.id,
-                    member?.id
+                     currentUser?.id,
+                     member?.id
                    ],
                  lastMessage:Number(new Date()),
                   unseen:true,
                  lastSender:currentUser?.id
 
               }
+              console.log(payload,"pay")
               try{
                 const docRef = await addDoc(collection(db, "conversations"),payload);
                 console.log(docRef)
