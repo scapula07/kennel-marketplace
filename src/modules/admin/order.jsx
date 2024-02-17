@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react'
-import { useLocation,useParams} from "react-router-dom";
+import { useLocation,useNavigation,useParams} from "react-router-dom";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
 import Select from "react-select";
@@ -14,12 +14,20 @@ import { orderApi } from '../api/order';
 import { Link } from 'react-router-dom';
 import { messageApi } from '../api/message';
 import { AiOutlineDownload } from "react-icons/ai";
+import { useRecoilValue } from 'recoil';
+import { accountTypeState } from '../recoil/state';
+import {ClipLoader} from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
 export default function Order() {
+     const navigate=useNavigate()
+     const currentUser=useRecoilValue(accountTypeState)
     const [order,setOrder]=useState({images:[]})
     const [file,setFile]=useState({name:""})
     const [isLoading,setLoader]=useState(false)
+    const [loading,setLoading]=useState(false)
     const hiddenFileInput = useRef()
     const location =useLocation()
+    const [customer,setCustomer]=useState({})
   
     const ordered=location?.state.order
 
@@ -73,7 +81,17 @@ export default function Order() {
               }
          }
   
-       
+         const startMsg=async()=>{
+            setLoading(true)
+              try{
+                const res=await messageApi.startConversation(customer,currentUser)
+                setLoading(false)
+                res&&navigate("/messages")
+              }catch(e){
+                setLoading(false)
+                console.log(e)
+              }
+          }
   return (
     <div className='w-full'>
                 <div className='flex flex-col space-y-3'>
@@ -94,8 +112,16 @@ export default function Order() {
                                      <Product 
                                        item={ordered?.products}
                                      />
-                                    
-                                          <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs '>Message customer</button>
+                                         {loading?
+                                           <ClipLoader 
+                                              color="orange"
+
+                                           />
+                                           :
+                                           <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs ' onClick={startMsg}>Message customer</button>
+
+                                         }
+                                          
                                      
                    
                
@@ -112,6 +138,8 @@ export default function Order() {
                                                <div className='bg-slate-100 py-8 px-4'         style={{background: "#F3F3F3"}}>
                                                   <Customer 
                                                       order={ordered}
+                                                      customer={customer}
+                                                      setCustomer={setCustomer}
                                                   />
                                                   <div className='flex flex-col'>
                                                       <h5 className='font-light text-slate-500 text-xs'>City :{ordered?.delivery?.city}</h5>
@@ -221,10 +249,21 @@ export default function Order() {
          
                                                                    
                                                              </div>
-                                                       :
-                                                       <div>
-
-                                                       </div>
+                                                          :
+                                                   <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-lg space-x-4'
+                                                          style={{background: "#F3F3F3"}}
+                                                      
+                                                        >
+                                                         
+                                                             <h5 className='text-slate-500 font-light text-sm'>Contract signed</h5>
+                                                             
+                                                             <AiOutlineDownload className='text-xl'
+                                                             />
+    
+                                                            
+    
+                                                              
+                                                        </div>
 
                                                     }
                                                     </>
@@ -395,8 +434,8 @@ const Tracker=()=>{
 
 
 
-const Customer=({order})=>{
-    const [customer,setCustomer]=useState({})
+const Customer=({order,customer,setCustomer})=>{
+    // const [customer,setCustomer]=useState({})
  
    
       useEffect(()=>{

@@ -170,7 +170,7 @@ export default function Messages() {
                                   <div className='flex items-center justify-between absolute top-0 py-4 border-b w-full px-5 '>
                                   {currentChat?.id?.length >0&&
                                         <div className='flex items-center space-x-6'>
-                                        {currentChat?.img?.length !=undefined?
+                                        {currentChat?.img?.length >0?
                                              <img
                                                  src={currentChat?.img} 
                                                  className="h-10 w-10 rounded-full"
@@ -316,7 +316,7 @@ const Contact=({conv,setCurrentChat,index})=>{
           <div className='w-full flex items-center space-x-3'>
                <div className='flex items-center space-x-2'>
                     <h5 className='h-2 w-2 rounded-full bg-green-900'></h5>
-                    {receiver?.img?.length !=undefined?
+                    {receiver?.img?.length >0?
                           <img
                           src={receiver?.img} 
                          className="h-10 w-10 rounded-full"
@@ -377,7 +377,7 @@ const ChatBox=({currentChat,currentUser})=>{
      
     }
 
-    ,[currentChat])  
+    ,[currentChat?.id])  
 
     useEffect(() => {
      if (chatRef.current) {
@@ -385,17 +385,20 @@ const ChatBox=({currentChat,currentUser})=>{
      }
    },[msgs])
 
+   console.log(msgs,"msg>>>>")
+
 
       return(
-          <div className='flex flex-col py-4 overflow-y-scroll space-y-4 '  ref={chatRef}>
-               {msgs?.map((msg)=>{
+          <div className='flex flex-col py-4 overflow-y-scroll space-y-6 '  ref={chatRef}>
+               {msgs?.map((msg,index)=>{
                      return(
 
-                         <div className={`flex ${msg?.sender==currentUser?`justify-start` :`justify-end`} w-full`}>
+                         <div className={`flex ${msg?.sender !=currentUser?.id?`justify-start` :`justify-end`} w-full`}>
                                   <Msg
                                       msg={msg}
                                       currentChat={currentChat}
                                       currentUser={currentUser}
+                                      index={index}
                                    />
                          </div>
                        
@@ -420,21 +423,21 @@ const ChatBox=({currentChat,currentUser})=>{
 
 
 
-const Msg=({msg,currentChat,currentUser})=>{
+const Msg=({msg,currentChat,currentUser,index})=>{
         
-        console.log(msg?.sender)
+        console.log(msg?.sender===currentUser?.id,index,"sender")
          
       return(
-          <div className='flex px-4'>
-               {msg?.sender ===currentUser&&
+          <div className='flex px-4 space-x-2'>
+               {msg?.sender !=currentUser?.id&&
                      <> 
                      {currentChat?.img?.length >0?
                          <img 
                          src={currentChat?.img}
-                         className="h-10 w-10 rounded-full"
+                         className="h-6 w-6 rounded-full"
                          />
                          :
-                         <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
+                         <h5 className='rounded-full bg-orange-400 text-white text-xs font-semibold h-6 w-6 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
                     
      
      
@@ -445,10 +448,11 @@ const Msg=({msg,currentChat,currentUser})=>{
             
 
 
-                <div className={`flex ${msg?.sender==currentUser?'bg-slate-100 px-6 py-1.5 rounded-lg text-slate-600 font-light':"bg-blue-100 px-6 py-1.5 rounded-lg text-slate-600 font-light"}`}>
+                <div className={`flex ${msg?.sender !=currentUser?.id?'bg-blue-100 px-6 py-1.5 rounded-lg text-slate-600 font-light':"bg-slate-100 px-6 py-1.5 rounded-lg text-slate-600 font-light"}`}>
                     {msg?.text}
 
                 </div>
+              
 
           </div>
       )
