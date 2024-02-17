@@ -4,12 +4,12 @@ import breeder from "../../assets/breeder.png"
 import { RxArrowRight } from "react-icons/rx";
 import { Link } from 'react-router-dom';
 import { accountTypeState } from '../recoil/state';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue ,useRecoilState} from 'recoil';
 import { useNavigate } from "react-router-dom";
 import { authApi } from '../api/auth';
 
 export default function Accoount() {
-    const currentUser =useRecoilValue(accountTypeState)
+    const [currentUser,setcurrentUser ]=useRecoilState(accountTypeState)
     console.log(currentUser,"accoount")
     let navigate = useNavigate();
   
@@ -17,6 +17,7 @@ export default function Accoount() {
     const logout=async()=>{
         localStorage.clear();
         try{
+             setcurrentUser({})
             const response =await authApi.logout()
             console.log(response,"response")
            

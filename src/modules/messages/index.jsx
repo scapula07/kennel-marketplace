@@ -74,18 +74,20 @@ export default function Messages() {
           const message = {
             sender:currentUser?.id,
             text: newMessage,
-            conversationid:currentChat.id,
+            conversationid:currentChat?.id,
             date:Number(Date.now()),
             time:new Date()
           };
           const receiverId = currentChat?.members.find(
             (member) => member !== currentUser.id
           );
+
+          console.log(message,"mmmm?>>>>>")
    
             setTextsubmit(false)
           try{
             
-              const docRef = await addDoc(collection(db, "messages"),message);
+                const docRef = await addDoc(collection(db, "messages"),message);
           
                const docSnap = await getDoc(docRef);
                console.log(docSnap?.data(),"came")
@@ -96,11 +98,11 @@ export default function Messages() {
                // const result = await updateDoc(doc(db,"unseen",receiver), {
                //     messages:true
                //   })
-              await updateDoc(doc(db,"conversations",currentChat?.id), {
-                 lastMessage:Number(new Date()),
-                 unseen:true,
-                 lastSender:currentUser?.id
-                })
+          //     await updateDoc(doc(db,"conversations",currentChat?.id), {
+          //        lastMessage:Number(new Date()),
+          //        unseen:true,
+          //        lastSender:currentUser?.id
+          //       })
   
          
         
@@ -292,8 +294,8 @@ const Contact=({conv,setCurrentChat,index})=>{
          if(conv?.members?.length != undefined){
            const unsub = onSnapshot(doc(db,"users",conv?.members[1]), (doc) => {
              console.log(doc.data(),"daa")
-         
-             setReceiver({...doc.data(),id:doc?.id})
+             const { id, ...rest } = doc.data()
+             setReceiver({...rest,receiverId:doc?.id})
 
 
             });
@@ -305,7 +307,7 @@ const Contact=({conv,setCurrentChat,index})=>{
           //      setCurrentChat({...conv,...receiver})
           //   }
 
-
+          console.log(receiver,"reeeeeeee")
       return(
 
           <div className='w-full flex flex-col space-y-1' 

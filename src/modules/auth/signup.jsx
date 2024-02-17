@@ -5,8 +5,12 @@ import { Link } from 'react-router-dom';
 import { authApi } from '../api/auth';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from 'recoil';
+import { accountTypeState } from '../recoil/state';
+
 
 export default function Signup() {
+     const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
      const [credentail,setCred]=useState({})
      const [loader,setLoader]=useState(false)
      const [errorMsg, setErrorMsg] = useState(null)
@@ -39,7 +43,7 @@ export default function Signup() {
             setLoader(false)
             localStorage.clear();
             localStorage.setItem('user',JSON.stringify(user));
-
+            setcurrentUser(user)
             user?.id.length >0&& navigate(`/market`)
 
         }catch(e){

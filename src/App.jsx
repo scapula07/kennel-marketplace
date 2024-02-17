@@ -48,21 +48,24 @@ import Cancelled from './modules/orders/cancelled'
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
   const user = localStorage.getItem("user");
+  console.log(user,"user >>>>>")
   useEffect( ()=>{ 
+    console.log("here>>>>>")
     setcurrentUser(JSON.parse(user))
     },[])
   useEffect( ()=>{ 
       setcurrentUser(JSON.parse(user))
-    console.log(JSON.parse(user),"user")
     if(JSON.parse(user)?.id?.length >0){
       const unsub = onSnapshot(doc(db,"users",JSON.parse(user)?.id), (doc) => {
-        console.log(doc.data(),"daa")
+        
         setcurrentUser({...doc.data(),id:doc?.id})
        });
 
-      // setcurrentUser(JSON.parse(user))
     
-  }
+      }else{
+        const userLogged = localStorage.getItem("user");
+        setcurrentUser(JSON.parse(userLogged ))
+      }
  
   },[user])
 
