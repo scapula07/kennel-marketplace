@@ -40,7 +40,7 @@ export default function Delivery({delivery,setDelivery}) {
                                         // styles={style}
                                         placeholder="Select your City, State"
                                         options={cities?.length >0 &&
-                                          cities?.slice(0, 20)?.map((item, index) => ({
+                                          cities?.slice(0, 10)?.map((item, index) => ({
                                               label: item,
                                               value: item
                                             

@@ -29,6 +29,7 @@ export default function Cover({seller}) {
             res&&navigate("/messages")
           }catch(e){
             console.log(e)
+            setLoader(false)
           }
       }
 

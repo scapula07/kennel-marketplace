@@ -6,17 +6,18 @@ import { useRecoilValue } from 'recoil';
 import { accountTypeState,saveTypeState } from '../recoil/state';
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where}  from "firebase/firestore";
 import {getStorage, ref, uploadBytes } from "firebase/storage"
-
+import { messageApi } from '../api/message';
 
 
 export default function Active() {
         const currentUser=useRecoilValue(accountTypeState)
         const [orders,setOrders]=useState([])
         const [areContacts,setContacts]=useState("")
+        const [isLoading,setLoader]=useState(false)
           console.log(currentUser,"user active")
         useEffect(()=>{
        if(currentUser?.id?.length >0){
-            const q = query(collection(db, "orders"),where('creator', '==', currentUser?.id));
+            const q = query(collection(db, "orders"),where('creator', '==', currentUser?.id),where("status", "==", "active"));
                 const unsubscribe = onSnapshot(q, (querySnapshot) => {
                   const products = []
                   querySnapshot.forEach((doc) => {
@@ -27,7 +28,7 @@ export default function Active() {
                   products?.length >0 &&setContacts("")
 
 
-             setOrders(products)
+               setOrders(products)
             });
 
           }
@@ -38,15 +39,16 @@ export default function Active() {
          
         },[])
 
-   
+ 
 
         
   return (
-    <div className='w-full flex flex-col'>
+    <div className='w-full flex flex-col space-y-4'>
           {orders?.map((order)=>{
               return(
                 <Order
                    order={order}
+          
                  />
               )
           })

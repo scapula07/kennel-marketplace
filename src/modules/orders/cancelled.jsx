@@ -16,7 +16,7 @@ export default function Cancelled() {
           console.log(currentUser,"user active")
         useEffect(()=>{
        if(currentUser?.id?.length >0){
-            const q = query(collection(db, "orders"),where('creator', '==', currentUser?.id));
+            const q = query(collection(db, "orders"),where('creator', '==', currentUser?.id),where("status", "==", "cancelled"));
                 const unsubscribe = onSnapshot(q, (querySnapshot) => {
                   const products = []
                   querySnapshot.forEach((doc) => {
@@ -41,7 +41,7 @@ export default function Cancelled() {
 
         
   return (
-    <div className='w-full flex flex-col'>
+    <div className='w-full flex flex-col space-y-4'>
           {orders?.map((order)=>{
               return(
                 <Order
