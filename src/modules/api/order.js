@@ -59,6 +59,21 @@ export const orderApi= {
             }catch(e){
                 console.log(e)
             }
-       }
+       },
+       signContract:async function (order) {
+        try{
+             const ref =doc(db,"order",order?.id)
+             const docSnap = await getDoc(ref);
+             const res=  await updateDoc(doc(db,"orders",order?.id), {
+                    contract:"signed",
+                })
+  
+
+                return true
+
+        }catch(e){
+            console.log(e)
+        }
+   }
 
 }

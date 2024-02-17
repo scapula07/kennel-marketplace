@@ -6,12 +6,16 @@ import { db } from '../../firebase';
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ClipLoader } from 'react-spinners';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { messageApi } from '../../api/message';
+import Modal from '../../../components/modal';
+import { AiOutlineDownload } from "react-icons/ai";
+import { orderApi } from '../../api/order';
 export default function Order({order}) {
         const navigate=useNavigate()
         const currentUser=useRecoilValue(accountTypeState)
         const [isLoading,setLoader]=useState(false)
+        const [loading,setLoading]=useState(false)
         const [product,setProduct]=useState({images:[]})
        console.log(order,"order ")
       const [open,setOpen]=useState(false)
@@ -26,23 +30,65 @@ export default function Order({order}) {
             console.log(e)
           }
       }
+
+
+      const signContract=async()=>{
+           setLoading(true)
+          try{
+            const res=await orderApi.signContract(order)
+            setLoading(false)
+            
+          }catch(e){
+            setLoading(false)
+            console.log(e)
+          }
+      }
  
   return (
+    <>
     <div className="bg-slate-200 w-4/5 py-4 px-4 flex flex-col rounded-xl space-y-6"
         style={{background:"#F3F3F3"}}
     >
               <div className='flex w-full justify-between'>
                  
                    <div className='flex space-x-3'>
-                        <h5 className='h-10 w-1 bg-orange-400'></h5>
+                      {order?.status==="active"&&
+                            <h5 className='h-10 w-1 bg-orange-400'></h5>
+                        }
+                          {order?.status==="completed"&&
+                            <h5 className='h-10 w-1 bg-green-400'></h5>
+                        }
+                         {order?.status==="cancelled"&&
+                        <h5 className='h-10 w-1 bg-slate-400'></h5>
+                     }
                         <div className='flex flex-col'>
                               <div className='flex items-center space-x-4'>
                                     <h5 className='text-lg font-semibold text-slate-600'>Order status:</h5>
+                                    {order?.status==="active"&&
                                     <h5 className='bg-orange-100 text-orange-600 py-1 px-2 text-sm font-semibold'>
-                                      {order?.status==="active"&&" Waiting for contract from seller" }
-                                      {order?.status==="completed"&&" Waiting for contract from seller" }
+                                      { order?.contract==="waiting"&& "Waiting for contract from seller" }
+                                      { order?.contract==="sent"&& "Waiting for customer to sign the contract" }
+                                      {order?.contract==="signed"&& "Contract signed. Item is ready for checkout" }
+                                     
                                    
                                     </h5>
+                                        }
+                                  {order?.status==="completed"&&
+                                    <h5 className='bg-green-100 text-green-600 py-1 px-2 text-sm font-semibold'>
+                                          Completed
+                                     
+                                   
+                                    </h5>
+                                  }
+                                  {order?.status==="cancelled"&&
+                                    <h5 className='bg-slate-100 text-slate-600 py-1 px-2 text-sm font-semibold'>
+                                          Cancelled
+                                     
+                                   
+                                    </h5>
+                                  }
+
+
 
                               </div>
 
@@ -122,9 +168,25 @@ export default function Order({order}) {
                                 </div>
 
                                 <div className='flex items-center w-1/2 justify-between'> 
-                                     <h5  className='text-lg font-semibold text-slate-700'>Total price:{order?.total}</h5>
+                                     <h5  className='text-lg font-semibold text-slate-700'>Total price:</h5>
                                      <h5 className='text-light text-slate-400'>${order?.total}</h5>
                                 </div>
+                                {order?.contract=="sent" || order?.contract=="signed" &&
+                                <div className='flex items-center w-1/2 justify-between'> 
+                                    
+                                     <Link to={order?.file}>
+                                        <div className='flex bg-slate-300  items-center py-2  rounded-lg space-x-2 px-4'
+                                          
+                                            
+                                          >
+                                          <h5 className='text-slate-500 font-light text-sm'>Download Contract </h5>
+                                          <AiOutlineDownload className='text-xl'
+                                            />
+                                        </div>
+                                     </Link>
+                                  
+                                   </div>
+                                   }
                           </div>
 
                   </div>
@@ -134,14 +196,54 @@ export default function Order({order}) {
 
               <div className='flex flex-col w-full space-y-2'>
                        <div className='w-full flex items-center justify-between' >
+
                                 <div className='flex items-center space-x-6 '>
-                                     <button className='text-blue-400 border border-blue-400 py-2 px-6 rounded-xl'>History of order</button>
+                                {order?.contract=="completed"&&
+                                    <>
+                                    {loading?
+                                       <ClipLoader
+                                         color='orange'
+                                        />
+                                         :
+                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl'>Repeat order</button>
+                                          }
+                                    </>
+                                 
+                                     }
+                                {order?.contract=="signed"&&
+                                    <>
+                                    {loading?
+                                       <ClipLoader
+                                         color='orange'
+                                        />
+                                         :
+                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'>Go to checkout</button>
+                                          }
+                                    </>
+                                 
+                                     }
+                                {order?.contract=="sent"&&
+                                    <>
+                                    {loading?
+                                       <ClipLoader
+                                         color='orange'
+                                        />
+                                         :
+                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
+                                       onClick={signContract}
+                                       >Confirm contract signature
+                                       </button>
+                                          }
+                                    </>
+                                 
+                                     }
+                                     <button className='text-blue-400 border border-blue-400 py-2 px-6 rounded-xl text-sm'>History of order</button>
                                      {isLoading?
                                        <ClipLoader
                                          color='orange'
                                         />
                                        :
-                                       <button className='text-blue-400 border border-blue-400 py-2 px-6 rounded-xl'
+                                       <button className='text-blue-400 border border-blue-400 py-2 px-6 rounded-xl text-sm'
                                          onClick={startMsg}
                                        >
                                        Chat with seller
@@ -152,7 +254,7 @@ export default function Order({order}) {
 
                                 </div>
 
-                                <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl'>Cancel</button>
+                                <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm'>Cancel</button>
 
                        </div>
                        <h5 className='text-slate-500 '>All the details about deal and contract you can discuss in chat with seller</h5>
@@ -162,6 +264,11 @@ export default function Order({order}) {
 
 
     </div>
+    <Modal>
+
+    </Modal>
+
+    </>
   )
 }
 
@@ -221,7 +328,19 @@ const Product=({item,order,product,setProduct})=>{
 
                             <div className='flex flex-col w-1/4 items-center space-y-1'>
                                  <h5 className='text-slate-500 font-light text-sm'>Contract</h5>
-                                 <h5 className='text-orange-700 font-semibold text-sm'>{order?.contract=="waiting"&&"Not sent"}</h5>
+                                 {order?.contract=="waiting"&&
+                                 <h5 className='text-orange-700 font-semibold text-sm'>Not sent
+                                 </h5>
+                                 }
+                                  {order?.contract=="sent"&&
+                                 <h5 className='text-orange-700 font-semibold text-sm'>Sent
+                                 </h5>
+                                 }
+
+                              {order?.contract=="signed"&&
+                                 <h5 className='text-orange-700 font-semibold text-sm'>Signed
+                                 </h5>
+                                 } 
                                
                             </div>
                     </div>
