@@ -1,9 +1,24 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import Layout from '../../layout'
 import { Outlet } from 'react-router-dom'
 import { FiSearch } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function Orders() {
+    const [active,setActive]=useState("")
+  
+    useEffect(()=>{
+        const currentURL = window.location.href;
+        const parts = currentURL?.split('/');
+        const lastPart = parts[parts.length - 1];
+        setActive(lastPart )
+
+    })
+
+    console.log(active)
+
+ 
   return (
 
     <Layout>
@@ -34,10 +49,28 @@ export default function Orders() {
 
                         <div className='w-full py-10 '>
                                 <div className='border rounded-full flex items-center w-1/3 justify-between'>
-                                    <button className='rounded-full py-2 hover:bg-green-900 px-6 hover:text-white text-black text-sm'>Active</button>
-                                    <button className='rounded-full py-2 hover:bg-green-900 px-6 hover:text-white px-6  text-sm'>Completed</button>
-                                    <button className='rounded-full py-2 hover:bg-green-900 px-6 hover:text-white px-6  text-sm'>Canceled</button>
+                                {[{text:"Active",link:""},{text:"Completed",link:"completed"},{text:"Cancelled",link:"cancelled"}].map((item)=>{
+                                                const part =`${"/" +item?.link}`
+                                                return(
+                                                <>
+                                                {active ==="orders"?
+                                                        <Link to={item?.link}>
+                                                                <button className={`${"" ==item?.link?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setActive(item?.link)}>{item?.text}</button>
+                                                        </Link>
+                                                        :
+                                                        <Link to={item?.link}>
+                                                        <button className={`${active ==item?.link?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setActive(item?.link)}>{item?.text}</button>
+                                                    </Link>
 
+
+                                                }
+                                            
+                                                </>
+                                            
+
+                                                )
+
+                                            })}
                                 </div>
 
                         </div>

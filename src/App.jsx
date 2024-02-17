@@ -42,6 +42,8 @@ import {doc,setDoc,
 import { db } from './modules/firebase'
 import Overview from './modules/admin/overview'
 import Customers from './modules/admin/customers'
+import Completed from './modules/orders/completed'
+import Cancelled from './modules/orders/cancelled'
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -104,6 +106,8 @@ function App() {
 
               <Route exact path="/orders"  element={<Orders/>} >
                   <Route exact path=""  element={<Active/>} />
+                  <Route exact path="completed"  element={<Completed/>} />
+                  <Route exact path="cancelled"  element={<Cancelled/>} />
                
               </Route>
 

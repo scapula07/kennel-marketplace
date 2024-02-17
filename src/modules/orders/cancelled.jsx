@@ -9,7 +9,7 @@ import {getStorage, ref, uploadBytes } from "firebase/storage"
 
 
 
-export default function Active() {
+export default function Cancelled() {
         const currentUser=useRecoilValue(accountTypeState)
         const [orders,setOrders]=useState([])
         const [areContacts,setContacts]=useState("")
@@ -26,7 +26,6 @@ export default function Active() {
                   products?.length===0 &&setContacts("No contact")
                   products?.length >0 &&setContacts("")
 
-
              setOrders(products)
             });
 
@@ -38,7 +37,7 @@ export default function Active() {
          
         },[])
 
-   
+     
 
         
   return (
@@ -53,7 +52,7 @@ export default function Active() {
 
           }
 
-                          {orders?.length ===0&&areContacts?.length ==0&&
+                 {orders?.length ===0&&areContacts?.length ==0&&
                                 <div className='w-full flex justify-center py-5 '>
                                     <ClipLoader 
                                           color={"orange"}
@@ -64,7 +63,7 @@ export default function Active() {
                                                     
                                 {orders?.length ===0&&areContacts?.length >0&&
                                 <div className='w-full flex justify-center  py-5'>
-                                <h5 className="text-sm">No active orders</h5>
+                                <h5 className="text-sm">No cancelled orders</h5>
                                 </div>
                                 } 
         

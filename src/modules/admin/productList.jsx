@@ -90,7 +90,7 @@ export default function ProductList() {
                                                     
                                 {products?.length ===0&&areContacts?.length >0&&
                                 <div className='w-full flex justify-center  py-5'>
-                                <h5 className="text-sm">No contacts</h5>
+                                <h5 className="text-sm">No Products</h5>
                                 </div>
                                 }
 
