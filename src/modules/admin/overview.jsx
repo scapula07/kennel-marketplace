@@ -22,7 +22,7 @@ export default function Overview() {
 
                 </div>
 
-                <div className='flex w-full space-x-4'>
+                <div className='flex w-full space-x-4 py-6'>
                       {[{
                         title:"Sales",
                         total:"0"
@@ -35,9 +35,9 @@ export default function Overview() {
                       ].map((item)=>{
                           return(
                             <div className='bg-white rounded-lg py-4 px-4 flex flex-col w-1/3 space-y-2'>
-                                 <h5 className='text-xl font-light text-slate-600'>{item?.title}</h5>
+                                 <h5 className='text-lg font-light text-slate-600'>{item?.title}</h5>
                                  <h5 className='text-xl font-semibold text-slate-600'>{item?.total}</h5>
-                                 <h5 className='font-light text-slate-500 text-end'>{formattedDate}</h5>
+                                 <h5 className='font-light text-slate-500 text-end text-sm'>{formattedDate}</h5>
                             </div>
                           )
                       })

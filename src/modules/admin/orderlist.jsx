@@ -6,6 +6,7 @@ import { accountTypeState,saveTypeState } from '../recoil/state';
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy}  from "firebase/firestore";
 import {getStorage, ref, uploadBytes } from "firebase/storage"
 import { Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 
 const monthNames = [
   "","January", "February", "March", "April", "May", "June", "July",
@@ -15,6 +16,7 @@ const monthNames = [
 
 export default function OrderList() {
   const [orders,setOrders]=useState([])
+  const [areContacts,setContacts]=useState("")
   
 
 useEffect(()=>{
@@ -26,7 +28,8 @@ useEffect(()=>{
             products.push({ ...doc.data(), id: doc.id })
 
           });
-
+          products?.length===0 &&setContacts("No contact")
+          products?.length >0 &&setContacts("")
 
      setOrders(products)
     });
@@ -70,6 +73,21 @@ console.log(orders,"orooo")
                         <Table 
                            orders={orders}
                         />
+
+                      {orders?.length ===0&&areContacts?.length ==0&&
+                                <div className='w-full flex justify-center py-5 '>
+                                    <ClipLoader 
+                                          color={"orange"}
+                                          loading={true}
+                                    />
+                                </div>
+                                }
+                                            
+                        {orders?.length ===0&&areContacts?.length >0&&
+                        <div className='w-full flex justify-center  py-5'>
+                        <h5 className="text-sm">No contacts</h5>
+                        </div>
+                        }
 
                 </div>
 

@@ -17,14 +17,14 @@ const monthNames = [
 
 
 
-export default function ProductList() {
+export default function Customers() {
 
         const [products,setProducts]=useState([])
         const [areContacts,setContacts]=useState("")
 
         useEffect(()=>{
         
-            const q = query(collection(db, "products"));
+            const q = query(collection(db, "users"));
                 const unsubscribe = onSnapshot(q, (querySnapshot) => {
                   const products = []
                   querySnapshot.forEach((doc) => {
@@ -42,18 +42,16 @@ export default function ProductList() {
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-white font-light text-sm'>Admin/Products</h5>
+                    <h5 className='text-white font-light text-sm'>Admin/Customers</h5>
                 </div>
 
 
                 <div className='w-full bg-white rounded-lg py-6 px-8 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
-                              <h5 className='text-xl font-semibold text-black'>All Products</h5>
+                              <h5 className='text-xl font-semibold text-black'>All Customers</h5>
 
                               <div className='flex items-center'>
-                              <Link to="/admin/new-product" >
-                              <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm'>+ New product</button>
-                              </Link>
+                          
 
 
                               </div>
@@ -114,14 +112,9 @@ const Table=({products})=>{
                     <thead className='py-2'>
                     <tr >
                           {
-                            ["Product",
-                              "Catagory",
-                            "Price",
-                            "SKU",
-                            "Quantity",
-                            "status",
-                            "Action"
-
+                            ["User",
+                              "Email",
+                            "Phone no."
                             ].map((text)=>{
                                 return(
                                 <th className='py-1 text-xs text-slate-500 text-start'>{text}</th>
@@ -179,16 +172,10 @@ const Row=({product})=>{
     </td>  
     
  
-      <td className='text-sm font-light text-slate-500'>{product?.category}</td>
-      <td className='text-sm font-light text-slate-500'>${product?.price}</td>
-      <td className='text-sm font-light text-slate-500'>{product?.sku}</td>
-      <td className='text-sm font-light text-slate-500'>{""}</td>
-  
-      <td className='text-xs font-semibold  px-2  rounded-lg  '>
-             <span className='font-semibold text-slate-500 text-green-600 bg-green-300 px-4 py-1 rounded-sm'>
-                  {product?.status}
-              </span>
-      </td>
+      <td className='text-sm font-light text-slate-500'>{product?.email}</td>
+      <td className='text-sm font-light text-slate-500'>{product?.phone}</td>
+   
+
     
 
  </tr>

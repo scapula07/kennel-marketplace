@@ -39,7 +39,7 @@ export default function SidePanel() {
                                 items:[
                                    {
                                     name:"Customers",
-                                    link:""
+                                    link:"customers"
 
    
                                    },
