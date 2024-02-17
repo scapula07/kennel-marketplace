@@ -18,12 +18,13 @@ export default function Header() {
      const [misc,setMisc]=useState({})
      const [saved,setSaved]=useRecoilState(saveTypeState)
      const user = localStorage.getItem("user");
-     const [active,setActive]=useState("feeds")
+     
      const currentURL = window.location.href;
      const parts = currentURL?.split('/');
      const lastPart = parts[parts.length - 1];
      console.log(lastPart,"lastp"); 
      const part =`${"/" +lastPart}`
+     const [active,setActive]=useState(part)
 
      console.log(part)
    
@@ -77,7 +78,7 @@ export default function Header() {
                             {[{text:"Home",link:"/"},{text:"Marketplace",link:"/market"},{text:"Sellers",link:"/sellers"}].map((item)=>{
                                 return(
                                    <Link to={item?.link}>
-                                       <h5 className={`${part ==item?.link ? 'font-light font-semibold text-orange-800':"font-light hover:font-semibold hover:text-orange-800"}`}>{item?.text}</h5>
+                                       <h5 className={`${active ==item?.link ? 'font-light font-semibold text-orange-800':"font-light hover:font-semibold hover:text-orange-800"}`}>{item?.text}</h5>
                                    </Link>
                           
 
