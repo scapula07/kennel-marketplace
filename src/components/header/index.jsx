@@ -95,12 +95,23 @@ export default function Header() {
                              {currentUser?.id?.length >0?
                                 <div className='flex items-center space-x-2'>
                                        <Link to={"/account"}>
-                                      <h5 className='rounded-full bg-blue-600 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
-                     >
-                                            {currentUser?.name?.split(' ')[0]?.slice(0,1) +currentUser?.name?.split(' ')[1]?.slice(0,1) }
-                                          
-                          
-                                        </h5>
+                                        {currentUser?.img?.length ===0?
+                                               <h5 className='rounded-full bg-orange-400 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
+                                               >
+                                                                      {currentUser?.name?.slice(0,1) }
+                                                                    
+                                                    
+                                                 </h5>
+                                                 :
+                                                 <img 
+                                                    src={currentUser?.img}
+                                                    className="rounded-full lg:w-8 lg:h-8 w-6 h-6"
+                                                 
+                                                 />
+
+
+                                        }
+                                     
                                         </Link>
                                         <Link to={"/messages"}>
                                           <IoChatbubbleEllipsesOutline 
