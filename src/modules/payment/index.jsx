@@ -18,15 +18,24 @@ import { FaCreditCard } from "react-icons/fa";
 import { BsCash } from "react-icons/bs";
 import { BiSolidCreditCard } from "react-icons/bi";
 import { paymentApi } from '../api/payment';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader ,ClipLoader} from 'react-spinners';
+import { stripeApi } from '../api/stripe';
+import { BsStripe } from "react-icons/bs";
+
+
 export default function Payment() {
+  useEffect(() => {
+       
+    window.scrollTo(0, 0);
+
+  
+}, []);
        const [trigger,setTrigger]=useState(false)
        const currentUser=useRecoilValue(accountTypeState)
        const [payments,setPayment]=useState([])
        const [isLoading,setLoader]=useState(false)
-      //  useEffect(()=>{
-      //    setPayment(currentUser?.payments)
-      //  },[])
+       const [loading,setLoading]=useState(false)
+    
 
        const addCard=async()=>{
         setLoader(true)
@@ -38,6 +47,23 @@ export default function Payment() {
             setLoader(false)
           }
        }
+
+       const createStripe=async(text)=>{
+             setLoading(true)
+             try{
+               const res=await stripeApi.createAccount()
+               console.log(res?.data?.data,"res")
+               window.location.href =res?.data?.data;
+               setLoader(false)
+               setPayment((prev)=>[...prev,text]) 
+               setTrigger(false)
+             }catch(e){
+              console.log(e)
+              setLoader(false)
+             }
+          
+       }
+       console.log(payments,"ppp")
   return (
     <Layout>
                 
@@ -52,7 +78,7 @@ export default function Payment() {
                                    />
                                 :
 
-                               <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600' onClick={addCard}>Save changes</button>
+                                 <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600' onClick={addCard}>Save changes</button>
 
                                }
                              
@@ -77,7 +103,7 @@ export default function Payment() {
                                     {item==="Cashless Transfer"&&<BiTransfer 
                                        className='text-3xl  rounded-lg text-center '
                                     />}
-                                    {item==="Credit card"&&<FaCreditCard 
+                                    {item==="Stripe"&&<BsStripe 
                                        className='text-3xl  rounded-lg text-center '
                                      />}
 
@@ -141,38 +167,28 @@ export default function Payment() {
                      </div>
                <div className='flex flex-col w-11/12 rounded-lg py-4 px-4 bg-white h-full overflow-y-scroll space-y-4'>
                     <h5 className='text-lg text-slate-600 font-semibold'>Select:</h5>
+                    <div className='flex justify-center w-full'>
+                        {loading&&
+                          <ClipLoader color='grey'/>
+
+                        }
+
+                      </div>
                 
 
                       <div className='flex flex-col bg-white w-full h-full space-y-2'>
 
                               {[
                                  {
-                                  icon:<IoWalletOutline />,
-                                  text:"Kennel wallet"
+                                  icon:<BsStripe />,
+                                  text:"Stripe",
+                                  call:(text)=>createStripe(text)
   
                               },
-                              {
-                                  icon:<BsCash />,
-                                  text:"Cash"
-  
-                              },
-                              {
-                                  icon:<FaCreditCard />,
-                                  text:"Credit card"
-  
-                              },
-
-                              {
-                                  icon:<BiTransfer />,
-                                  text:"Cashless Transfer"
-
-                              },
-
-
                               ].map((item)=>{
                                 return(
                                     <div className='flex w-full justify-between bg-white rounded-lg px-4 space-x-6 hover:bg-slate-100 py-4'
-                                      onClick={()=>setPayment((prev)=>[...prev,item?.text]) || setTrigger(false)}
+                                      onClick={()=>item?.call(item?.text)}
                                     >
                                         <h5 className='text-3xl  rounded-lg text-center '>{item?.icon}</h5>
 
@@ -199,6 +215,9 @@ export default function Payment() {
                               }
                         
                       </div>
+
+
+                
 
                      
                </div>

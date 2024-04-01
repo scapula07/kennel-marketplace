@@ -14,6 +14,12 @@ import { BeatLoader, ClipLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 
 export default function Messages() {
+     useEffect(() => {
+       
+          window.scrollTo(0, 0);
+     
+        
+      }, []);
      const currentUser=useRecoilValue(accountTypeState)
      const [currentChat,setCurrentChat] =useState({})
      const [conversations,setConversations]=useState([])

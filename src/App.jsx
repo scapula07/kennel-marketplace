@@ -44,6 +44,18 @@ import Overview from './modules/admin/overview'
 import Customers from './modules/admin/customers'
 import Completed from './modules/orders/completed'
 import Cancelled from './modules/orders/cancelled'
+import Breader from './modules/breeder'
+import SellerAdmin from './modules/sellerAdmin'
+import SellerOrder from './modules/sellerAdmin/order'
+import SellerOrderList from './modules/sellerAdmin/orderlist'
+import SellerProductList from './modules/sellerAdmin/productList'
+import EditProductSeller from './modules/sellerAdmin/editProduct'
+import CreateProductSeller from './modules/sellerAdmin/createProduct'
+import OverviewSeller from './modules/sellerAdmin/overview'
+import ProductDetailsSeller from './modules/sellerAdmin/product'
+import SellerBreeder from './modules/admin/sellers'
+import User from './modules/admin/user'
+import Search from './modules/search'
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -79,6 +91,7 @@ function App() {
               <Route exact path="/product"  element={<Product/>} />
               <Route exact path="/signup"  element={<Signup/>} />
               <Route exact path="/login"  element={<Login/>} />
+              <Route exact path="/breader"  element={<Breader/>} />
               <Route exact path="/seller"  element={<Seller/>} >
                    <Route exact path=""  element={<SellerHome/>} />
                    <Route exact path="products"  element={<SellerProducts/>} />
@@ -103,6 +116,20 @@ function App() {
                   <Route exact path="order"  element={<Order/>} />
                   <Route exact path=""  element={<Overview/>} />
                   <Route exact path="customers"  element={<Customers/>} />
+                  <Route exact path="sellers"  element={<SellerBreeder/>} />
+                  <Route exact path="user"  element={<User/>} />
+
+              </Route>
+
+              <Route exact path="/admin-seller"  element={<SellerAdmin/>} >
+                  <Route exact path="new-product"  element={<CreateProductSeller/>} />
+                  <Route exact path="products"  element={<SellerProductList/>} />
+                  <Route exact path=""  element={<SellerOrderList/>} />
+                  <Route exact path="product"  element={<ProductDetailsSeller/>} />
+                  <Route exact path="edit"  element={<EditProductSeller/>} />
+                  <Route exact path="order"  element={<SellerOrder/>} />
+                  {/* <Route exact path=""  element={<OverviewSeller/>} /> */}
+                
 
               </Route>
 
@@ -115,6 +142,7 @@ function App() {
               </Route>
 
               <Route exact path="/profile"  element={<Profile/>} />
+              <Route exact path="/search"  element={<Search/>} />
 
 
               

@@ -12,6 +12,12 @@ import { productApi } from '../api/product';
 import { accountTypeState } from '../recoil/state';
 import { useRecoilValue } from 'recoil';
 export default function Cart() {
+      useEffect(() => {
+          
+        window.scrollTo(0, 0);
+
+      
+    }, []);
         const location =useLocation()
        const products=location?.state?.products
 
@@ -24,6 +30,21 @@ export default function Cart() {
    
 
        console.log(cart,"prodyct ")
+       function calculateTotalPrice(products) {
+        let totalPrice = 0;
+  
+        products.forEach(product => {
+          const subtotal = parseFloat(product.price) * product.qty; 
+          totalPrice += subtotal; 
+        });
+      
+        return totalPrice.toFixed(2); 
+      }
+
+      useEffect(()=>{
+        const totalPrice = calculateTotalPrice(cart);
+         setTotal(totalPrice)
+      },[])
   return (
     <Layout>
         <div className='w-full h-full flex justify-center py-10'>
@@ -44,7 +65,7 @@ export default function Cart() {
                      <div className='flex flex-col space-y-4'>
 
 
-                          {cart?.map((product)=>{
+                          {cart?.map((product,index)=>{
                               return(
                                  <Card 
                                    item={product}
@@ -52,6 +73,9 @@ export default function Cart() {
                                    total={total}
                                    currentUser={currentUser}
                                    setCart={setCart}
+                                   cart={cart}
+                                   index={index}
+                                   
                                  />
                               )
                            })
@@ -95,7 +119,7 @@ export default function Cart() {
 
 
 
-const Card=({item,setTotal,total,currentUser,setCart})=>{
+const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
      const [product,setProduct]=useState({images:[]})
      const [qty,setQty]=useState(1)
      const [isLoading,setLoading]=useState(false)
@@ -106,10 +130,17 @@ const Card=({item,setTotal,total,currentUser,setCart})=>{
           console.log(doc.data(),"daa")
       
           setProduct({...doc.data(),id:doc?.id})
-           setTotal((total+Number(doc.data()?.price)))
+        
          });
         }
        },[qty])
+
+       function calculateTotalPrice(products) {
+        return products.reduce((total, product) => {
+          return total + (parseFloat(product.price) * product.qty);
+        }, 0);
+      }
+      
 
        console.log(product,"prod")
 
@@ -125,6 +156,24 @@ const Card=({item,setTotal,total,currentUser,setCart})=>{
             console.log(e)
             setLoading(false)
            }
+       }
+
+       const increment=()=>{
+        setQty(qty+1)
+        cart[index].qty += 1;
+        const totalPrice = calculateTotalPrice(cart);
+        setTotal(totalPrice)
+
+
+       }
+
+       const decrement=()=>{
+        setQty(qty-1)
+        cart[index].qty -= 1;
+        const totalPrice = calculateTotalPrice(cart);
+        setTotal(totalPrice)
+
+
        }
    return(
     <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4 px-4 shadow'>
@@ -149,37 +198,42 @@ const Card=({item,setTotal,total,currentUser,setCart})=>{
                <div className='flex items-center space-x-5'>
                      <BsDash
                         className='text-3xl font-semibold text-slate-600'
-                        onClick={()=>qty !=1&&setQty(qty -1)}
+                        onClick={()=>qty !=1&&decrement()}
                       />
-                     <input 
-                         className='h-10 w-10 rounded-lg border px-3'
+                      <input 
+                         className='h-10 w-10 rounded-lg border px-3 text-center'
                          value={qty}
                      />
                      <IoMdAdd
                          className='text-3xl font-semibold text-slate-600'
-                         onClick={()=>setQty(qty + 1)}
+                         onClick={increment}
 
                       />
 
                </div>
          </div>
-         <div>
+         <div className='flex space-x-3'>
+             <h5 className='font-semibold'>${product?.price}</h5>
+            <>
+               {isLoading?
+
+
+                      <ClipLoader 
+                        color='orange'
+                      />
+                      :
+
+                      <MdOutlineDeleteOutline 
+                      className='text-slate-500 text-2xl'
+                      onClick={remove}
+                      />
+
+
+                      }
+          
+             </>
             
-            {isLoading?
-
-
-                <ClipLoader 
-                  color='orange'
-                />
-                :
-
-              <MdOutlineDeleteOutline 
-              className='text-slate-500 text-2xl'
-              onClick={remove}
-              />
-
-
-            }
+            
             
           
 

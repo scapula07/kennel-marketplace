@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import Layout from '../../layout'
 import HeroSection from './components/heroSection'
 import Featured from './components/featured'
@@ -10,6 +10,12 @@ import TopProduct from './components/top'
 
 
 export default function Home() {
+   useEffect(() => {
+       
+      window.scrollTo(0, 0);
+ 
+    
+  }, []);
   return (
     <Layout>
         <div className='w-full'>

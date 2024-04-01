@@ -8,18 +8,25 @@ import { collection,  onSnapshot,
   doc, getDocs,
   query, orderBy, 
   limit,getDoc,setDoc ,
- updateDoc,addDoc } from 'firebase/firestore'
+ updateDoc,addDoc,startAt,endAt } from 'firebase/firestore'
  import { productApi } from '../../api/product';
 import { ClipLoader } from 'react-spinners';
 import { db } from '../../firebase';
 import { useRecoilValue } from 'recoil';
 import { accountTypeState,saveTypeState } from '../../recoil/state';
+import ReactPaginate from 'react-paginate';
 
-export default function Products() {
-     const [products,setProducts]=useState([])
+export default function Products({products,setProducts}) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0)
+  const itemsPerPage = 4
+  const pageVisited = pageNumber * itemsPerPage
+
+
+
      
   useEffect(()=>{
-    const q = query(collection(db, "products"));
+    const q = query(collection(db, "products"),orderBy("createdAt","desc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const products = []
         querySnapshot.forEach((doc) => {
@@ -35,7 +42,18 @@ export default function Products() {
       });
    },[])
 
+
+
+
+   const currentItems = products?.slice(pageVisited, pageVisited + itemsPerPage)
+   const pageCount = Math.ceil(products?.length / itemsPerPage)
+
    console.log(products,"producys")
+   const handlePageClick = ({ selected }) => {
+    setPageNumber(selected)
+}
+
+
 
   return (
     <div className='w-full'>
@@ -49,18 +67,36 @@ export default function Products() {
 
           </div>
         }
+
+           <div className='flex flex-col space-y-20 w-full'>
+              
+              <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
+                        {products?.length>0&&currentItems?.map((product)=>{
+                            return(
+                              <Card 
+                                  product={product}
+                              />
+                            )
+                        })}
+
+
+                </div>
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="next >"
+                    onPageChange={ handlePageClick}
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    className="flex items-center space-x-4 justify-center w-full text-orange-500 "
+                  />
+
+
+
+
+              </div>
          
-         <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
-                  {products?.length>0&&products?.map((product)=>{
-                      return(
-                         <Card 
-                            product={product}
-                         />
-                       )
-                  })}
-
-
-          </div>
 
     </div>
   )

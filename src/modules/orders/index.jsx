@@ -7,6 +7,12 @@ import { useState } from 'react'
 
 export default function Orders() {
     const [active,setActive]=useState("")
+    useEffect(() => {
+       
+        window.scrollTo(0, 0);
+   
+      
+    }, []);
   
     useEffect(()=>{
         const currentURL = window.location.href;

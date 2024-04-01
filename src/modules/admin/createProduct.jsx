@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState,useRef } from 'react'
 import Select from "react-select";
+import CreatableSelect from 'react-select/creatable';
 import { IoMdClose } from "react-icons/io";
 import { productApi } from '../api/product';
 import { useRecoilValue } from 'recoil';
@@ -8,19 +9,67 @@ import { accountTypeState } from '../recoil/state';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
 export default function CreateProduct() {
       const navigate=useNavigate()
       const [num,setNum]=useState(1)
       const currentUser=useRecoilValue(accountTypeState)
-      const [product,setProduct]=useState({})
+      const [product,setProduct]=useState({name:"",description:"",qty:1,currency:"USD",category:[],features:[],sku:"",price:0})
       const [url,setUrl]=useState([])
       const [files,setFiles]=useState([])
       const [isLoading,setLoading]=useState(false)
-      console.log(product,"prodcuct")
+      const [errorMsg, setErrorMsg] = useState(null)
+      
 
 
       const create=async()=>{
           setLoading(true)
+          setErrorMsg(null)
+          if (product?.name?.length < 3) {
+            setErrorMsg(' Product name is required! ');
+            setLoading(false);
+            setNum(1)
+            return;
+          }
+    
+          if (product?.description.length < 3) {
+            setErrorMsg( "Product description is required!" );
+            setLoading(false)
+            setNum(1);
+            return;
+          }
+     
+     
+          if (files?.length ==0) {
+            setErrorMsg( "Images are required!" );
+            setLoading(false);
+            setNum(2)
+            return;
+          }
+          if (product?.price == 0) {
+            setErrorMsg( "Price is required!" );
+            setLoading(false);
+            setNum(3)
+            return;
+          }
+          if (product?.sku.length < 3) {
+            setErrorMsg( "Product SKU is required!" );
+            setLoading(false);
+            setNum(3)
+            return;
+          }
+          if (product?.category.length == 0) {
+            setErrorMsg( "Select a category" );
+            setLoading(false);
+            setNum(1)
+            return;
+          }
+          if (product?.features.length == 0) {
+            setErrorMsg( "Select a feature" );
+            setLoading(false);
+            setNum(1)
+            return;
+          }
          try{
              const res=await productApi.create(product,currentUser,files)
               res&&setLoading(false)
@@ -28,12 +77,13 @@ export default function CreateProduct() {
           }catch(e){
             console.log(e)
             setLoading(false)
+            setErrorMsg(' Something went wrong! ');
           }
       }
 
       
 
-   
+   console.log(product,"pppr")
 
   return (
     <div className='w-full'>
@@ -46,11 +96,12 @@ export default function CreateProduct() {
 
 
           <div className='py-20 flex justify-center'>
-                <div className='w-3/4 flex flex-col  px-4 py-4'>
-                        <div className='flex items-center'>
-                              
-
-                        </div>
+                <div className='w-3/4 flex flex-col  px-4 py-4 space-y-3'>
+                    
+                {errorMsg && (
+                
+                  <h5 className='text-xs text-center font-semibold text-red-500'>{errorMsg}</h5>
+                 )}
 
                       {num==1&&
                           <Info
@@ -134,6 +185,19 @@ const Info=({num,setNum,setProduct,product})=>{
 
                                 </div>
 
+                                <div className='flex flex-col space-y-2'>
+                                    <label className='text-sm font-semibold'>Key Features</label>
+                                    <CreatableSelect 
+                                       isMulti 
+                                       options={features}
+                                          value={product?.features}
+                                          onChange={(opt) => {
+                                          console.log(opt,"opt")
+                                           setProduct({...product,features:opt})
+                                       }}
+                                     />
+                                </div>
+
 
                         </div>
 
@@ -152,16 +216,29 @@ const Info=({num,setNum,setProduct,product})=>{
                                 </div>
                             {[
                                
-                                {
+                                 {
                                     title:"Category",
-                                    items:["Dogs","Cats"],
-                                    click:(e)=>setProduct({...product,category:e.target.value})
+                                    items:items,
+                                    value:product?.category,
+                              
+                                    click:(opt)=>setProduct({...product,category:opt})
 
-                                },
+                                  },
                                 {
                                     title:"Sizes",
-                                    items:["10","20"],
-                                    click:(e)=>setProduct({...product,sizes:e.target.value})
+                                    value:product?.sizes,
+                                    items:[
+                                      {
+                                        label:"Large",
+                                        value:"50"
+                                      },
+                                      {
+                                        label:"Small",
+                                        value:"10"
+                                      },
+
+                                       ],
+                                    click:(opt)=>setProduct({...product,sizes:opt})
 
                                 }
 
@@ -169,27 +246,37 @@ const Info=({num,setNum,setProduct,product})=>{
                                   return(
                                     <div className='flex flex-col space-y-2'>
                                     <label className='text-sm font-semibold'>{item?.title}</label>
-                                    <select 
-                                       placeholder='e.g Dogs feed'
-                                       className='rounded-lg px-4 py-3 border text-sm outline-none'
-                                       onChange={(e)=>item?.click(e)}
-                                    >
-                                        {item?.items?.map((tag)=>{
-                                             return(
-                                                <option value={tag}>{tag}</option>
-                                             )
-                                        })
-
-                                        }
-                                       
-                                      </select>
+                              
+                                        <Select
+                                            defaultValue={[item?.items[2], item?.items[3]]}
+                                            isMulti
+                                            name="colors"
+                                            options={item?.items}
+                                            className="basic-multi-select"
+                                            classNamePrefix="select"
+                                            value={item?.value}
+                                            onChange={(opt) => {
+                                              item?.click(opt)
+                                              console.log(opt,"opti")
+                                              }}
+                                          />
 
                                 </div>
                                   )
                             })
 
                             }
-                            
+                             <div className='flex flex-col space-y-2'>
+                                <label className='text-sm font-semibold'>Quantity</label>
+                                        <input 
+                                        placeholder='1'
+                                        className='rounded-lg px-4 py-3 border text-sm'
+                                        value={product?.qty}
+                                        type="number"
+                                        onChange={(e)=>setProduct({...product,qty:e.target.value})}
+                                        />
+
+                                </div>
                         </div>
                       
 
@@ -259,10 +346,15 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
                                     <div className='flex flex-col w-full space-y-2  h-36 rounded-xl border py-4 px-6'>
                                        <h5 className='text-sm font-light text-slate-500 hover:underline text-center'   onClick={handleClick}>Click to upload images</h5>
                                          <div className='flex items-center space-x-4'>
-                                              {url?.map((item)=>{
+                                              {url?.map((item,index)=>{
                                                   return(
                                                     <Image 
                                                        src={item?.src}
+                                                       url={url}
+                                                       setUrl={setUrl}
+                                                       files={files}
+                                                       setFiles={setFiles}
+                                                       index={index}
                                                     />
                                                   )
                                               })
@@ -331,7 +423,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                        type={"number"}
                                        className='rounded-lg px-4 py-2 border text-sm'
                                        value={product?.price}
-                                       onChange={(e)=>setProduct({...product,price:e.target.value})}
+                                       onChange={(e)=>setProduct({...product,price:Number(e.target.value)})}
                                     />
 
                         </div>
@@ -343,7 +435,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                        className='rounded-lg px-4 py-2 border text-sm outline-none'
                                        onChange={(e)=>setProduct({...product,currency:e.target.value})}
                                     >
-                                        {["USD","GBP"].map((tag)=>{
+                                        {["USD"].map((tag)=>{
                                              return(
                                                 <option value={tag}>{tag}</option>
                                              )
@@ -378,9 +470,11 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                         className="basic-multi-select"
                         classNamePrefix="select"
                         value={product?.status}
-                        onChange={(opt)=>setProduct({...product,status:opt?.value})}
+                        onChange={(opt)=>setProduct({...product,status:opt})}
                     />
              </div>
+
+         
 
               <div className='flex w-full justify-between'>
                    <button className='bg-orange-300 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
@@ -404,7 +498,19 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
 
 
 
-const Image=({src})=>{
+const Image=({src,url,setUrl,files,setFiles,index})=>{
+        const remove=()=>{
+          const newFiles=[...files]
+          const newUrl=[...url]
+          newFiles.splice(index, 1);
+          
+          newUrl.splice(index,1)
+
+          
+          setFiles(newFiles)
+          setUrl(newUrl)
+
+        }
      return(
         <div className='w-20 h-20 relative rounded-lg'>
             <img 
@@ -415,10 +521,122 @@ const Image=({src})=>{
             <div className='absolute top-0 w-full h-full flex items-center justify-center bg-black opacity-60 rounded-lg'>
                   <IoMdClose 
                       className="text-4xl text-white"
-                      onClick={""}
+                      onClick={remove}
                   />
 
             </div>
         </div>
      )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const items=[
+  {
+    label:"Dogs",
+    value:"Dogs"
+  },
+  {
+    label:"Cats",
+    value:"Cats"
+  },
+  {
+    label:"Horse",
+    value:"H0rse"
+  },
+  {
+    label:"Cows",
+    value:"Cows"
+  },
+  {
+    label:"Cows",
+    value:"Cows"
+  },
+  {
+    label:"Snake",
+    value:"Snake"
+  },
+  {
+    label:"Pig",
+    value:"Pig"
+  },
+  {
+    label:"Breeding kits",
+    value:"Breeding kits"
+  },
+  {
+    label:"Training",
+    value:"Training"
+  },
+  {
+    label:"Medicine",
+    value:"Medicine"
+  },
+ 
+]
+
+
+
+
+
+
+const features=[
+  {
+    label:"Equine Artificial Insemination Kit",
+    value:"Equine Artificial Insemination Kit"
+  },
+  {
+    label:"Breeding Mount",
+    value:"Breeding Mount"
+  },
+  {
+    label:"Semen Collection Equipmen",
+    value:"Semen Collection Equipmen"
+  },
+  {
+    label:"Ultrasound Machine",
+    value:"Ultrasound Machine"
+  },
+  {
+    label:"Breeding Stocks",
+    value:"Breeding Stocks"
+  },
+  {
+    label:"Breeding Halter",
+    value:"Breeding Halter"
+  },
+  {
+    label:"Breeding Supplies",
+    value:"Breeding Supplies"
+  },
+  {
+    label:"Foaling Alarm System",
+    value:"Foaling Alarm System"
+  },
+  {
+    label:"Teasing Equipment",
+    value:"Teasing Equipment"
+  },
+  {
+    label:"Equine Breeding Management Software",
+    value:"Equine Breeding Management Software"
+  },
+  {
+    label:"Canine Artificial Insemination Kit",
+    value:"Canine Artificial Insemination Kit"
+  },
+ 
+]

@@ -45,7 +45,7 @@ export default function SidePanel() {
                                    },
                                    {
                                     name:"Sellers",
-                                    link:""
+                                    link:"sellers"
                                     
    
                                    },

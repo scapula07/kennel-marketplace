@@ -11,13 +11,13 @@ import { IoMdRadioButtonOn } from "react-icons/io";
 
 export default function Order({products,delivery,setDelivery}) {
       const currentUser=useRecoilValue(accountTypeState)
-      const [payment,setPayment]=useState("Kennel Breeders wallet")
+      const [payment,setPayment]=useState("Payment with Stripe")
   return (
     <div className='w-full flex flex-col rounded-lg py-6 px-6 space-y-3'
         style={{background: "#F3F3F3"}}
         >
             <div>
-                <h5 className='text-2xl font-semibold'>Order  #1</h5>
+                <h5 className='text-2xl font-semibold'>Orders</h5>
             </div>
             <div className='flex flex-col space-y-4'>
                    <h5 className='text-lg font-semibold'>1. Contact information</h5>
@@ -64,7 +64,7 @@ export default function Order({products,delivery,setDelivery}) {
                    <h5 className='text-lg font-semibold'>4. Payment</h5>
                    <div className='flex flex-col space-y-2.5 py-5 bg-white rounded-lg px-4'>
                    <h5 className='text-slate-600'>Choose option</h5>
-                     {["Kennel Breeders wallet","Cashless transfer","Cash"].map((text)=>{
+                     {["Payment with Stripe"].map((text)=>{
                           return(
                             <div className='rounded-full border w-1/2 px-4 py-1 flex items-center space-x-3'> 
                           {payment===text?
@@ -89,8 +89,8 @@ export default function Order({products,delivery,setDelivery}) {
                 </div>
 
                 <div className='flex flex-col space-y-4 w-full'>
-                   <h5 className='text-lg font-semibold'>5. Order recipient contact information </h5>
-                  
+                   {/* <h5 className='text-lg font-semibold'>5. Order recipient contact information </h5>
+                   */}
                  
 
               </div>

@@ -1,13 +1,31 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { FiSearch } from "react-icons/fi";
+import { IoRadioButtonOffSharp } from "react-icons/io5";
+import { IoRadioButtonOn } from "react-icons/io5";
+import { ClipLoader } from 'react-spinners';
 
+export default function Filters({filters,setFilter,apply,isLoading,prices,setPrices,isFindingPrice,findPrice}) {
+    
 
-export default function Filters() {
+     
+    
+ 
   return (
-    <div className='flex flex-col w-full'>
+    <div className='flex flex-col w-full h-full'>
          <div className='flex items-center w-full justify-between'>
              <h5 className='text-lg '>Filters</h5>
-             <h5 className='text-sm text-red-500 font-light'>Clear all</h5>
+             <h5 className='text-sm text-red-500 font-light flex items-center space-x-4'>
+              {!isLoading? 
+                   <span className='font-semibold text-orange-500 text-xs  hover:bg-orange-100 hover:py-1.5 hover:rounded-lg hover:px-3' onClick={apply}> Apply</span>
+                   :
+                   <ClipLoader size={12} color={"orange"}/>
+
+
+              }
+             
+              <span className=' text-red-500  ' onClick={()=>setFilter([])}> Clear all</span>
+             
+              </h5>
               
          </div>
 
@@ -45,7 +63,9 @@ export default function Filters() {
                ].map((filter)=>{
                  return(
                    <Card 
-                   filter={filter}
+                     filter={filter}
+                     filters={filters}
+                     setFilter={setFilter}
                    />
                  )
             
@@ -54,23 +74,39 @@ export default function Filters() {
          </div>
 
          <div className='flex flex-col w-full space-y-4 py-4'>
-                 <h5 className='font-semibold'>{"Price"}</h5>
-                 
-                <div className='flex items-center w-full justify-between space-x-8'>
+                <div className='flex items-center justify-between'>
+                <h5 className='font-semibold'>
+                    {"Price"}
+                 </h5>
+                 {!isFindingPrice? 
+                    <span className='font-semibold text-orange-500 text-xs  hover:bg-orange-100 hover:py-1.5 hover:rounded-lg hover:px-3' onClick={findPrice} > Apply</span>
 
-                    <div className='flex flex-col w-1/2 space-y-1'>
+                   :
+                   <ClipLoader size={12} color={"orange"}/>
+
+
+                   }
+
+                </div>
+              
+                 
+                <div className='flex items-center w-3/4 justify-between space-x-8'>
+
+                    <div className='flex flex-col w-1/3 space-y-1'>
                          <h5 className='text-slate-600'>From</h5>
                          <input 
                           className='border border-orange-700 rounded-lg py-2 px-2'
                           placeholder='500'
+                          onChange={(e)=>setPrices({...prices,low:Number(e.target.value)})}
                          />
 
                     </div>
-                    <div className='flex flex-col w-1/2 space-y-1'>
+                    <div className='flex flex-col w-1/3 space-y-1'>
                          <h5 className='text-slate-600'>To</h5>
                          <input 
                           className='border border-orange-700 rounded-lg py-2 px-2'
                           placeholder='100000'
+                          onChange={(e)=>setPrices({...prices,high:Number(e.target.value)})}
                          />
 
                     </div>
@@ -84,7 +120,8 @@ export default function Filters() {
 }
 
 
-const Card=({filter})=>{
+const Card=({filter,filters,setFilter})=>{
+     
       return(
         <div className='border-t border-b flex flex-col py-4 space-y-3'>
              <h5 className='font-semibold'>{filter?.label}</h5>
@@ -98,22 +135,19 @@ const Card=({filter})=>{
                         className='text-slate-600'
                         />
 
-             </div>
+                </div>
 
              }
              <div className='flex flex-col space-y-3 overflow-y-scroll h-36'>
-                {filter?.items.map((item)=>{
+                {filter?.items.map((item,index)=>{
                    return(
-                     <div className='flex items-center space-x-2'>
-                        <input
-                         type={"radio"} 
-                         className="border-2"
-                        />
-                        <h5 className='font-light text-sm text-slate-600'>{item}</h5>
-
-                
-                    </div>
-                     
+                    
+                     <Item 
+                       item={item}
+                       filters={filters}
+                       setFilter={setFilter}
+                       index={index}
+                     />
                       
 
                      )
@@ -124,4 +158,38 @@ const Card=({filter})=>{
 
         </div>
       )
+}
+
+
+const Item=({item,filters,setFilter,index})=>{
+  const [onRadio,setRadio]=useState()
+  const remove=()=>{
+    
+    const newFilters=[...filters]
+ 
+    newFilters.splice(index, 1);
+    setFilter(newFilters)
+
+
+  }
+  console.log(filters,"filters")
+   return(
+    <div className='flex items-center space-x-2'>
+    {!onRadio?
+     <IoRadioButtonOffSharp 
+        onClick={()=>setRadio(true) || setFilter(prev=>[...prev,{label:item,value:item}])}
+        className="text-orange-400"
+      />
+      :
+      <IoRadioButtonOn 
+          onClick={()=>setRadio(false) ||remove()}
+          className="text-orange-400"
+      />
+       }
+    <h5 className='font-light text-sm text-slate-600'>{item}</h5>
+
+
+</div>
+
+   )
 }

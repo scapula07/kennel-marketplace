@@ -18,6 +18,10 @@ import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import {ClipLoader} from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { IoMdCheckbox } from "react-icons/io";
+
+
 export default function Order() {
      const navigate=useNavigate()
      const currentUser=useRecoilValue(accountTypeState)
@@ -129,7 +133,9 @@ export default function Order() {
 
                              <div className='flex w-full justify-between py-4'>
                                    <div className='w-1/4'>
-                                      <Tracker />
+                                      <Tracker 
+                                        order={order}
+                                      />
                                    </div>
 
                                     <div className='w-2/4 flex flex-col px-4 space-y-8'>                         
@@ -164,7 +170,12 @@ export default function Order() {
                                           </div>
 
                                           <div className='flex flex-col w-full space-y-2'>
-                                              <h5 className='text-slate-500 font-semibold'>Contract</h5>
+                                              <h5 className='text-slate-500 font-semibold'>Contract(
+                                                <Link to="https://firebasestorage.googleapis.com/v0/b/reach-nft-auction.appspot.com/o/order%2Fkb%20contract%20template.pdf?alt=media&token=912fe008-c696-4816-9a3c-a75495435612">
+                                                <span className='text-sm font-light text-orange-500 hover:underline ' >Example contract</span>
+                                                </Link>
+                                                
+                                              )</h5>
                                               {ordered?.contract==="waiting"?
                                                    <>
                                                    {file?.name?.length==0?
@@ -334,14 +345,25 @@ const Product=({item})=>{
 
 
 
-const Tracker=()=>{
+const Tracker=({order})=>{
+      const [inProgess,setProgress]=useState(false)
+     const deliverySent=async()=>{
+      setProgress(true)
+         try{
+           const res=orderApi.sentPackage(order)
+           setProgress(false)
+         }catch(e){
+          console.log(e)
+          setProgress(false)
+         }
+     }
      return(
         <div className='w-full flex flex-col py-'>
             <h5 className='text-slate-500 font-semibold'>Update Tracking</h5>
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
-                              <IoIosNotifications
-                                className='text-2xl text-slate-600'
+                                <IoIosNotifications
+                                   className='text-2xl text-green-600'
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order received</h5>
@@ -357,7 +379,7 @@ const Tracker=()=>{
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
                               <IoDocumentTextSharp 
-                                className='text-2xl text-slate-600'
+                                className={`${order?.contract =='sent' || order?.contract =='signed' ? 'text-2xl text-green-600':'text-2xl text-slate-600'}`}
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract sent</h5>
@@ -374,7 +396,7 @@ const Tracker=()=>{
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
                              <IoDocumentTextSharp 
-                                className='text-2xl text-slate-600'
+                                 className={`${order?.contract =='signed' ? 'text-2xl text-green-600':'text-2xl text-slate-600'}`}
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract signed</h5>
@@ -391,12 +413,26 @@ const Tracker=()=>{
 
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
-                             <input
-                               type={"checkbox"}
+                           {order?.deliveryStatus==""?
+                             <>
+                             {inProgess?
+                                <ClipLoader size={12} color="orange"/>
+                                   :
+                             
+                                  <MdOutlineCheckBoxOutlineBlank 
+                                     onClick={deliverySent}
+                                     />
+                                  }
+                             </>
+                           
+                              :
+                              <IoMdCheckbox 
+                                 className='text-green-400 text-3xl'
                               />
-                             {/* <FaCartShopping
-                                className='text-2xl text-slate-600'
-                               /> */}
+                             
+
+                           }
+                          
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order transmited to courier</h5>
                                    <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>

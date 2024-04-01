@@ -18,27 +18,63 @@ const uploadFile=async(file)=>{
 
 export const orderApi= {
     create:async function (products,user,delivery,total) {
+              console.log(products,"products")
+              const orders = {};
            try{
-                    const  snap = await addDoc(collection(db, "orders"),{
-                        products:products,
-                        creator:user?.id,
-                        status:"active",
-                        total:total,
-                        paid:false,
-                        contract:"waiting",
-                        time:Number(new Date()),
-                        delivery
-                        })
-        
-        
-            
-                    
-                    const ref=doc(db,"products",snap?.id)
-                    const docSnap = await getDoc(ref);
-                    return {status:docSnap.exists(),id:docSnap?.id}
-            }catch(e){
-                console.log(e)
-            }
+                        // products.forEach(product => {
+                        //     const vendor = product.vendor;
+                        //     if (!orders[vendor]) {
+                        //     orders[vendor] = [];
+                        //     }
+                        //     orders[vendor].push(product);
+                        // });
+                        // const ordersArray = Object.values(orders);
+                        // console.log(ordersArray,"aordr arr")
+
+                        // const orderPromises = products.map(async (orderProducts) => {
+                        //     const total = orderProducts.reduce((acc, curr) => acc + parseFloat(curr.price), 0); // Calculate total price for the order
+                        
+                        //     const snap = await addDoc(collection(db, "orders"), {
+                        //       products: orderProducts,
+                        //       creator: user?.id,
+                        //       vendor: orderProducts[0].vendor, // Assuming all products in the order have the same vendor
+                        //       status: "active",
+                        //       total: total.toFixed(2), // Round total to 2 decimal places
+                        //       paid: false,
+                        //       contract: "waiting",
+                        //       time: Number(new Date()),
+                        //       delivery
+                        //     });
+                        
+                        //     return snap;
+                        //   });
+                        
+                        //   return Promise.all(orderPromises);
+
+                        const orderPromises = products.map(async (product) => {
+                            const total = parseFloat(product.price); // Total price for the order is just the price of the product
+                      
+                            const snap = await addDoc(collection(db, "orders"), {
+                              products:[product], // Place the product in an array to match the structure of orders
+                              creator: user?.id,
+                              vendor: product.vendor, // Assuming each product has a vendor
+                              status: "active",
+                              total: total.toFixed(2), // Round total to 2 decimal places
+                              paid: false,
+                              contract: "waiting",
+                              time: Number(new Date()),
+                              deliveryStatus:"",
+                              delivery
+                            });
+                      
+                            return snap;
+                          });
+                      
+                          return Promise.all(orderPromises);
+                  
+                        }catch(e){
+                            console.log(e)
+                        }
 
        },
        uploadContract:async function (order,file) {
@@ -74,6 +110,22 @@ export const orderApi= {
         }catch(e){
             console.log(e)
         }
+        
+   },
+   sentPackage:async function (order) {
+    try{
+         const ref =doc(db,"order",order?.id)
+         const docSnap = await getDoc(ref);
+         const res=  await updateDoc(doc(db,"orders",order?.id), {
+                deliveryStatus:"sent",
+            })
+
+
+            return true
+
+    }catch(e){
+        console.log(e)
+    }
    }
 
 }

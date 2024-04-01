@@ -7,6 +7,7 @@ import { authApi } from '../api/auth';
 import { ClipLoader } from 'react-spinners';
 import { useRecoilState } from 'recoil';
 import { accountTypeState } from '../recoil/state';
+
 export default function Login() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
   const [credentail,setCred]=useState({})

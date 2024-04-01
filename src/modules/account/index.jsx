@@ -85,15 +85,11 @@ export default function Accoount() {
                                       label:"Payment methods ",
                                       link:"/payment"
                                     },
-                                    {
-                                      label:"My wallet ",
-                                      link:"/wallet"
-                                    },
-                                    {
-                                      label:"Settings ",
-                                      link:"/settings"
+                                    // {
+                                    //   label:"Settings ",
+                                    //   link:"/settings"
 
-                                    }
+                                    // }
 
                                   ].map((item)=>{
                                      return(

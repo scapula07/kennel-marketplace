@@ -3,6 +3,7 @@ import { MdOutlineStar } from "react-icons/md";
 import { useLocation,useParams} from "react-router-dom";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
+import { Link } from 'react-router-dom';
 export default function ProductDetails() {
     const [product,setProduct]=useState({images:[]})
     const location =useLocation()
@@ -96,7 +97,10 @@ export default function ProductDetails() {
                                         </div>
 
                                         <div>
-                                            <button className='bg-orange-400 py-2 px-6 rounded-lg text-white '>Edit product</button>
+                                          <Link to={"/admin/edit" } state={{product}}>
+                                             <button className='bg-orange-400 py-2 px-6 rounded-lg text-white '>Edit product</button>
+                                          </Link>
+                                         
                                         </div>
                                     
                                 </div>

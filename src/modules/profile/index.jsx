@@ -14,6 +14,9 @@ import {BeatLoader } from 'react-spinners';
 
 
 export default function Profile() {
+       useEffect(() => {
+          window.scrollTo(0, 0);
+      }, []);
        const [profile,setProfile]=useState()
        const currentUser=useRecoilValue(accountTypeState)
        const [url,setUrl]=useState("")

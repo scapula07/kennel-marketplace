@@ -11,11 +11,15 @@ import { messageApi } from '../../api/message';
 import Modal from '../../../components/modal';
 import { AiOutlineDownload } from "react-icons/ai";
 import { orderApi } from '../../api/order';
+import { stripeApi } from '../../api/stripe';
+
+
 export default function Order({order}) {
         const navigate=useNavigate()
         const currentUser=useRecoilValue(accountTypeState)
         const [isLoading,setLoader]=useState(false)
         const [loading,setLoading]=useState(false)
+        const [loader,setisLoading]=useState(false)
         const [product,setProduct]=useState({images:[]})
        console.log(order,"order ")
       const [open,setOpen]=useState(false)
@@ -42,6 +46,16 @@ export default function Order({order}) {
             setLoading(false)
             console.log(e)
           }
+      }
+
+      const checkout=async()=>{
+        setisLoading(true)
+         try{
+          const res = await stripeApi.checkout(order)
+
+           }catch(e){
+            console.log(e)
+         }
       }
  
   return (
@@ -126,7 +140,7 @@ export default function Order({order}) {
 
 
            
-                <div className='flex flex-col'>
+                <div className='flex flex-col space-y-2'>
                      {order?.products?.map((item)=>{
                         return(
                           <Product 
@@ -217,7 +231,19 @@ export default function Order({order}) {
                                          color='orange'
                                         />
                                          :
-                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'>Go to checkout</button>
+                                          <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
+                                            onClick={()=>!loader&&checkout()}
+                                          >
+                                            {loader?
+                                             <ClipLoader color='white' size={10}/>
+                                             :
+                                            "Go to checkout"
+                                            
+                                           
+
+                                            }
+                                          
+                                          </button>
                                           }
                                     </>
                                  

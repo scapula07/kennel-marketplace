@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Layout from '../../layout'
 import Order from './order'
 import { Link, useLocation,useParams,useNavigate} from "react-router-dom";
@@ -8,11 +8,19 @@ import { orderApi } from '../api/order';
 import { ClipLoader } from 'react-spinners';
 
 export default function Checkout() {
+      useEffect(() => {
+       
+            window.scrollTo(0, 0);
+       
+          
+        }, []);
       const navigate=useNavigate()
        const [isLoading,setLoader]=useState(false)
        const currentUser=useRecoilValue(accountTypeState)
        const location =useLocation()
-       const [delivery,setDelivery]=useState({dispatch:"FedEx Office",payment:"Kennel Breeders wallet"})
+       const [delivery,setDelivery]=useState({dispatch:"FedEx Office",payment:"Payment with Stripe",city:""})
+       const [errorMsg, setErrorMsg] = useState(null)
+
 
        const products=location?.state?.products
        const total=location?.state?.total
@@ -21,10 +29,18 @@ export default function Checkout() {
 
         const create=async()=>{
               setLoader(true)
+              setErrorMsg(null)
+              if (delivery?.city?.length < 3) {
+                setErrorMsg(' City is required! ');
+                setLoader(false)
+              
+                return;
+              }
               try{
                   const res=await orderApi.create(products,currentUser,delivery,total)
                   setLoader(false)
-                  res&&  navigate("/orders", { state:res?.id});
+                  console.log(res,"ressss")
+                  res&&  navigate("/orders");
                }catch(e){
                   console.log(e)
                   setLoader(false)
@@ -74,7 +90,7 @@ export default function Checkout() {
 
                                                <div className='flex items-center w-full justify-between'>
                                                            <h5 className='  text-sm font-semibold'>Total price</h5>
-                                                           <h5 className='text-blue-600 text-sm'>${total + 130}</h5>
+                                                           <h5 className='text-blue-600 text-sm'>${parseInt(total) + 130}</h5>
 
                                                  </div>
                                                   {isLoading?

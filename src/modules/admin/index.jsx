@@ -1,9 +1,15 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import SidePanel from './components/sidePanel'
 import Header from './components/header'
 import { Outlet } from 'react-router-dom'
 
 export default function Admin() {
+     useEffect(() => {
+       
+          window.scrollTo(0, 0);
+     
+        
+      }, []);
   return (
    <div className='w-full overflow-x-hidden overflow-y-hidden h-screen pt-6 pb-4 px-10 admin' 
         // style={{background: "rgba(242, 242, 242, 0.6)"}}

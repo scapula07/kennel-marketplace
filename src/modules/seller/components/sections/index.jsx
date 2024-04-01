@@ -11,8 +11,8 @@ export default function Sections() {
   return (
       <div className='py-4 flex flex-col w-full px-28'>
            <div className='w-full'>
-                <div className='border rounded-full flex items-center w-3/5 justify-between '>
-                {[{text:"Home",link:""},{text:"Products",link:"products"},{text:"Services",link:"services"},{text:"Seller Information",link:"information"},{text:"Payment & Delivery",link:"/seller"}].map((item)=>{
+                <div className='border rounded-full flex items-center w-3/6 justify-between '>
+                {[{text:"Home",link:""},{text:"Products",link:"products"},{text:"Services",link:"services"},{text:"Seller Information",link:"information"}].map((item)=>{
                      return(
                       <>
                       {part ==="seller"?

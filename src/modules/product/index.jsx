@@ -1,12 +1,21 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import Layout from '../../layout'
 import Gallery from './components/gallery'
 import Details from './components/details'
 import Actionsection from './components/actionsection'
-import { useLocation,useParams} from "react-router-dom";
+import { useLocation,useParams,} from "react-router-dom";
 
 
 export default function Product() {
+    
+
+      useEffect(() => {
+       
+          window.scrollTo(0, 0);
+     
+        
+      }, []);
+    
       const location =useLocation()
 
       const product=location?.state?.product

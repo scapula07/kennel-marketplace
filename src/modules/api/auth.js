@@ -7,7 +7,7 @@ import {
         signOut,} from "firebase/auth";
        
 import { auth,db } from "../firebase";
-import { doc,getDoc,setDoc,updateDoc }  from "firebase/firestore";
+import { doc,getDoc,setDoc,updateDoc,deleteDoc }  from "firebase/firestore";
 import axios from "axios";
 
 export const authApi= {
@@ -258,7 +258,17 @@ export const authApi= {
           }catch(e){
               console.log(e)
           }
-        }
+        },
+     
+        deleteUser:async function (user) {
+          try{
+       
+             await deleteDoc(doc(db,"users",user?.id));
+             return true
+            }catch(e){
+               console.log(e)
+           }
+     }
 
 
 }

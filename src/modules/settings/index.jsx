@@ -1,9 +1,15 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import Layout from '../../layout'
 import breeder from "../../assets/breeder.png"
 import { RxArrowRight } from "react-icons/rx";
 
 export default function Settings() {
+  useEffect(() => {
+       
+    window.scrollTo(0, 0);
+
+  
+}, []);
   return (
     <Layout>
             <div className='w-full h-full flex justify-center py-10'>

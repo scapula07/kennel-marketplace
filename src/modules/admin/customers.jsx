@@ -7,6 +7,12 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,
 import {getStorage, ref, uploadBytes } from "firebase/storage"
 import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
+import Fuse from "fuse.js"
+import { MdDelete } from "react-icons/md";
+import { MdBlock } from "react-icons/md";
+import { MdOutlineCheckBoxOutlineBlank, } from "react-icons/md";
+import { IoMdCheckbox } from "react-icons/io";
+import { authApi } from '../api/auth';
 
 const monthNames = [
   "January", "February", "March", "April", "May", "June", "July",
@@ -21,10 +27,12 @@ export default function Customers() {
 
         const [products,setProducts]=useState([])
         const [areContacts,setContacts]=useState("")
+        const [searchQuery,setQuery]=useState("")
+
 
         useEffect(()=>{
         
-            const q = query(collection(db, "users"));
+            const q = query(collection(db, "users"),where('role','==','user'));
                 const unsubscribe = onSnapshot(q, (querySnapshot) => {
                   const products = []
                   querySnapshot.forEach((doc) => {
@@ -39,6 +47,26 @@ export default function Customers() {
         
         },[])
         console.log(products,"pp")
+
+        const fuse =new Fuse([...products],{
+          isCaseSensitive: false,
+          includeScore: true,
+          shouldSort: true,
+          includeMatches: false,
+          findAllMatches: false,
+          minMatchCharLength: 2,
+          location: 0,
+          threshold: 0.2,
+          distance: 100,
+          useExtendedSearch: true,
+          ignoreLocation: false,
+          ignoreFieldNorm: false,
+          fieldNormWeight: 1,
+       keys:["name","email","Specialty"]
+     })
+
+     const result=fuse.search(searchQuery)
+
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
@@ -60,9 +88,10 @@ export default function Customers() {
 
                         <div className='flex w-full justify-start'>
                                  <div className='border py-1.5 px-3 rounded-lg flex w-1/4 justify-between bg-white'>
-                                    <input
-                                       placeholder='Search'
-                                       className='outline-none border-0 w-3/5 text-sm font-light '
+                                 <input
+                                       placeholder='Search with name,email '
+                                       className='outline-none border-0 w-full text-sm font-light '
+                                       onChange={(e)=>setQuery(e.target.value)}
                                     
                                       />
                                     <FiSearch
@@ -75,6 +104,7 @@ export default function Customers() {
 
                         <Table 
                            products={products}
+                           result={result}
                         />
 
                              {products?.length ===0&&areContacts?.length ==0&&
@@ -105,7 +135,7 @@ export default function Customers() {
 
 
 
-const Table=({products})=>{
+const Table=({products,result})=>{
       return(
         <div>
             <table class="table-auto w-full border-separate border-spacing-0.5">
@@ -114,7 +144,8 @@ const Table=({products})=>{
                           {
                             ["User",
                               "Email",
-                            "Phone no."
+                            "Phone no.",
+                            "Action"
                             ].map((text)=>{
                                 return(
                                 <th className='py-1 text-xs text-slate-500 text-start'>{text}</th>
@@ -126,8 +157,7 @@ const Table=({products})=>{
                     </thead>
 
                     <tbody className='w-full '>
-                        
-                        {products?.length >0 &&products?.map((product)=>{
+                    {result?.length ==0 &&products?.map((product)=>{
                             return(
                                   <Row product={product}/>
 
@@ -135,6 +165,15 @@ const Table=({products})=>{
                           })
 
                         }
+                     {result?.length >0 &&result?.map((product)=>{
+                            return(
+                                  <Row product={product?.item}/>
+
+                              )
+                          })
+
+                        }
+
 
                  
                      
@@ -156,14 +195,34 @@ const Table=({products})=>{
 
 
 const Row=({product})=>{
+  const [onSelect,setSelect]=useState(false)
+  const [ondelete,setisDeleting]=useState(false)
+  const deleteUser=async()=>{
+    setisDeleting(true)
+    try{
+    const res=await authApi.deleteUser(product)
+    res&&setisDeleting(false)
+    }catch(e){
+        setisDeleting(false)
+        console.log(e)
+    }
+}
     return(
-      <tr className='border-b '>
-      <td className='flex items-center space-x-8'>
-          <input
-             type={"checkbox"}
-             className="py-2 px-2"
-           />
-            <Link to="/admin/edit" state={{product}}>
+      <tr className={`${onSelect?'border-b shadow-lg py-4 ':'border-b'}`}>
+         <td className='flex items-center space-x-8'>
+                {onSelect?
+                    <IoMdCheckbox
+                    className="text-2xl text-orange-500"
+                    onClick={()=>setSelect(false)}
+                  />
+                      :
+                  <MdOutlineCheckBoxOutlineBlank
+                      className="text-lg text-orange-500"
+                      onClick={()=>setSelect(true)}
+                    />
+
+                  } 
+            <Link to="/seller" state={{seller:product}}>
                 <span className='font-semibold text-slate-400 hover:underline '>
                       {product?.name}
                   </span>
@@ -174,6 +233,24 @@ const Row=({product})=>{
  
       <td className='text-sm font-light text-slate-500'>{product?.email}</td>
       <td className='text-sm font-light text-slate-500'>{product?.phone}</td>
+      <td className='text-xs font-semibold  px-2  rounded-lg flex items-center  space-x-3 py-2'>
+        
+             
+            {ondelete?
+               <ClipLoader
+                 color='red'
+                 size={14}
+                />
+               :
+               <MdDelete 
+                  onClick={()=>onSelect&&deleteUser()}
+                  className={`${onSelect?'text-2xl text-red-500 font-light hover:text-red-400':'text-lg text-slate-500'}`}
+                />
+
+            }
+
+         
+      </td>
    
 
     

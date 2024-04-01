@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import Layout from '../../layout'
 import Products from './products'
 import Seller from './seller'
@@ -7,6 +7,12 @@ import { useRecoilValue } from 'recoil'
 
 export default function Saved() {
     const saved=useRecoilValue(saveTypeState)
+    useEffect(() => {
+       
+      window.scrollTo(0, 0);
+ 
+    
+  }, []);
   return (
     <Layout>
               <div className='w-full h-full flex justify-center py-10'>

@@ -13,11 +13,18 @@ import { collection,  onSnapshot,
 import { db } from '../../modules/firebase';
 import { saveTypeState ,accountTypeState} from '../../modules/recoil/state';
 import { useRecoilState ,useRecoilValue} from 'recoil';
+import Modal from "../modal"
+import { searchApi } from '../../modules/api/search';
+import { ClipLoader } from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
+
+
 export default function Header() {
      const currentUser=useRecoilValue(accountTypeState)
      const [misc,setMisc]=useState({})
      const [saved,setSaved]=useRecoilState(saveTypeState)
      const user = localStorage.getItem("user");
+     const [isLoading,setLoading]=useState(false)
      
      const currentURL = window.location.href;
      const parts = currentURL?.split('/');
@@ -25,6 +32,9 @@ export default function Header() {
      console.log(lastPart,"lastp"); 
      const part =`${"/" +lastPart}`
      const [active,setActive]=useState(part)
+     const [search,setSearch]=useState("")
+
+     const navigate=useNavigate()
 
      console.log(part)
    
@@ -43,8 +53,21 @@ export default function Header() {
 
 
 
+    const onSearch=async()=>{
+           setLoading(true)
+        try{
+             const res=await searchApi.globalSearch(search)
+            setLoading(false)
+            navigate('/search',{state:res})
+         }catch(e){
+            setLoading(false)
+            console.log(e)
+        }
+    }
+
 
   return (
+    <>
       <div className='w-full '>
 
 
@@ -57,14 +80,34 @@ export default function Header() {
                         />
 
                     </div>
-                     <div className='border py-2 px-3 rounded-lg flex w-1/2 justify-between'>
+                     <div className='border py-1 px-3 rounded-lg flex w-1/2 justify-between items-center'>
                         <input
-                           placeholder='Search'
-                           className='outline-none border-0 w-3/5'
-                         />
-                        <FiSearch
-                          className='text-slate-600'
-                         />
+                           placeholder='Search products,sellers and category'
+                           className='outline-none border-0 w-full'
+                           onChange={(e)=>setSearch(e.target.value)}
+                          />
+                         {search?.length >0?
+                            <button className='py-2 text-white px-4 rounded-sm text-xs font-semibold bg-orange-600'
+                              onClick={()=>!isLoading&&onSearch()}
+                            >
+                               {!isLoading?
+                                 "  Search"
+                                 :
+                                 <ClipLoader size={10} color="white" />
+
+
+                               }
+                             
+                             </button>
+
+                              :
+                              <FiSearch
+                              className='text-slate-600'
+                             />
+
+
+                         }
+                      
 
                      </div>
 
@@ -98,14 +141,24 @@ export default function Header() {
                                 
 
                                  :
-                                 <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
-
+                                 <>
+                                   {currentUser?.role==="breeder"?
+                                 <Link to="/admin-seller">
+                                        <h5 className=' font-light hover:font-semibold hover:text-orange-800'>Dashboard</h5>
+                                  </Link>
+                                  :
+                              
+                                  <Link to="/breader">
+                                  <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
+                                  </Link>
+                                 }
+                                 </>
                             }
                            
                              {currentUser?.id?.length >0?
                                 <div className='flex items-center space-x-2'>
                                        <Link to={"/account"}>
-                                        {currentUser?.img?.length ===0?
+                                          {currentUser?.img?.length ===0?
                                                <h5 className='rounded-full bg-orange-400 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
                                                >
                                                                       {currentUser?.name?.slice(0,1) }
@@ -169,5 +222,7 @@ export default function Header() {
            </div>
 
         </div>
+       
+        </>
   )
 }

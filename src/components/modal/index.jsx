@@ -1,5 +1,8 @@
 import React from 'react'
 import "./modal.css"
+
+
+
 export default function Modal({children ,cname,trigger,onClose}) {
   return (
     <div>

@@ -13,12 +13,15 @@ import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilValue } from 'recoil';
+import { productApi } from '../../api/product';
 
 export default function Actionsection({product}) {
       const currentUser=useRecoilValue(accountTypeState)
       const [seller,setSeller]=useState({})
       const [products,setProducts]=useState([])
       const [isLoading,setLoader]=useState(false)
+      const [isSaving,setSave]=useState(false)
+      const [loading,setLoading]=useState(false)
       const navigate=useNavigate()
         useEffect(()=>{
         
@@ -42,6 +45,32 @@ export default function Actionsection({product}) {
                 console.log(e)
               }
           }
+
+
+  
+ 
+          const addTocart=async()=>{
+             setLoading(true)
+             try{
+                 const res=await productApi.addToCart(product,currentUser)
+                 res&&setLoading(false)
+               }catch(e){
+               console.log(e)
+               setLoading(false)
+             }
+          }
+ 
+          const save=async()=>{
+           setSave(true)
+           try{
+               const res=await productApi.save(product,currentUser)
+               res&&setSave(false)
+             }catch(e){
+             console.log(e)
+             setSave(false)
+           }
+        }
+ 
         
   return (
     <div className='flex w-1/2 flex-col py-6 space-y-6'>
@@ -82,7 +111,7 @@ export default function Actionsection({product}) {
                             <div className='flex items-center space-x-4'>
                                   {seller?.img?.length !=undefined?
                                             <img 
-                                            src={breeder}
+                                            src={seller?.img}
                                             className="w-10 h-10 rounded-full"
                                         />
                                         :
@@ -160,7 +189,17 @@ export default function Actionsection({product}) {
                     </div>
 
                     <div className='flex flex-col space-y-4'>
-                            <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}>
+                       {loading?
+                               <div className='w-full flex justify-center'>
+                                     <ClipLoader
+                                        color="#C74A1F"
+                                      />
+                                </div>
+                                :
+                            <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full'
+                             style={{background:"#C74A1F"}}
+                             onClick={addTocart}
+                             >
                         
                                         <MdOutlineShoppingCart 
                                             className='text-xl' 
@@ -168,6 +207,7 @@ export default function Actionsection({product}) {
                                         <span>Add to cart</span>
 
                             </button>
+                        }
 
                             {isLoading?
                                <div className='w-full flex justify-center'>
