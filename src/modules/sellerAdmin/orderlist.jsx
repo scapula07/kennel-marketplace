@@ -157,7 +157,7 @@ const Table=({orders})=>{
 
 const Row=({order})=>{
   const [customer,setCustomer]=useState({})
-  const [products,setProducts]=useState([])
+  const [product,setProduct]=useState()
  
     useEffect(()=>{
     
@@ -173,25 +173,23 @@ const Row=({order})=>{
        useEffect(()=>{
   
           if(order?.products?.length >0){
-            const ids = order?.products?.map(obj => obj.id);
+          
+            const unsub = onSnapshot(doc(db,"products",order?.products[0]?.id), (doc) => {
+              console.log(doc.data(),"daa")
+              setProduct({...doc.data(),id:doc?.id})
             
-            const q = query(collection(db, "products"),where('id', 'in',ids ))
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
-              const products= [];
-              querySnapshot.forEach((doc) => {
-                products.push({...doc?.data(),id:doc?.id});
-               
-              });
+             });
+         
      
             
-              setProducts(products)
-            });
+              
+          
 
             }
          },[])
   
 
-       console.log(order?.products,"prod")
+       console.log(product,"prod")
 
       const date = new Date(order?.time);
 
@@ -210,7 +208,7 @@ const Row=({order})=>{
              type={"checkbox"}
              className="py-2 px-2"
            />
-           <span className='text-sm font-light text-slate-500'>#{order?.id?.slice(0,4)}</span>
+           <span className='text-sm font-light text-slate-500'>{order?.id}</span>
 
       </td>
       </Link>
@@ -227,15 +225,7 @@ const Row=({order})=>{
        <span> {customer?.name}</span>
         </td>
       <td className='text-sm font-light text-slate-500'>
-            <select className='outline-none' >
-                {products?.map((product)=>{
-                    return(
-                      <option>{product?.name}</option>
-                    )
-                })
-
-                }
-            </select>
+           {product?.name}
       </td>
       <td className='text-sm font-light text-slate-500'>${order?.total}</td>
     

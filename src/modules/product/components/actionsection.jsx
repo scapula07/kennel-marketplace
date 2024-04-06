@@ -87,12 +87,12 @@ export default function Actionsection({product}) {
                 </div>
 
                <div className='flex items-center'>
-                  <h5 className='text-sm text-slate-500'>Rating 4.8 of 5</h5>
+                  <h5 className='text-sm text-slate-500'>Rating 0 of 5</h5>
                   <h5 className='bg-white flex items-center p-2 rounded-full'>
                         {[1,2,3,4,5].map(()=>{
                           return(
                              <MdOutlineStar 
-                               className='text-yellow-300 '
+                               className='text-slate-300 '
                              />
                           )
                         })
@@ -162,14 +162,14 @@ export default function Actionsection({product}) {
 
 
          <div className='flex flex-col space-y-4'>
-              {["Large (L) treats pack (5kg)","Medium (M) treats pack (3kg)","Small (S) treats pack (1kg)"].map((text)=>{
+              {product?.sizes.map((text)=>{
                  return(
                      <div className='rounded-full border px-4 py-2 flex items-center space-x-3'> 
                        <input 
                           type={"radio"}
                        />
 
-                       <h5 className='font-light text-slate-700 text-lg'>{text}</h5>
+                       <h5 className='font-light text-slate-700 text-lg'>{text?.label}({text?.value}kg)</h5>
                     </div>
                  )
               })}

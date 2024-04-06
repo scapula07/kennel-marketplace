@@ -132,7 +132,7 @@ const Product=({item})=>{
             <div className='flex flex-col'>
                   <div className='flex flex-col space-y-3'>
                        <h5 className='text-lg text-slate-700 font-light'>{product?.name}</h5>
-                       <h5 className='text-sm text-slate-500 '>{product?.description}</h5>
+                       <h5 className='text-sm text-slate-500 '>{product?.description?.slice(0,50)}</h5>
                   </div>
 
                   <div className='flex items-center'>

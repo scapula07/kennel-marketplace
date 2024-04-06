@@ -18,6 +18,8 @@ import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import {ClipLoader} from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { IoMdCheckbox } from "react-icons/io";
 
 
 export default function SellerOrder() {
@@ -103,7 +105,7 @@ export default function SellerOrder() {
                 </div>
 
                 <div className='w-full rounded-lg py-6 px-4 flex justify-center'>
-                       <div className='w-4/5 bg-slate-100  rounded-xl px-6 py-8'>
+                       <div className='w-4/5 bg-white  rounded-xl px-6 py-8'>
                             <div className='flex flex-col border-b pb-4'>
                                     <h5 className='text-lg  text-slate-700'>Order Details</h5>
                                     <h5 className='text-sm font-light  text-slate-700'>Order no:</h5>
@@ -131,7 +133,9 @@ export default function SellerOrder() {
 
                              <div className='flex w-full justify-between py-4'>
                                    <div className='w-1/4'>
-                                      <Tracker />
+                                      <Tracker 
+                                        order={order}
+                                      />
                                    </div>
 
                                     <div className='w-2/4 flex flex-col px-4 space-y-8'>                         
@@ -166,7 +170,12 @@ export default function SellerOrder() {
                                           </div>
 
                                           <div className='flex flex-col w-full space-y-2'>
-                                              <h5 className='text-slate-500 font-semibold'>Contract</h5>
+                                              <h5 className='text-slate-500 font-semibold'>Contract(
+                                                <Link to="https://firebasestorage.googleapis.com/v0/b/reach-nft-auction.appspot.com/o/order%2Fkb%20contract%20template.pdf?alt=media&token=912fe008-c696-4816-9a3c-a75495435612">
+                                                <span className='text-sm font-light text-orange-500 hover:underline ' >Example contract</span>
+                                                </Link>
+                                                
+                                              )</h5>
                                               {ordered?.contract==="waiting"?
                                                    <>
                                                    {file?.name?.length==0?
@@ -324,7 +333,7 @@ const Product=({item})=>{
              />
              <div className='flex flex-col'>
                   <h5 className='font-semibold text-slate-600 text-lg'>{product?.name}</h5>
-                  <h5 className='font-light'>{product?.description}</h5>
+                  <h5 className='font-light'>{product?.description?.slice(0,150)}...</h5>
 
              </div>
 
@@ -336,14 +345,37 @@ const Product=({item})=>{
 
 
 
-const Tracker=()=>{
+const Tracker=({order})=>{
+      const [inProgess,setProgressing]=useState(false)
+      const [inDelivered,setDelivery]=useState(false)
+     const deliverySent=async()=>{
+            setProgressing(true)
+         try{
+           const res=orderApi.sentPackage(order)
+           setProgressing(false)
+         }catch(e){
+          console.log(e)
+          setProgressing(false)
+         }
+     }
+
+    const deliveryReceived=async()=>{
+          setDelivery(true)
+      try{
+        const res=orderApi.deliveredPackage(order)
+        setDelivery(false)
+      }catch(e){
+        console.log(e)
+        setDelivery(false)
+      }
+    }
      return(
         <div className='w-full flex flex-col py-'>
             <h5 className='text-slate-500 font-semibold'>Update Tracking</h5>
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
-                              <IoIosNotifications
-                                className='text-2xl text-slate-600'
+                                <IoIosNotifications
+                                   className='text-2xl text-green-600'
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order received</h5>
@@ -359,7 +391,7 @@ const Tracker=()=>{
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
                               <IoDocumentTextSharp 
-                                className='text-2xl text-slate-600'
+                                className={`${order?.contract =='sent' || order?.contract =='signed' ? 'text-2xl text-green-600':'text-2xl text-slate-600'}`}
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract sent</h5>
@@ -376,7 +408,7 @@ const Tracker=()=>{
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
                              <IoDocumentTextSharp 
-                                className='text-2xl text-slate-600'
+                                 className={`${order?.contract =='signed' ? 'text-2xl text-green-600':'text-2xl text-slate-600'}`}
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract signed</h5>
@@ -393,12 +425,27 @@ const Tracker=()=>{
 
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
-                             <input
-                               type={"checkbox"}
+                           {order?.deliveryStatus ==="pending"?
+                             <>
+                             {inProgess?
+                                <BeatLoader size={6} color="orange"/>
+                                      :
+                             
+                                  <MdOutlineCheckBoxOutlineBlank 
+                                     onClick={deliverySent}
+                                     className='text-green-400 text-xl'
+                                     />
+                                  }
+                             </>
+                           
+                              :
+                              <IoMdCheckbox 
+                                 className='text-green-400 text-3xl'
                               />
-                             {/* <FaCartShopping
-                                className='text-2xl text-slate-600'
-                               /> */}
+                             
+
+                           }
+                          
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order transmited to courier</h5>
                                    <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
@@ -412,10 +459,29 @@ const Tracker=()=>{
 
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
+                        {order?.deliveryStatus=="delivered"?
                           
-                             <IoMdCheckmark
-                                className='text-2xl text-slate-600'
-                               />
+                           
+                              
+                           <IoMdCheckmark
+                              className='text-2xl text-green-600'
+                             />
+                                :
+                             <>
+                             {inDelivered?
+                                <BeatLoader size={6} color="orange"/>
+                                      :
+                             
+                                  <MdOutlineCheckBoxOutlineBlank 
+                                     onClick={deliveryReceived}
+                                     className='text-green-400 text-xl'
+                                     />
+                                  }
+                             </>
+                             
+
+                           }
+                           
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order delivered</h5>
                                    <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>

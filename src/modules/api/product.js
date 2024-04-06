@@ -37,7 +37,8 @@ export const productApi= {
                  images:directory,
                  features:newArray,
                  creator:user?.id,
-                 createdAt:new Date()
+                 createdAt:new Date(),
+                 reviews:[]
                  
                })
 
@@ -209,5 +210,21 @@ export const productApi= {
                 console.log(e)
             }
       },
+      addReviews:async function (product,review) {
+        try{
+          const ref =doc(db,"products",product?.id)
+          const docSnap = await getDoc(ref);
+             await updateDoc(doc(db,"products",product?.id), {
+                 reviews:[...docSnap?.data()?.reviews,review]
+              })
+
+             return true
+
+
+         }catch(e){
+            console.log(e)
+         }
+
+    },
 }
 

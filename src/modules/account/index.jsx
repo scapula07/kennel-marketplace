@@ -82,7 +82,7 @@ export default function Accoount() {
                                       link:"/profile"
                                     },
                                     {
-                                      label:"Payment methods ",
+                                      label:"Payment methods",
                                       link:"/payment"
                                     },
                                     // {
@@ -93,20 +93,58 @@ export default function Accoount() {
 
                                   ].map((item)=>{
                                      return(
-                                        <div className='flex justify-between py-4 px-4 rounded-lg shadow-lg '>
-                                           <h5>{item?.label}</h5>
-                                           <Link to={item?.link}>
-                                            <RxArrowRight  
-                                                className='text-blue-600 text-xl'
-                                            />
-                                           </Link>
-                                         
+                 
+                                                <>
+                                    {item?.label ==="Payment methods"?
+                                            <>
+                                               {currentUser?.role ==="breeder"&&
+                                                    <div className='flex justify-between py-4 px-4 rounded-lg shadow-lg '>
+                                                    
+                                                       
+                                                              <h5>{item?.label}</h5>                     
+
+                                                      <Link to={item?.link}>
+                                                        <RxArrowRight  
+                                                            className='text-blue-600 text-xl'
+                                                        />
+                                                      </Link>
+                                                      
+                                                  
+                                                    </div>
+                                               }
+                                            </>
+                                             
+                                                 :
+                                                 <div className='flex justify-between py-4 px-4 rounded-lg shadow-lg '>
+                                                    
+                                                       
+                                                 <h5>{item?.label}</h5>                                        
+
+                                                      <Link to={item?.link}>
+                                                      <RxArrowRight  
+                                                      className='text-blue-600 text-xl'
+                                                      />
+                                                      </Link>
 
 
+                                                      </div>
 
-                                        </div>
-                                     )
-                                 })
+
+                                                }
+                                                
+                                                
+                                                
+                                           </>
+                                            
+                                          
+                                     
+                               
+
+                            
+                                     
+       
+                                            )
+                                          })
 
                                  }
 

@@ -19,8 +19,8 @@ export default function Details({product}) {
                 {product?.description}
               </p>
               <div className='py-4'>
-                 {[`weight:${product?.weight}g`,
-                    `sizes:${product?.sizes}`,
+                 {[`Weight:${product?.weight}g`,
+                    
 
                  ].map((text)=>{
                      return(
@@ -28,6 +28,13 @@ export default function Details({product}) {
                      )
                  })
                 }
+
+              {product?.features?.map((text)=>{
+                      return(
+                         <li className='text-slate-500 text-sm'>{text?.value}</li>
+                      )
+                  })
+                 }
 
               </div>
 

@@ -13,7 +13,7 @@ export default function Info({seller}) {
          </div>
 
          <div className='w-full py-4'>
-             <p className='font-light text-slate-700 w-3/4'>{seller?.about}</p>
+             <p className='font-light text-slate-700 w-3/4'>{seller?.bio}</p>
          </div>
 
          <div className='flex flex-col w-full'>

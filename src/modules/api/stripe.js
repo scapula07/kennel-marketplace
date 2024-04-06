@@ -27,7 +27,7 @@ export const stripeApi= {
           }
 
     },
-    checkout:async function (order) {
+    checkout:async function (vendor,product,order) {
         try{
                           
           const url=`http://localhost:3003/api/v1/stripe/payment`
@@ -45,8 +45,10 @@ export const stripeApi= {
               const response= await axios.post(
                       url,
                       {
-                        product:order?.products[0],
-                        accountId:"acct_1OzRG4P0mVZ3h5tm"
+                        product:product,
+                        accountId:vendor?.payments[0]?.accountId,
+                        qty:order?.products[0]?.qty,
+                        orderId:order?.id
                       },
                       config
                 )

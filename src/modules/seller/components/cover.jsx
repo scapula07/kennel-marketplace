@@ -58,12 +58,12 @@ export default function Cover({seller}) {
                   } 
 
                     <div className='flex items-center -mt-12'>
-                        <h5 className='text text-slate-500'>Seller rating 4.8 of 5</h5>
+                        <h5 className='text text-slate-500'>Seller rating 0 of 5</h5>
                         <h5 className='bg-white flex items-center p-2 rounded-full'>
                                 {[1,2,3,4,5].map(()=>{
                                 return(
                                     <MdOutlineStar 
-                                    className='text-yellow-300 '
+                                       className='text-slate-300 '
                                     />
                                 )
                                 })

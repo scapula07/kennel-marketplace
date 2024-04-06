@@ -15,3 +15,11 @@ export const saveTypeState =atom({
    default:[]
 })
 
+
+
+
+export const alertTypeState =atom({
+   key:"alert",
+   default:null
+})
+

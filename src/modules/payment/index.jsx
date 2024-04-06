@@ -52,11 +52,13 @@ export default function Payment() {
              setLoading(true)
              try{
                const res=await stripeApi.createAccount()
+               const res1=await paymentApi.addPayment(currentUser,[{text:"Stripe",accountId:res?.data?.data?.account_id,verification:false}])
                console.log(res?.data?.data,"res")
-               window.location.href =res?.data?.data;
+               window.location.href =res?.data?.data?.link;
+               console.log(res?.data?.data?.account_id," account id")
                setLoader(false)
                setPayment((prev)=>[...prev,text]) 
-               setTrigger(false)
+            
              }catch(e){
               console.log(e)
               setLoader(false)
@@ -94,23 +96,23 @@ export default function Payment() {
                           {currentUser?.payments?.length !=undefined&&[...payments,...currentUser?.payments]?.map((item)=>{
                               return(
                                   <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4'>
-                                    {item==="Kennel wallet"&&<IoWalletOutline 
+                                    {item?.text==="Kennel wallet"&&<IoWalletOutline 
                                          className='text-3xl  rounded-lg text-center '
                                     />}
-                                    {item==="Cash"&&<BsCash 
+                                    {item?.text==="Cash"&&<BsCash 
                                        className='text-3xl  rounded-lg text-center '
                                     />}
-                                    {item==="Cashless Transfer"&&<BiTransfer 
+                                    {item?.text==="Cashless Transfer"&&<BiTransfer 
                                        className='text-3xl  rounded-lg text-center '
                                     />}
-                                    {item==="Stripe"&&<BsStripe 
+                                    {item?.text==="Stripe"&&<BsStripe 
                                        className='text-3xl  rounded-lg text-center '
                                      />}
 
                                       <div className='flex w-full justify-between'>
                                           <div className='flex flex-col'>
                                                 <div className='flex flex-col'>
-                                                     <h5 className='text-lg text-slate-700 font-light'>{item}</h5>
+                                                     <h5 className='text-lg text-slate-700 font-light'>{item?.text}</h5>
                                                      {/* <h5 className='text-sm text-slate-500 '>Expiry 06/2024</h5> */}
                                                 </div>
 
@@ -169,7 +171,7 @@ export default function Payment() {
                     <h5 className='text-lg text-slate-600 font-semibold'>Select:</h5>
                     <div className='flex justify-center w-full'>
                         {loading&&
-                          <ClipLoader color='grey'/>
+                          <ClipLoader color='grey' size={14}/>
 
                         }
 

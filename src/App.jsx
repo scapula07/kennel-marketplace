@@ -93,8 +93,8 @@ function App() {
               <Route exact path="/login"  element={<Login/>} />
               <Route exact path="/breader"  element={<Breader/>} />
               <Route exact path="/seller"  element={<Seller/>} >
-                   <Route exact path=""  element={<SellerHome/>} />
-                   <Route exact path="products"  element={<SellerProducts/>} />
+                   <Route exact path="home"  element={<SellerHome/>} />
+                   <Route exact path=""  element={<SellerProducts/>} />
                    <Route exact path="services"  element={<SellerServices/>} />
                    <Route exact path="information"  element={<Information/>} />
                 </Route>
@@ -134,7 +134,7 @@ function App() {
               </Route>
 
 
-              <Route exact path="/orders"  element={<Orders/>} >
+              <Route exact path="/orders/"  element={<Orders/>} >
                   <Route exact path=""  element={<Active/>} />
                   <Route exact path="completed"  element={<Completed/>} />
                   <Route exact path="cancelled"  element={<Cancelled/>} />

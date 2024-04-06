@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom';
-export default function Sections() {
+export default function Sections({seller}) {
   const currentURL = window.location.href;
   const parts = currentURL?.split('/');
   const lastPart = parts[parts.length - 1];
@@ -11,8 +11,13 @@ export default function Sections() {
   return (
       <div className='py-4 flex flex-col w-full px-28'>
            <div className='w-full'>
-                <div className='border rounded-full flex items-center w-3/6 justify-between '>
-                {[{text:"Home",link:""},{text:"Products",link:"products"},{text:"Services",link:"services"},{text:"Seller Information",link:"information"}].map((item)=>{
+                <div className='border rounded-full flex items-center w-1/3 justify-between '>
+                {[
+               //    {text:"Home",link:""},
+                  {text:"Products",link:""},
+                  {text:"Services",link:"services"},
+                  {text:"Seller Information",link:"information"}
+                  ].map((item)=>{
                      return(
                       <>
                       {part ==="seller"?
@@ -40,7 +45,7 @@ export default function Sections() {
 
 
            <div className='w-full '>
-                <Outlet />
+                <Outlet context={[seller]}/>
            </div>
             
           

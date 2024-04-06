@@ -35,7 +35,7 @@ export default function Completed() {
 
         
          
-        },[])
+        },[currentUser])
 
        
 
@@ -68,6 +68,6 @@ export default function Completed() {
                                 } 
         
 
-    </div>
+               </div>
   )
 }

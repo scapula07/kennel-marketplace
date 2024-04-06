@@ -31,7 +31,9 @@ export default function Seller() {
                   seller={seller}
                />
 
-              <Sections />
+              <Sections 
+                seller={seller}
+              />
 
           </div>
 

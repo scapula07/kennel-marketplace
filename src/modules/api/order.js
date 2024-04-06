@@ -126,6 +126,36 @@ export const orderApi= {
     }catch(e){
         console.log(e)
     }
+   },
+   deliveredPackage:async function (order) {
+    try{
+         const ref =doc(db,"order",order?.id)
+         const docSnap = await getDoc(ref);
+         const res=  await updateDoc(doc(db,"orders",order?.id), {
+                deliveryStatus:"delivered",
+            })
+
+
+            return true
+
+    }catch(e){
+        console.log(e)
+    }
+   },
+   completeOrder:async function (order) {
+    try{
+         const ref =doc(db,"order",order?.id)
+         const docSnap = await getDoc(ref);
+         const res=  await updateDoc(doc(db,"orders",order?.id), {
+                status:"completed",
+         })
+
+
+            return true
+
+    }catch(e){
+        console.log(e)
+    }
    }
 
 }

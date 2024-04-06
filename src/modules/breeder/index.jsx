@@ -17,7 +17,7 @@ import CreatableSelect from 'react-select/creatable';
 
 export default function Breader() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
-  const [profile,setProfile]=useState({tags:[{label:"",value:""}],phone:'',bio:"",animal:""})
+  const [profile,setProfile]=useState({tags:[{label:"",value:""}],phone:'',bio:"",animal:[{label:"",value:""}],})
   const [url,setUrl]=useState("")
   const [file,setFile]=useState({})
   const [loader,setLoader]=useState(false)
@@ -69,7 +69,7 @@ export default function Breader() {
         setLoader(false);
         return;
       }
-      if (profile?.animal?.length ==0 ) {
+      if (profile?.animal?.label?.length ==0 ) {
         setErrorMsg('Select your breed specialty');
         setNum(1)
         setLoader(false);
@@ -398,7 +398,7 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
                                   <Select 
                                        
                                           options={species}
-                                          value={currentUser?.tags}
+                                          value={currentUser?.animal}
                                           onChange={(opt) => {
                                           console.log(opt,"opt")
                                           setcurrentUser({...currentUser,animal:opt})

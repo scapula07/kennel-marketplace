@@ -180,7 +180,7 @@ const Card=({product})=>{
                          {[1,2,3,4,5].map(()=>{
                            return(
                               <MdOutlineStar 
-                                className='text-yellow-300 '
+                                className='text-slate-300 '
                               />
                            )
                          })

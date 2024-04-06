@@ -164,7 +164,8 @@ const Card=({product})=>{
                       state={{
                          product
                     }}
-                    >                <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
+                    >      
+                        <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
               </Link>
                <h5 className='text-slate-400 text-sm '>{product?.description}</h5>
                <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>

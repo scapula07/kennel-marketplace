@@ -68,7 +68,8 @@ export default function Header() {
 
   return (
     <>
-      <div className='w-full '>
+      <div className='w-full relative'>
+
 
 
            <div className='flex items-center w-full px-10'>
@@ -220,6 +221,8 @@ export default function Header() {
                  </div>
 
            </div>
+
+        
 
         </div>
        

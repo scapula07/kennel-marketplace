@@ -12,6 +12,8 @@ import Modal from '../../../components/modal';
 import { AiOutlineDownload } from "react-icons/ai";
 import { orderApi } from '../../api/order';
 import { stripeApi } from '../../api/stripe';
+import { IoMdClose } from "react-icons/io";
+import Review from './review';
 
 
 export default function Order({order}) {
@@ -21,6 +23,11 @@ export default function Order({order}) {
         const [loading,setLoading]=useState(false)
         const [loader,setisLoading]=useState(false)
         const [product,setProduct]=useState({images:[]})
+        const [state,setContractState]=useState(order?.contract == "sent" || order?.contract == "signed")
+        const [vendor,setVendor]=useState({})
+        const [trigger,setTrigger]=useState(false)
+
+
        console.log(order,"order ")
       const [open,setOpen]=useState(false)
       const startMsg=async()=>{
@@ -40,6 +47,7 @@ export default function Order({order}) {
            setLoading(true)
           try{
             const res=await orderApi.signContract(order)
+            
             setLoading(false)
             
           }catch(e){
@@ -51,12 +59,34 @@ export default function Order({order}) {
       const checkout=async()=>{
         setisLoading(true)
          try{
-          const res = await stripeApi.checkout(order)
-
+            const res = await stripeApi.checkout(vendor,product,order)
+            window.location.href =res?.data?.url;
+            setisLoading(false)
            }catch(e){
             console.log(e)
+            // window.location.href =res?.data?.data?.url;
+            setisLoading(false)
+
          }
       }
+
+
+      const confirmDelivery=async()=>{
+        setisLoading(true)
+         try{
+            const res = await orderApi.completeOrder(order)
+            
+            setisLoading(false)
+           }catch(e){
+            console.log(e)
+          
+            setisLoading(false)
+
+         }
+      }
+
+
+      console.log(product,"state")
  
   return (
     <>
@@ -80,9 +110,12 @@ export default function Order({order}) {
                                     <h5 className='text-lg font-semibold text-slate-600'>Order status:</h5>
                                     {order?.status==="active"&&
                                     <h5 className='bg-orange-100 text-orange-600 py-1 px-2 text-sm font-semibold'>
-                                      { order?.contract==="waiting"&& "Waiting for contract from seller" }
-                                      { order?.contract==="sent"&& "Waiting for customer to sign the contract" }
-                                      {order?.contract==="signed"&& "Contract signed. Item is ready for checkout" }
+                                      {order?.paid==false&& order?.contract==="waiting"&& "Waiting for contract from seller" }
+                                      {order?.paid==false&&  order?.contract==="sent"&& "Waiting for customer to sign the contract" }
+                                      {order?.paid==false&& order?.contract==="signed"&& "Contract signed. Item is ready for checkout" }
+                                      {order?.paid==true&& order?.deliveryStatus==="pending"&& "Accepted. Waiting for seller to send package" }
+                                      {order?.paid==true&& order?.deliveryStatus==="sent"&& "Sent. Going to customer" }
+                                      {order?.paid==true&& order?.deliveryStatus==="delivered"&& "Arrived. Waiting for customer" }
                                      
                                    
                                     </h5>
@@ -148,6 +181,7 @@ export default function Order({order}) {
                             order={order}
                             product={product}
                             setProduct={setProduct}
+                            setVendor={setVendor}
                       />
                         )
                      })
@@ -185,21 +219,21 @@ export default function Order({order}) {
                                      <h5  className='text-lg font-semibold text-slate-700'>Total price:</h5>
                                      <h5 className='text-light text-slate-400'>${order?.total}</h5>
                                 </div>
-                                {order?.contract=="sent" || order?.contract=="signed" &&
-                                <div className='flex items-center w-1/2 justify-between'> 
-                                    
-                                     <Link to={order?.file}>
-                                        <div className='flex bg-slate-300  items-center py-2  rounded-lg space-x-2 px-4'
-                                          
-                                            
-                                          >
-                                          <h5 className='text-slate-500 font-light text-sm'>Download Contract </h5>
-                                          <AiOutlineDownload className='text-xl'
-                                            />
-                                        </div>
-                                     </Link>
-                                  
-                                   </div>
+                                 {state==true &&
+                                      <div className='flex items-center w-1/2 justify-between'> 
+                                        
+                                        <Link to={order?.file}>
+                                            <div className='flex bg-slate-300  items-center py-2  rounded-lg space-x-2 px-4'
+                                              
+                                                
+                                              >
+                                              <h5 className='text-slate-500 font-light text-sm'>Download Contract </h5>
+                                              <AiOutlineDownload className='text-xl'
+                                                />
+                                            </div>
+                                        </Link>
+                                      
+                                      </div>
                                    }
                           </div>
 
@@ -212,43 +246,70 @@ export default function Order({order}) {
                        <div className='w-full flex items-center justify-between' >
 
                                 <div className='flex items-center space-x-6 '>
-                                {order?.contract=="completed"&&
+                                {order?.status=="completed"&&
                                     <>
                                     {loading?
                                        <ClipLoader
                                          color='orange'
                                         />
                                          :
-                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl'>Repeat order</button>
+                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl' onClick={()=>setTrigger(true)}>Review</button>
                                           }
                                     </>
                                  
                                      }
-                                {order?.contract=="signed"&&
+                                {order?.status=="active"&&order?.contract=="signed"&&
                                     <>
                                     {loading?
                                        <ClipLoader
                                          color='orange'
                                         />
                                          :
-                                          <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
-                                            onClick={()=>!loader&&checkout()}
-                                          >
-                                            {loader?
-                                             <ClipLoader color='white' size={10}/>
-                                             :
-                                            "Go to checkout"
-                                            
-                                           
+                                         <>
+                                              {order?.status=="active"&&order?.paid==false?
+                                                       <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
+                                                                onClick={()=>!loader&&checkout()}
+                                                              >
+                                                                {loader?
+                                                                <ClipLoader color='white' size={10}/>
+                                                                :
+                                                                "Go to checkout"
+                                                                
+                                                              
 
-                                            }
-                                          
-                                          </button>
-                                          }
+                                                                }
+                                                              
+                                                              </button>
+                                                              :
+                                                              <>
+                                                                {order?.deliveryStatus=="delivered"&&
+
+                                                               
+                                                                      <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
+                                                                          onClick={()=>!loader&&confirmDelivery()}
+                                                                        >
+                                                                          {loader?
+                                                                          <ClipLoader color='white' size={10}/>
+                                                                              :
+                                                                              "Confirm delivery"
+                                                                          
+                                                                        
+
+                                                                          }
+                                                                        
+                                                                    </button>
+                                                                         }
+                                                              </>
+                                                      
+                                                       }
+                                                            </>
+
+                                     
+                                              }
                                     </>
                                  
                                      }
-                                {order?.contract=="sent"&&
+                                {order?.status=="active"&&order?.contract=="sent"&&
                                     <>
                                     {loading?
                                        <ClipLoader
@@ -263,7 +324,7 @@ export default function Order({order}) {
                                     </>
                                  
                                      }
-                                     <button className='text-blue-400 border border-blue-400 py-2 px-6 rounded-xl text-sm'>History of order</button>
+                                     {/* <button className='text-blue-400 border border-blue-400 py-2 px-6 rounded-xl text-sm'>History of order</button> */}
                                      {isLoading?
                                        <ClipLoader
                                          color='orange'
@@ -279,8 +340,11 @@ export default function Order({order}) {
                                   
 
                                 </div>
+                                 {order?.status==="active"&&
+                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm'>Cancel</button>
 
-                                <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm'>Cancel</button>
+                                 }
+                        
 
                        </div>
                        <h5 className='text-slate-500 '>All the details about deal and contract you can discuss in chat with seller</h5>
@@ -290,7 +354,31 @@ export default function Order({order}) {
 
 
     </div>
-    <Modal>
+    <Modal trigger={trigger}  cname="w-1/2 py-2   px-8 rounded-lg ">
+            <div className='bg-white w-full  rounded-lg px-4 py-4'>
+                    <div className='w-full justify-end flex '>
+                           
+                                <IoMdClose
+                                      className='text-2xl font-light'
+                                      onClick={()=>setTrigger(false)}
+                               />
+
+                     
+                          
+                    </div>
+
+                 <div>
+                     <Review 
+                       product={product}
+                       setTrigger={setTrigger}
+                     />
+
+
+
+                 </div>
+
+            </div>
+
 
     </Modal>
 
@@ -304,7 +392,7 @@ export default function Order({order}) {
 
 
 
-const Product=({item,order,product,setProduct})=>{
+const Product=({item,order,product,setProduct,setVendor})=>{
 
     useEffect(()=>{
      
@@ -315,7 +403,19 @@ const Product=({item,order,product,setProduct})=>{
          setProduct({...doc.data(),id:doc?.id})
         });
        }
+
+       if(order?.vendor?.length != undefined){
+        const unsub = onSnapshot(doc(db,"users",order?.vendor), (doc) => {
+          console.log(doc.data(),"daa")
+      
+          setVendor({...doc.data(),id:doc?.id})
+         });
+        }
       },[])
+
+    
+
+      
   
       console.log(product?.images[0],"prod")
         return(
@@ -329,7 +429,7 @@ const Product=({item,order,product,setProduct})=>{
               <div className='flex flex-col w-2/5'>
                     <div className='flex flex-col space-y-3'>
                          <h5 className='text-lg text-slate-700 font-light'>{product?.name}</h5>
-                         <h5 className='text-sm text-slate-500 '>{product?.description}</h5>
+                         <h5 className='text-sm text-slate-500 '>{product?.description?.slice(0,50)}...</h5>
                     </div>
   
               

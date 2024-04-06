@@ -182,7 +182,7 @@ const Card=({product})=>{
                          {[1,2,3,4,5].map(()=>{
                            return(
                               <MdOutlineStar 
-                                className='text-yellow-300 '
+                                className='text-slate-300 '
                               />
                            )
                          })
@@ -207,7 +207,7 @@ const Card=({product})=>{
                   }}
                   >                <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
             </Link>
-             <h5 className='text-slate-400 text-sm '>{product?.description}</h5>
+             <h5 className='text-slate-400 text-sm '>{product?.description?.slice(0,100)}</h5>
              <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>
  
           </div>

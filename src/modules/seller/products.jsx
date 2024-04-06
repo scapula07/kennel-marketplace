@@ -10,27 +10,32 @@ import { collection,  onSnapshot,
   doc, getDocs,
   query, orderBy, 
   limit,getDoc,setDoc ,
- updateDoc,addDoc } from 'firebase/firestore'
+ updateDoc,addDoc ,where} from 'firebase/firestore'
  import { db } from '../firebase';
 
 export default function SellerProducts() {
+    const currentUser=useRecoilValue(accountTypeState)
     const [products,setProducts]=useState([])
      
     useEffect(()=>{
-      const q = query(collection(db, "products"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-          const products = []
-          querySnapshot.forEach((doc) => {
-            products.push({ ...doc.data(), id: doc.id })
-  
-          });
-  
-  
-          setProducts(products)
-  
-  
-     
-        });
+      if(currentUser?.id?.length >0){
+            const q = query(collection(db, "products"),where('creator',"==",currentUser?.id));
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const products = []
+                querySnapshot.forEach((doc) => {
+                  products.push({ ...doc.data(), id: doc.id })
+        
+                });
+        
+        
+                setProducts(products)
+        
+        
+          
+              });
+        
+      }
+   
      },[])
   
      console.log(products,"producys")
