@@ -1,4 +1,6 @@
 import React,{useState} from 'react'
+import { FaStar } from "react-icons/fa";
+
 
 export default function Details({product}) {
      const [select,setSelect]=useState("info")
@@ -6,9 +8,10 @@ export default function Details({product}) {
     <div className='flex flex-col w-3/5 py-6 space-y-4 '>
           <h5 className='text-2xl font-semibold'>{product?.name}</h5>
 
-          <div className='border rounded-full flex items-center w-1/2 justify-between'>
+          <div className='border rounded-full flex items-center w-2/5 justify-between'>
               <button className={`${select =="info"?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setSelect("info")}>Information</button>
-              <button className={`${select =="payment"?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setSelect("payment")}>Payment & Delivery</button>
+              <button className={`${select =="payment"?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setSelect("payment")}>Reviews</button>
+
 
           </div>
           {select==="info"?
@@ -40,8 +43,26 @@ export default function Details({product}) {
 
           </div>
              :
-             <div className='flex flex-col'>
-                <h5 className='text-sm font-semibold'>Platform support payment with only Stripe </h5>
+             <div className='flex flex-col space-y-6'>
+                <h5 className='text-sm font-semibold'>COMMENTS FROM VERIFIED PURCHASES({product?.reviews?.length}) </h5>
+                {product?.reviews?.slice(0,5)?.map((rev)=>{
+                     return(
+                        <diiv className="flex flex-col space-y-1">
+                              <div className='flex items-center space-x-1'>
+                                 {Array(rev.rating).fill(1)?.map(()=>{
+                                    return(
+                                         <FaStar className='text-yellow-400 text-2xl' />
+                                    )
+                                 })}
+                              </div>
+                              <h5>{rev?.text}</h5>
+                              <h5 className='text-slate-500 font-light'>by {rev?.user}</h5>
+
+                        </diiv>
+                     )
+                })
+
+                }
             </div>
 }
 

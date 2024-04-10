@@ -11,18 +11,29 @@ import { db } from '../firebase';
 import { profileApi } from '../api/profile';
 import { ClipLoader } from 'react-spinners';
 import {BeatLoader } from 'react-spinners';
-
+import { authApi } from '../api/auth';
+import { alertTypeState } from '../recoil/state';
+import { useRecoilState } from 'recoil';
 
 export default function Profile() {
        useEffect(() => {
           window.scrollTo(0, 0);
       }, []);
        const [profile,setProfile]=useState()
+       const [password,setPassword]=useState()
+
+
        const currentUser=useRecoilValue(accountTypeState)
+
        const [url,setUrl]=useState("")
        const [file,setFile]=useState({})
+
        const [isLoading,setLoader]=useState(false)
        const [loading,setLoading]=useState(false)
+       const [editing,setEdit]=useState(false)
+
+
+       const [alert,setAlert]=useRecoilState(alertTypeState)
 
        const hiddenFileInput = useRef()
      
@@ -31,67 +42,81 @@ export default function Profile() {
            }
 
 
-   const handleChange = async(e)=> {
-       const dir = e.target.files[0]
-       console.log(dir,"dir")
-       if (dir) {
-         setUrl(URL.createObjectURL(dir))
-    
+        const handleChange = async(e)=> {
+            const dir = e.target.files[0]
+            console.log(dir,"dir")
+            if (dir) {
+                setUrl(URL.createObjectURL(dir))
+            
 
+                }
+                setFile(dir)
         }
-        setFile(dir)
+
+
+        useEffect(()=>{
+        
+                if(currentUser?.id?.length >0){
+                    const unsub = onSnapshot(doc(db,"users",currentUser?.id), (doc) => {
+                        console.log(doc.data(),"daa")
+                    
+                        setProfile({...doc.data(),id:doc?.id})
+                    });
+                }
+            },[])
+
       
 
-   }
-    
-
-       useEffect(()=>{
-       
-        if(currentUser?.id?.length != undefined){
-          const unsub = onSnapshot(doc(db,"users",currentUser?.id), (doc) => {
-            console.log(doc.data(),"daa")
-        
-            setProfile({...doc.data(),id:doc?.id})
-           });
-          }
-         },[])
-
-
-
-         const upload=async()=>{
-                setLoader(true)
-                try{
-                    const res=await profileApi.updateImg(currentUser,profile,file)
-                    setLoader(false)
-                 }catch(e){
-                    console.log(e)
-                    setLoader(false)
-                 }
+        const upload=async()=>{
+            setLoader(true)
+            try{
+                const res=await profileApi.updateImg(currentUser,profile,file)
+                setLoader(false)
+            }catch(e){
+                console.log(e)
+                setLoader(false)
+            }
 
          }
 
          const saveProfile=async()=>{
             setLoading(true)
-             try{
-                 const res=await profileApi.saveChanges(currentUser,profile,file)
-                 setLoading(false)
-             }catch(e){
+                try{
+                    const res=await profileApi.saveChanges(currentUser,profile,file)
+                    setLoading(false)
+                }catch(e){
                 console.log(e)
                 setLoading(false)
+                }
+
+            }
+
+          const saveEmail=async()=>{
+                    setLoading(true)
+                    try{
+                        const res=await profileApi.updateImg(currentUser,profile,file)
+                        setLoading(false)
+                    }catch(e){
+                        console.log(e)
+                        setLoading(false)
+                    }
+        
+            }
+
+    
+          const editPassword=async()=>{
+              setEdit(true)
+             try{
+                 const res=await authApi.changePassword(password)
+                 setEdit(false)
+                 setAlert({text:"Password update successfully!",color:"sucess"})
+             }catch(e){
+                console.log(e)
+                setEdit(false)
+                setAlert({text:"Something went wrong! Please re-login!!",color:"danger"})
              }
 
-              }
-       const saveEmail=async()=>{
-                setLoading(true)
-                 try{
-                     const res=await profileApi.updateImg(currentUser,profile,file)
-                     setLoading(false)
-                 }catch(e){
-                    console.log(e)
-                    setLoading(false)
-                 }
-    
-         }
+     }
 
   return (
     <Layout>
@@ -278,14 +303,22 @@ export default function Profile() {
                                                        <label className='font-light text-slate-600'>Password</label>
                                                        <input 
                                                           placeholder=''
-                                                          value={""}
+                                                          value={password}
+                                                          onChange={(e)=>setPassword(e.target.value)}
                                                           className="border rounded-lg py-2 w-full"
                                                        />
 
                                                  </div>
 
                                                  <div className='w-1/2 justify-end flex '>
-                                                      <h5 className='text-blue-500'>Edit password</h5>
+                                                 {editing?
+                                                    <BeatLoader 
+                                                        color="black"
+                                                        size={8}
+                                                        />
+                                                        :
+                                                      <h5 className='text-blue-500' onClick={editPassword}>Edit password</h5>
+                                                 }
                                                  </div>
 
                                                  

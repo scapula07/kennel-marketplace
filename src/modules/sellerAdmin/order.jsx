@@ -29,6 +29,7 @@ export default function SellerOrder() {
     const [file,setFile]=useState({name:""})
     const [isLoading,setLoader]=useState(false)
     const [loading,setLoading]=useState(false)
+    const [cancel,setCanceling]=useState(false)
     const hiddenFileInput = useRef()
     const location =useLocation()
     const [customer,setCustomer]=useState({})
@@ -95,6 +96,21 @@ export default function SellerOrder() {
                 setLoading(false)
                 console.log(e)
               }
+          }
+
+
+          const cancelOrder=async()=>{
+            setCanceling(true)
+             try{
+                const res = await orderApi.cancelOrder(order)
+                
+                setCanceling(false)
+               }catch(e){
+                console.log(e)
+              
+                setCanceling(false)
+    
+             }
           }
   return (
     <div className='w-full'>
@@ -290,6 +306,16 @@ export default function SellerOrder() {
                                                  <h5 className='text-slate-500 font-light'>Product Price:        ${order?.total}</h5>
 
                                             </div>
+
+                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
+                                              {!cancel?
+                                              "Cancel order"
+                                              :
+                                              <BeatLoader size={10} color="orange" />
+
+                                              }
+                                            
+                                              </button>
                                     
                                     </div>
 
@@ -379,7 +405,7 @@ const Tracker=({order})=>{
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order received</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -395,7 +421,7 @@ const Tracker=({order})=>{
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract sent</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -412,7 +438,7 @@ const Tracker=({order})=>{
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract signed</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -448,7 +474,7 @@ const Tracker=({order})=>{
                           
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order transmited to courier</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -484,7 +510,7 @@ const Tracker=({order})=>{
                            
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order delivered</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>

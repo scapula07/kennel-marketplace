@@ -56,6 +56,10 @@ import ProductDetailsSeller from './modules/sellerAdmin/product'
 import SellerBreeder from './modules/admin/sellers'
 import User from './modules/admin/user'
 import Search from './modules/search'
+import Notifications from './modules/notifications'
+import ForgetPassword from './modules/auth/forgot'
+
+
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -91,6 +95,7 @@ function App() {
               <Route exact path="/product"  element={<Product/>} />
               <Route exact path="/signup"  element={<Signup/>} />
               <Route exact path="/login"  element={<Login/>} />
+              <Route exact path="/forget"  element={<ForgetPassword/>} />
               <Route exact path="/breader"  element={<Breader/>} />
               <Route exact path="/seller"  element={<Seller/>} >
                    <Route exact path="home"  element={<SellerHome/>} />
@@ -143,6 +148,7 @@ function App() {
 
               <Route exact path="/profile"  element={<Profile/>} />
               <Route exact path="/search"  element={<Search/>} />
+              <Route exact path="/notifications"  element={<Notifications/>} />
 
 
               

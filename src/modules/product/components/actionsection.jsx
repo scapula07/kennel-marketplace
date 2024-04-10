@@ -71,6 +71,25 @@ export default function Actionsection({product}) {
            }
         }
  
+
+        function calculateAverageRating(reviews) {
+          // Initialize variables for sum and count
+          let sum = 0;
+          let count = 0;
+      
+          // Iterate over each review
+          reviews.forEach(review => {
+              // Add the rating to the sum
+              sum += review.rating;
+              // Increment the count
+              count++;
+          });
+      
+          // Calculate the average rating
+          const averageRating = count > 0 ? sum / count : 0;
+      
+          return averageRating;
+      }
         
   return (
     <div className='flex w-1/2 flex-col py-6 space-y-6'>
@@ -87,12 +106,12 @@ export default function Actionsection({product}) {
                 </div>
 
                <div className='flex items-center'>
-                  <h5 className='text-sm text-slate-500'>Rating 0 of 5</h5>
+                  <h5 className='text-sm text-slate-500'>Rating {product?.reviews?.length >0&&calculateAverageRating(product?.reviews)} of 5</h5>
                   <h5 className='bg-white flex items-center p-2 rounded-full'>
-                        {[1,2,3,4,5].map(()=>{
+                        {product?.reviews?.length >0&&Array(calculateAverageRating(product?.reviews)).fill(1)?.map(()=>{
                           return(
                              <MdOutlineStar 
-                               className='text-slate-300 '
+                               className='text-yellow-500 '
                              />
                           )
                         })

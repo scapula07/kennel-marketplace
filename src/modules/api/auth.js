@@ -4,7 +4,7 @@ import {
         GoogleAuthProvider,
         signInWithPopup,
         sendPasswordResetEmail,
-        signOut,} from "firebase/auth";
+        signOut,updatePassword} from "firebase/auth";
        
 import { auth,db } from "../firebase";
 import { doc,getDoc,setDoc,updateDoc,deleteDoc }  from "firebase/firestore";
@@ -257,6 +257,7 @@ export const authApi= {
               return response
           }catch(e){
               console.log(e)
+              throw new Error(e)
           }
         },
      
@@ -267,8 +268,21 @@ export const authApi= {
              return true
             }catch(e){
                console.log(e)
+               throw new Error(e)
            }
-     }
+     },
+    changePassword:async function (password) {
+      const user = auth.currentUser;
+
+      try{
+   
+         await updatePassword(user,password);
+         return true
+        }catch(e){
+           console.log(e)
+           throw new Error(e)
+       }
+ }
 
 
 }

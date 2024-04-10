@@ -10,28 +10,34 @@ import { collection,  onSnapshot,
   doc, getDocs,
   query, orderBy, 
   limit,getDoc,setDoc ,
- updateDoc,addDoc } from 'firebase/firestore'
+ updateDoc,addDoc,where } from 'firebase/firestore'
  import { db } from '../firebase';
+ import { useOutletContext } from 'react-router-dom';
 
 export default function SellerServices() {
+    const [seller]= useOutletContext();
     const [products,setProducts]=useState([])
      
     useEffect(()=>{
-      const q = query(collection(db, "products"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-          const products = []
-          querySnapshot.forEach((doc) => {
-            products.push({ ...doc.data(), id: doc.id })
-  
-          });
-  
-  
-          setProducts(products)
-  
-  
-     
-        });
-     },[])
+      if(seller?.id?.length >0){
+            const q = query(collection(db, "products"),where('creator',"==",seller?.id));
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const products = []
+                querySnapshot.forEach((doc) => {
+                  products.push({ ...doc.data(), id: doc.id })
+        
+                });
+        
+        
+                setProducts(products)
+        
+        
+          
+              });
+        
+      }
+   
+     },[seller])
   
      console.log(products,"producys")
   return (

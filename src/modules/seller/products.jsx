@@ -12,14 +12,16 @@ import { collection,  onSnapshot,
   limit,getDoc,setDoc ,
  updateDoc,addDoc ,where} from 'firebase/firestore'
  import { db } from '../firebase';
+ import { useOutletContext } from 'react-router-dom';
 
 export default function SellerProducts() {
+  const [seller]= useOutletContext();
     const currentUser=useRecoilValue(accountTypeState)
     const [products,setProducts]=useState([])
      
     useEffect(()=>{
-      if(currentUser?.id?.length >0){
-            const q = query(collection(db, "products"),where('creator',"==",currentUser?.id));
+      if(seller?.id?.length >0){
+            const q = query(collection(db, "products"),where('creator',"==",seller?.id));
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const products = []
                 querySnapshot.forEach((doc) => {
@@ -36,7 +38,7 @@ export default function SellerProducts() {
         
       }
    
-     },[])
+     },[seller])
   
      console.log(products,"producys")
   return (
@@ -170,7 +172,7 @@ const Card=({product})=>{
                     }}
                     >                <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
               </Link>
-               <h5 className='text-slate-400 text-sm '>{product?.description}</h5>
+               <h5 className='text-slate-400 text-sm '>{product?.description?.slice(0,100)}</h5>
                <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>
    
             </div>

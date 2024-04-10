@@ -12,6 +12,7 @@ import { stripeApi } from '../api/stripe';
 import { MdOutlineCameraAlt } from "react-icons/md";
 import Select from "react-select";
 import CreatableSelect from 'react-select/creatable';
+import { alertTypeState } from '../recoil/state';
 
 
 
@@ -23,6 +24,7 @@ export default function Breader() {
   const [loader,setLoader]=useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
   const [num,setNum]=useState(1)
+  const [alert,setAlert]=useRecoilState(alertTypeState)
   let navigate = useNavigate();
   
   useEffect(()=>{
@@ -89,7 +91,7 @@ export default function Breader() {
           user?.status&&localStorage.setItem('user',JSON.stringify(user?.data));
           setcurrentUser(user?.data)
           setLoader(false)
-     
+          setAlert({text:"Successfull!",color:"success"})
           user?.status&& navigate(`/admin-seller`)
 
      }catch(e){

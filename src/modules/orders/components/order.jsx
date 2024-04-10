@@ -5,7 +5,7 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onS
 import { db } from '../../firebase';
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader, ClipLoader } from 'react-spinners';
 import { Link, useNavigate } from 'react-router-dom';
 import { messageApi } from '../../api/message';
 import Modal from '../../../components/modal';
@@ -22,6 +22,7 @@ export default function Order({order}) {
         const [isLoading,setLoader]=useState(false)
         const [loading,setLoading]=useState(false)
         const [loader,setisLoading]=useState(false)
+        const [cancel,setCanceling]=useState(false)
         const [product,setProduct]=useState({images:[]})
         const [state,setContractState]=useState(order?.contract == "sent" || order?.contract == "signed")
         const [vendor,setVendor]=useState({})
@@ -81,6 +82,20 @@ export default function Order({order}) {
             console.log(e)
           
             setisLoading(false)
+
+         }
+      }
+
+      const cancelOrder=async()=>{
+        setCanceling(true)
+         try{
+            const res = await orderApi.cancelOrder(order)
+            
+            setCanceling(false)
+           }catch(e){
+            console.log(e)
+          
+            setCanceling(false)
 
          }
       }
@@ -341,7 +356,15 @@ export default function Order({order}) {
 
                                 </div>
                                  {order?.status==="active"&&
-                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm'>Cancel</button>
+                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
+                                              {!cancel?
+                                              "Cancel"
+                                              :
+                                              <BeatLoader size={8} color="orange" />
+
+                                              }
+                                            
+                                              </button>
 
                                  }
                         

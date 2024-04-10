@@ -22,13 +22,14 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { IoMdCheckbox } from "react-icons/io";
 
 
-export default function Order() {
+export default function SellerOrder() {
      const navigate=useNavigate()
      const currentUser=useRecoilValue(accountTypeState)
     const [order,setOrder]=useState({images:[]})
     const [file,setFile]=useState({name:""})
     const [isLoading,setLoader]=useState(false)
     const [loading,setLoading]=useState(false)
+    const [cancel,setCanceling]=useState(false)
     const hiddenFileInput = useRef()
     const location =useLocation()
     const [customer,setCustomer]=useState({})
@@ -95,6 +96,21 @@ export default function Order() {
                 setLoading(false)
                 console.log(e)
               }
+          }
+
+
+          const cancelOrder=async()=>{
+            setCanceling(true)
+             try{
+                const res = await orderApi.cancelOrder(order)
+                
+                setCanceling(false)
+               }catch(e){
+                console.log(e)
+              
+                setCanceling(false)
+    
+             }
           }
   return (
     <div className='w-full'>
@@ -290,6 +306,16 @@ export default function Order() {
                                                  <h5 className='text-slate-500 font-light'>Product Price:        ${order?.total}</h5>
 
                                             </div>
+
+                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
+                                              {!cancel?
+                                              "Cancel order"
+                                              :
+                                              <BeatLoader size={10} color="orange" />
+
+                                              }
+                                            
+                                              </button>
                                     
                                     </div>
 
@@ -333,7 +359,7 @@ const Product=({item})=>{
              />
              <div className='flex flex-col'>
                   <h5 className='font-semibold text-slate-600 text-lg'>{product?.name}</h5>
-                  <h5 className='font-light'>{product?.description}</h5>
+                  <h5 className='font-light'>{product?.description?.slice(0,150)}...</h5>
 
              </div>
 
@@ -346,17 +372,29 @@ const Product=({item})=>{
 
 
 const Tracker=({order})=>{
-      const [inProgess,setProgress]=useState(false)
+      const [inProgess,setProgressing]=useState(false)
+      const [inDelivered,setDelivery]=useState(false)
      const deliverySent=async()=>{
-      setProgress(true)
+            setProgressing(true)
          try{
            const res=orderApi.sentPackage(order)
-           setProgress(false)
+           setProgressing(false)
          }catch(e){
           console.log(e)
-          setProgress(false)
+          setProgressing(false)
          }
      }
+
+    const deliveryReceived=async()=>{
+          setDelivery(true)
+      try{
+        const res=orderApi.deliveredPackage(order)
+        setDelivery(false)
+      }catch(e){
+        console.log(e)
+        setDelivery(false)
+      }
+    }
      return(
         <div className='w-full flex flex-col py-'>
             <h5 className='text-slate-500 font-semibold'>Update Tracking</h5>
@@ -367,7 +405,7 @@ const Tracker=({order})=>{
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order received</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -383,7 +421,7 @@ const Tracker=({order})=>{
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract sent</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -400,7 +438,7 @@ const Tracker=({order})=>{
                                />
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Contract signed</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -413,14 +451,15 @@ const Tracker=({order})=>{
 
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
-                           {order?.deliveryStatus==""?
+                           {order?.deliveryStatus ==="pending"?
                              <>
                              {inProgess?
-                                <ClipLoader size={12} color="orange"/>
-                                   :
+                                <BeatLoader size={6} color="orange"/>
+                                      :
                              
                                   <MdOutlineCheckBoxOutlineBlank 
                                      onClick={deliverySent}
+                                     className='text-green-400 text-xl'
                                      />
                                   }
                              </>
@@ -435,7 +474,7 @@ const Tracker=({order})=>{
                           
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order transmited to courier</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>
@@ -446,13 +485,32 @@ const Tracker=({order})=>{
 
                 <div className='flex flex-col py-4'>
                         <div className='flex items-center space-x-4'>
+                        {order?.deliveryStatus=="delivered"?
                           
-                             <IoMdCheckmark
-                                className='text-2xl text-slate-600'
-                               />
+                           
+                              
+                           <IoMdCheckmark
+                              className='text-2xl text-green-600'
+                             />
+                                :
+                             <>
+                             {inDelivered?
+                                <BeatLoader size={6} color="orange"/>
+                                      :
+                             
+                                  <MdOutlineCheckBoxOutlineBlank 
+                                     onClick={deliveryReceived}
+                                     className='text-green-400 text-xl'
+                                     />
+                                  }
+                             </>
+                             
+
+                           }
+                           
                               <div className='flex flex-col'>
                                    <h5 className=' font-semibold text-slate-600'>Order delivered</h5>
-                                   <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5>
+                                   {/* <h5 className='text-xs font-light text-slate-500'>22 DEC 7:20 AM</h5> */}
 
                               </div>
                         </div>

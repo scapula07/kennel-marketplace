@@ -27,6 +27,65 @@ export const stripeApi= {
           }
 
     },
+    retrieveAccount:async function (user) {
+          try{
+              
+        const url=`http://localhost:3003/api/v1/stripe/get-Account`
+
+
+        const config = {
+            headers:{
+                'Content-Type': 'application/json',
+                },
+            };
+
+        
+          
+        
+            const response= await axios.post(
+                    url,
+                    {
+                        accountId:user?.payments[0]?.accountId
+                    },
+                    config
+              )
+              return response
+              
+          }catch(e){
+            console.log(e)
+          }
+
+    },
+    completeOnboarding:async function (user) {
+                try{
+                    
+              const url=`http://localhost:3003/api/v1/stripe/get-onboarding-link`
+
+
+              const config = {
+                  headers:{
+                      'Content-Type': 'application/json',
+                      },
+                  };
+
+              
+                
+              
+                  const response= await axios.post(
+                          url,
+                          {
+                              accountId:user?.payments[0]?.accountId
+                          },
+                          config
+                    )
+                    return response
+                    
+                }catch(e){
+                  console.log(e)
+                }
+
+          },
+
     checkout:async function (vendor,product,order) {
         try{
                           

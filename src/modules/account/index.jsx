@@ -55,8 +55,9 @@ export default function Accoount() {
 
                             } 
 
-                               <div className='flex flex-col space-y-4'>
+                               <div className='flex flex-col space-y-2'>
                                   <h5 className='text-2xl font-semibold '>{currentUser?.name}</h5>
+                                  <p>{currentUser?.bio}</p>
                                   <Link to="/profile">
                                     <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>View profile</button>
                                   </Link>

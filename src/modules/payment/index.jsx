@@ -11,7 +11,7 @@ import { IoMdAdd } from "react-icons/io";
 import Modal from '../../components/modal';
 import { IoMdClose } from "react-icons/io";
 import { BiTransfer } from "react-icons/bi";
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue ,useRecoilState} from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import { IoWalletOutline } from "react-icons/io5";
 import { FaCreditCard } from "react-icons/fa";
@@ -21,17 +21,25 @@ import { paymentApi } from '../api/payment';
 import { BeatLoader ,ClipLoader} from 'react-spinners';
 import { stripeApi } from '../api/stripe';
 import { BsStripe } from "react-icons/bs";
-
+import { alertTypeState } from '../recoil/state';
 
 export default function Payment() {
-  useEffect(() => {
+      const [alert,setAlert]=useRecoilState(alertTypeState)
+      const [trigger,setTrigger]=useState(false)
+       const currentUser=useRecoilValue(accountTypeState)
+       const [enabled,setEnable]=useState(false)
+         useEffect(() => {
        
-    window.scrollTo(0, 0);
+              window.scrollTo(0, 0);
+
+
+              if(currentUser?.payments?.length >0){
+                     getAccount()
+                }
 
   
-}, []);
-       const [trigger,setTrigger]=useState(false)
-       const currentUser=useRecoilValue(accountTypeState)
+            }, [currentUser]);
+       
        const [payments,setPayment]=useState([])
        const [isLoading,setLoader]=useState(false)
        const [loading,setLoading]=useState(false)
@@ -41,10 +49,12 @@ export default function Payment() {
         setLoader(true)
           try{
             const res=await paymentApi.addPayment(currentUser,payments)
+
             setLoader(false)
           }catch(e){
             console.log(e)
             setLoader(false)
+            setAlert({color:"danger",text:"Something went wrong!"})
           }
        }
 
@@ -62,9 +72,41 @@ export default function Payment() {
              }catch(e){
               console.log(e)
               setLoader(false)
+              setAlert({color:"danger",text:"Something went wrong!"})
              }
           
        }
+
+
+       const getAccount=async()=>{
+              try{
+                     const res=await stripeApi.retrieveAccount(currentUser)
+                     console.log(res?.data?.data?.charges_enabled)
+                    setEnable(res?.data?.data?.charges_enabled)
+                    res?.data?.data?.charges_enabled==false&& setAlert({color:"danger",text:"Stripe charges is not enable,please complete onboarding"})
+
+               }catch(e){
+                console.log(e)
+                setAlert({color:"danger",text:"Something went wrong!"})
+               }
+       }
+
+
+
+       const completeOnboarding=async()=>{
+               setLoading(true)
+        try{ 
+               const res=await stripeApi.completeOnboarding(currentUser)
+               window.location.href =res?.data?.data?.link;
+               setLoader(false)
+         }catch(e){
+          console.log(e)
+              setLoader(false)
+              setAlert({color:"danger",text:"Something went wrong!"})
+         }
+ }
+
+
        console.log(payments,"ppp")
   return (
     <Layout>
@@ -110,13 +152,24 @@ export default function Payment() {
                                      />}
 
                                       <div className='flex w-full justify-between'>
-                                          <div className='flex flex-col'>
+                                          <div className='flex flex-col space-y-3'>
                                                 <div className='flex flex-col'>
                                                      <h5 className='text-lg text-slate-700 font-light'>{item?.text}</h5>
                                                      {/* <h5 className='text-sm text-slate-500 '>Expiry 06/2024</h5> */}
                                                 </div>
 
                                                 <div className='flex items-center'>
+                                                    {enabled==false&&
+                                                       <button className='bg-orange-600 text-xs text-white rounded-sm px-2 py-1.5' onClick={()=>!loading&&completeOnboarding()}>
+                                                        {!loading?
+                                                           "Complete onboarding"
+                                                           :
+                                                           <ClipLoader size={"12"} color="white"/>
+
+                                                        }
+
+                                                        </button>
+                                                    }
                                                 </div>
                                           </div>
 

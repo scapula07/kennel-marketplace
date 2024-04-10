@@ -156,6 +156,21 @@ export const orderApi= {
     }catch(e){
         console.log(e)
     }
+   },
+   cancelOrder:async function (order) {
+    try{
+         const ref =doc(db,"order",order?.id)
+         const docSnap = await getDoc(ref);
+         const res=  await updateDoc(doc(db,"orders",order?.id), {
+                status:"cancelled",
+         })
+
+
+            return true
+
+    }catch(e){
+        console.log(e)
+    }
    }
 
 }
