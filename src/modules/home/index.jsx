@@ -36,14 +36,14 @@ export default function Home() {
                    <div className=''>
 
                    </div>
-                   <img 
+                   {/* <img 
                       src={separate}
-                   />
+                   /> */}
               </div>
 
-              <div className='w-full flex justify-center'>
+              {/* <div className='w-full flex justify-center'>
                 <Upcoming />
-              </div>
+              </div> */}
                
 
               <div className='w-full flex flex-col space-y-10'>
@@ -62,9 +62,9 @@ export default function Home() {
                       src={separate}
                    />
               </div>
-              <div className='w-full flex justify-center'>
+              {/* <div className='w-full flex justify-center'>
                 <TopProduct />
-              </div>
+              </div> */}
 
               
 

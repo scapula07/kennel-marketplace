@@ -6,7 +6,7 @@ import { db } from '../firebase';
 import Select from 'react-select';
 import { IoMdRadioButtonOff } from "react-icons/io";
 import { IoMdRadioButtonOn } from "react-icons/io";
-
+import CreatableSelect from 'react-select/creatable';
 
 export default function Delivery({delivery,setDelivery}) {
      const [cities, setSelectedCity] = useState();
@@ -22,25 +22,25 @@ export default function Delivery({delivery,setDelivery}) {
             .get("https://countriesnow.space/api/v0.1/countries/")
             .then(async(response) => {
                console.log(response?.data?.data,"data")
-                setSelectedCity(response?.data?.data[218]?.cities)
+                setSelectedCity(response?.data?.data[216]?.cities)
 
 
             });
         }
 
 
-        console.log(delivery)
+        console.log(delivery,"cityy")
     
   return (
     <div className='w-full flex flex-col space-y-5'>
            <div className='flex flex-col space-y-2'>
                 <h5 className='text-slate-500 font-light '>Enter city name</h5>
 
-                                 <Select
+                                 <CreatableSelect
                                         // styles={style}
                                         placeholder="Select your City, State"
                                         options={cities?.length >0 &&
-                                          cities?.slice(0, 20)?.map((item, index) => ({
+                                          cities?.slice(0,500)?.map((item, index) => ({
                                               label: item,
                                               value: item
                                             

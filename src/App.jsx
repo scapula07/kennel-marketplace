@@ -96,7 +96,7 @@ function App() {
               <Route exact path="/signup"  element={<Signup/>} />
               <Route exact path="/login"  element={<Login/>} />
               <Route exact path="/forget"  element={<ForgetPassword/>} />
-              <Route exact path="/breader"  element={<Breader/>} />
+              <Route exact path="/breeder"  element={<Breader/>} />
               <Route exact path="/seller"  element={<Seller/>} >
                    <Route exact path="home"  element={<SellerHome/>} />
                    <Route exact path=""  element={<SellerProducts/>} />

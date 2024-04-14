@@ -149,8 +149,8 @@ export default function Header() {
                                   </Link>
                                   :
                               
-                                  <Link to="/breader">
-                                  <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
+                                  <Link to={`${currentUser?.id?.length ==undefined? "/login":"/breeder" }`}>
+                                       <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
                                   </Link>
                                  }
                                  </>

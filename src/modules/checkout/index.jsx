@@ -3,9 +3,10 @@ import Layout from '../../layout'
 import Order from './order'
 import { Link, useLocation,useParams,useNavigate} from "react-router-dom";
 import { accountTypeState } from '../recoil/state';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue ,useRecoilState} from 'recoil';
 import { orderApi } from '../api/order';
 import { ClipLoader } from 'react-spinners';
+import { alertTypeState } from '../recoil/state';
 
 export default function Checkout() {
       useEffect(() => {
@@ -25,13 +26,14 @@ export default function Checkout() {
        const products=location?.state?.products
        const total=location?.state?.total
       
-        console.log(products,"prodyct ")
+       const [alert,setAlert]=useRecoilState(alertTypeState)
 
         const create=async()=>{
               setLoader(true)
               setErrorMsg(null)
               if (delivery?.city?.length < 3) {
                 setErrorMsg(' City is required! ');
+                setAlert({color:"danger",text:"City is required!"})
                 setLoader(false)
               
                 return;

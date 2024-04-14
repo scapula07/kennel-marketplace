@@ -211,12 +211,12 @@ export default function Order({order}) {
                          <h5 className='text-lg font-semibold text-slate-700'>Details</h5>
                          
                                <ol className='flex flex-col font-light text-slate-500 space-y-1 text-sm'>
-                                  <li>Customer delivery address & service / Seller address:{order?.delivery?.city} </li>
+                                  <li>Customer delivery address & service / Seller address:{order?.delivery?.city},USA </li>
                                   <li>Delivery time:</li>
-                                  <li>Customer name:</li>
-                                  <li>Seller name:</li>
-                                  <li>Customer email:</li>
-                                  <li>Customer phone number:</li>
+                                  <li>Customer name:{currentUser?.name}</li>
+                                  <li>Seller name:{vendor?.name}</li>
+                                  <li>Customer email:{currentUser?.email}</li>
+                                  <li>Seller phone number:{vendor?.phone}</li>
                                </ol>
                   
                            <div className='flex flex-col space-y-4'> 

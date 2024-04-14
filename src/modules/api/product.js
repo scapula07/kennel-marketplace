@@ -83,13 +83,17 @@ export const productApi= {
           const ref =doc(db,"misc",user?.id)
           const docSnap = await getDoc(ref);
           console.log(docSnap?.data()?.cart,"old")
-          const newCart=docSnap?.data()?.cart?.filter(i=>i?.id !=product?.id)
+          const newCart=docSnap?.data()?.cart?.filter(i=>i?.id != product?.id)
           console.log(newCart,"new")
              await updateDoc(doc(db,"misc",user?.id), {
                  cart:[...newCart]
               })
 
-             return newCart
+              const docNewSnap = await getDoc(ref);
+              console.log(docNewSnap?.data()?.cart,"old")
+            
+
+             return docNewSnap?.data()?.cart
 
 
          }catch(e){

@@ -19,13 +19,13 @@ export default function Cart() {
       
     }, []);
         const location =useLocation()
-       const products=location?.state?.products
+        const products=location?.state?.products
 
         const [cart,setCart]=useState(products)
     
-       const [total,setTotal]=useState(0)
+        const [total,setTotal]=useState(0)
 
-       const currentUser=useRecoilValue(accountTypeState)
+        const currentUser=useRecoilValue(accountTypeState)
 
    
 
@@ -149,6 +149,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
            try{
 
             const res=await productApi.removeFromCart(item,currentUser)
+            setCart([])
             setCart(res)
             setLoading(false)
 
