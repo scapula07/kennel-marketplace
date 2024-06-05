@@ -2,7 +2,7 @@ import { auth,db } from "../firebase";
 import axios from "axios";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc}  from "firebase/firestore";
 import {getStorage, ref, uploadBytes } from "firebase/storage"
-
+import { sendEmail } from "./email";
 
 const uploadFile=async(file)=>{
     console.log("Uploading")
@@ -63,12 +63,19 @@ export const orderApi= {
                               paid: false,
                               contract: "waiting",
                               time: Number(new Date()),
-                              deliveryStatus:"",
+                              deliveryStatus:"pending",
                               delivery
                             });
-                      
+                                        try{
+                                            sendEmail(user?.email,`Kennel Breeder,Order confirmed!!`,`Order id:${snap?.id},Product name:${product?.name},amount:${product?.price}`)
+                                        }catch(e){
+                                            console.log(e)
+                                        }
+
                             return snap;
                           });
+
+
                       
                           return Promise.all(orderPromises);
                   
@@ -96,7 +103,7 @@ export const orderApi= {
                 console.log(e)
             }
        },
-       signContract:async function (order) {
+       signContract:async function (order,vendor,product) {
         try{
              const ref =doc(db,"order",order?.id)
              const docSnap = await getDoc(ref);
@@ -104,7 +111,12 @@ export const orderApi= {
                     contract:"signed",
                 })
   
-
+             
+             try{
+                   sendEmail(vendor?.email,`Kennel Breeder,Contract has been signed!!!`,`Order id:${docSnap?.id},Product name:${product?.name},amount:${product?.price} , Please message seller on app to discuss how to receive your package.`)
+                  }catch(e){
+                    console.log(e)
+              }
                 return true
 
         }catch(e){
@@ -112,13 +124,20 @@ export const orderApi= {
         }
         
    },
-   sentPackage:async function (order) {
+   sentPackage:async function (order,customer) {
     try{
          const ref =doc(db,"order",order?.id)
-         const docSnap = await getDoc(ref);
-         const res=  await updateDoc(doc(db,"orders",order?.id), {
+          const docSnap = await getDoc(ref);
+          const res=  await updateDoc(doc(db,"orders",order?.id), {
                 deliveryStatus:"sent",
             })
+
+            try{
+                sendEmail(customer?.email,`Kennel Breeder,Your Package has been sent!`,`Order id:${docSnap?.id}, Please message seller on app to discuss how to receive your package.`)
+                  }catch(e){
+                    console.log(e)
+              }
+    
 
 
             return true
@@ -142,7 +161,7 @@ export const orderApi= {
         console.log(e)
     }
    },
-   completeOrder:async function (order) {
+   completeOrder:async function (order,user) {
     try{
          const ref =doc(db,"order",order?.id)
          const docSnap = await getDoc(ref);
@@ -151,20 +170,31 @@ export const orderApi= {
          })
 
 
+         try{
+            sendEmail(user?.email,`Kennel Breeder,Order is complete`,`Order id:${docSnap?.id} , Please leave a review!  Dispute or for product return,please contact seller on app or report to admin.Phoen number +11111111111 `)
+              }catch(e){
+                console.log(e)
+          }
+
+
             return true
 
     }catch(e){
         console.log(e)
     }
    },
-   cancelOrder:async function (order) {
+   cancelOrder:async function (order,user) {
     try{
          const ref =doc(db,"order",order?.id)
          const docSnap = await getDoc(ref);
          const res=  await updateDoc(doc(db,"orders",order?.id), {
                 status:"cancelled",
          })
-
+            try{
+            sendEmail(user?.email,`Kennel Breeder,Order cancelled!!`,`Order id:${docSnap?.id}`)
+              }catch(e){
+                console.log(e)
+              }
 
             return true
 
@@ -174,3 +204,5 @@ export const orderApi= {
    }
 
 }
+
+

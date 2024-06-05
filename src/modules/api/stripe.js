@@ -1,10 +1,10 @@
 import axios from "axios"
-
+const baseUrl="https://kennel-stripe-apis.onrender.com"
 export const stripeApi= {
     createAccount:async function () {
           try{
               
-        const url=`http://localhost:3003/api/v1/stripe/get-link`
+        const url=`${baseUrl}/api/v1/stripe/get-link`
     
 
         const config = {
@@ -30,7 +30,7 @@ export const stripeApi= {
     retrieveAccount:async function (user) {
           try{
               
-        const url=`http://localhost:3003/api/v1/stripe/get-Account`
+        const url=`${baseUrl}/api/v1/stripe/get-Account`
 
 
         const config = {
@@ -59,7 +59,7 @@ export const stripeApi= {
     completeOnboarding:async function (user) {
                 try{
                     
-              const url=`http://localhost:3003/api/v1/stripe/get-onboarding-link`
+              const url=`${baseUrl}/api/v1/stripe/get-onboarding-link`
 
 
               const config = {
@@ -89,7 +89,7 @@ export const stripeApi= {
     checkout:async function (vendor,product,order) {
         try{
                           
-          const url=`http://localhost:3003/api/v1/stripe/payment`
+          const url=`${baseUrl}/api/v1/stripe/payment`
       
 
           const config = {

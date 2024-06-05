@@ -15,33 +15,34 @@ const monthNames = [
 
 
 export default function SellerOrderList() {
+
   const [orders,setOrders]=useState([])
   const [areContacts,setContacts]=useState("")
   const currentUser=useRecoilValue(accountTypeState)
-
-useEffect(()=>{
+  
+  useEffect(()=>{
   if(currentUser?.id?.length >0){
     const q = query(collection(db, "orders"),where("vendor", "==",currentUser?.id),orderBy('time', 'desc'));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const products = []
           querySnapshot.forEach((doc) => {
             products.push({ ...doc.data(), id: doc.id })
-
+  
           });
           products?.length===0 &&setContacts("No contact")
           products?.length >0 &&setContacts("")
-
+  
      setOrders(products)
     });
   }
- 
-},[])
+  
+  },[])
 
 console.log(orders,"orooo")
   return (
-    <div className='w-full space-y-4 text-slate-700'>
+    <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-slate-700 font-light text-sm'>Breeder/orders</h5>
+                    <h5 className='text-white font-light text-sm'>Admin/orders</h5>
                 </div>
 
 
@@ -50,7 +51,7 @@ console.log(orders,"orooo")
                             
 
                               <div className='flex items-center justify-end w-full'>
-                                  <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm' >Filters</button>
+                                  <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm'>Filters</button>
 
                               </div>
 
@@ -85,10 +86,10 @@ console.log(orders,"orooo")
                                 }
                                             
                         {orders?.length ===0&&areContacts?.length >0&&
-                          <div className='w-full flex justify-center  py-5'>
-                          <h5 className="text-sm">You have no orders</h5>
-                          </div>
-                          }
+                        <div className='w-full flex justify-center  py-5'>
+                        <h5 className="text-sm">No Orders</h5>
+                        </div>
+                        }
 
                 </div>
 
@@ -157,7 +158,7 @@ const Table=({orders})=>{
 
 const Row=({order})=>{
   const [customer,setCustomer]=useState({})
-  const [product,setProduct]=useState()
+  const [products,setProducts]=useState()
  
     useEffect(()=>{
     
@@ -173,23 +174,19 @@ const Row=({order})=>{
        useEffect(()=>{
   
           if(order?.products?.length >0){
-          
-            const unsub = onSnapshot(doc(db,"products",order?.products[0]?.id), (doc) => {
+            const ids = order?.products?.map(obj => obj.id);
+            
+            const unsub = onSnapshot(doc(db,"products",ids[0]), (doc) => {
               console.log(doc.data(),"daa")
-              setProduct({...doc.data(),id:doc?.id})
-            
-             });
-         
-     
-            
-              
           
+              setProducts({...doc.data(),id:doc?.id})
+             });
 
             }
-         },[])
+         },[order])
   
 
-       console.log(product,"prod")
+       console.log(order?.products,"prod")
 
       const date = new Date(order?.time);
 
@@ -208,7 +205,7 @@ const Row=({order})=>{
              type={"checkbox"}
              className="py-2 px-2"
            />
-           <span className='text-sm font-light text-slate-500'>{order?.id}</span>
+           <span className='text-sm font-light text-slate-500'>#{order?.id?.slice(0,4)}</span>
 
       </td>
       </Link>
@@ -225,7 +222,8 @@ const Row=({order})=>{
        <span> {customer?.name}</span>
         </td>
       <td className='text-sm font-light text-slate-500'>
-           {product?.name}
+          {products?.name}
+
       </td>
       <td className='text-sm font-light text-slate-500'>${order?.total}</td>
     

@@ -33,6 +33,7 @@ export default function SellerOrder() {
     const hiddenFileInput = useRef()
     const location =useLocation()
     const [customer,setCustomer]=useState({})
+    const [product,setProduct]=useState({images:[]})
   
     const ordered=location?.state.order
 
@@ -102,7 +103,7 @@ export default function SellerOrder() {
           const cancelOrder=async()=>{
             setCanceling(true)
              try{
-                const res = await orderApi.cancelOrder(order)
+                const res = await orderApi.cancelOrder(order,customer)
                 
                 setCanceling(false)
                }catch(e){
@@ -131,6 +132,8 @@ export default function SellerOrder() {
                              <div className='flex w-full items-center justify-between py-6 border-b '>
                                      <Product 
                                        item={ordered?.products}
+                                       product={product}
+                                       setProduct={setProduct}
                                      />
                                          {loading?
                                            <ClipLoader 
@@ -151,6 +154,9 @@ export default function SellerOrder() {
                                    <div className='w-1/4'>
                                       <Tracker 
                                         order={order}
+                                        customer={customer}
+                                        product={product}
+                                        setProduct={setProduct}
                                       />
                                    </div>
 
@@ -335,8 +341,8 @@ export default function SellerOrder() {
 
 
 
-const Product=({item})=>{
-       const [product,setProduct]=useState({images:[]})
+const Product=({item,product,setProduct})=>{
+      //  const [product,setProduct]=useState({images:[]})
        console.log(item,"iii")
        useEffect(()=>{
       

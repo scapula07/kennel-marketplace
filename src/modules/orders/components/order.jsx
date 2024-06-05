@@ -47,7 +47,7 @@ export default function Order({order}) {
       const signContract=async()=>{
            setLoading(true)
           try{
-            const res=await orderApi.signContract(order)
+            const res=await orderApi.signContract(order,vendor,product)
             
             setLoading(false)
             
@@ -89,7 +89,7 @@ export default function Order({order}) {
       const cancelOrder=async()=>{
         setCanceling(true)
          try{
-            const res = await orderApi.cancelOrder(order)
+            const res = await orderApi.cancelOrder(order,currentUser,product)
             
             setCanceling(false)
            }catch(e){

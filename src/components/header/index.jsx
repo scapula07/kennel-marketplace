@@ -174,7 +174,7 @@ export default function Header() {
                                                  />
 
 
-                                        }
+                                              }
                                      
                                         </Link>
                                         <Link to={"/messages"}>

@@ -116,7 +116,7 @@ export default function Payment() {
                             <div className='flex w-full justify-between '>
                                 <h5 className='text-4xl font-semibold '>Payment methods</h5>
 
-                               {isLoading?
+                               {/* {isLoading?
                                 <BeatLoader
                                   size={"8"}
                                    />
@@ -125,7 +125,7 @@ export default function Payment() {
                                  <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600' onClick={addCard}>Save changes</button>
 
                                }
-                             
+                              */}
 
                             </div>
 
@@ -162,7 +162,7 @@ export default function Payment() {
                                                     {enabled==false&&
                                                        <button className='bg-orange-600 text-xs text-white rounded-sm px-2 py-1.5' onClick={()=>!loading&&completeOnboarding()}>
                                                         {!loading?
-                                                           "Complete onboarding"
+                                                           "Complete verification"
                                                            :
                                                            <ClipLoader size={"12"} color="white"/>
 

@@ -156,7 +156,7 @@ const Table=({orders})=>{
 
 const Row=({order})=>{
   const [customer,setCustomer]=useState({})
-  const [products,setProducts]=useState([])
+  const [products,setProducts]=useState()
  
     useEffect(()=>{
     
@@ -174,20 +174,14 @@ const Row=({order})=>{
           if(order?.products?.length >0){
             const ids = order?.products?.map(obj => obj.id);
             
-            const q = query(collection(db, "products"),where('id', 'in',ids ))
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
-              const products= [];
-              querySnapshot.forEach((doc) => {
-                products.push({...doc?.data(),id:doc?.id});
-               
-              });
-     
-            
-              setProducts(products)
-            });
+            const unsub = onSnapshot(doc(db,"products",ids[0]), (doc) => {
+              console.log(doc.data(),"daa")
+          
+              setProducts({...doc.data(),id:doc?.id})
+             });
 
             }
-         },[])
+         },[order])
   
 
        console.log(order?.products,"prod")
@@ -226,15 +220,8 @@ const Row=({order})=>{
        <span> {customer?.name}</span>
         </td>
       <td className='text-sm font-light text-slate-500'>
-            <select className='outline-none' >
-                {products?.map((product)=>{
-                    return(
-                      <option>{product?.name}</option>
-                    )
-                })
+          {products?.name}
 
-                }
-            </select>
       </td>
       <td className='text-sm font-light text-slate-500'>${order?.total}</td>
     
