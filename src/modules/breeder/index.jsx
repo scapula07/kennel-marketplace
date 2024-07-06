@@ -274,7 +274,7 @@ const handleChange = async(e)=> {
                               {url?.length ==0&&currentUser?.img?.length >0?
                                  <div>
                                     <img 
-                                    src={profile?.img}
+                                    src={currentUser?.img}
                                     onClick={handleClick}
                                     className="rounded-full  h-10 w-10"
                 

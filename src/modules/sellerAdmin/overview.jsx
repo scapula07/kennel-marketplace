@@ -16,26 +16,33 @@ export default function OverviewSeller() {
   return (
     <div className='w-full'>
                 <div className='flex flex-col space-y-3'>
-                <h5 className='text-white font-light text-sm'>Admin/Overview</h5>
+                <h5 className='text-black font-light text-sm'>Breeder/Overview</h5>
                 
-                  <h5 className='text-lg font-semibold text-white'>Overview</h5>
+                  <h5 className='text-lg font-semibold text-black'>Overview</h5>
 
                 </div>
 
                 <div className='flex w-full space-x-4 py-6'>
-                      {[{
-                        title:"Sales",
-                        total:"0"
+                {[
+                      {
+                        title:"Total products",
+                        total:"4"
                       },
                       {
-                        title:"Customer",
+                        title:"Completed order",
                         total:"4"
-                      }
+                      },
+                      {
+                        title:"Cancelled order",
+                        total:"4"
+                      },
+                
+                 
 
                       ].map((item)=>{
                           return(
-                            <div className='bg-white rounded-lg py-4 px-4 flex flex-col w-1/3 space-y-2'>
-                                 <h5 className='text-lg font-light text-slate-600'>{item?.title}</h5>
+                            <div className='bg-white rounded-lg py-1.5 px-4 flex flex-col w-1/3 space-y-2'>
+                                 <h5 className='text-sm font-light text-slate-600'>{item?.title}</h5>
                                  <h5 className='text-xl font-semibold text-slate-600'>{item?.total}</h5>
                                  <h5 className='font-light text-slate-500 text-end text-sm'>{formattedDate}</h5>
                             </div>

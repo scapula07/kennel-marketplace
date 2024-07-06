@@ -48,6 +48,7 @@ export const breederApi= {
            }
     },
     blockBreeder: async function (user) {
+        console.log(user,"blackedusr")
         try{
             const ref =doc(db,"users",user?.id)
             await updateDoc(doc(db,"users",user?.id),{status:"blocked"})

@@ -12,7 +12,7 @@ export default function EditProductSeller() {
   const location =useLocation()
   const [isLoading,setLoading]=useState(false)
 
-  const item=location?.state.product
+  const item=location?.state
 
 
 
@@ -45,7 +45,7 @@ export default function EditProductSeller() {
                 </div>
                 <div className='w-full text-white py-6 px-4 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
-                              <h5 className='text-2xl font-semibold text-white'>Make the changes below</h5>
+                              <h5 className='text-2xl font-semibold text-black'>Make the changes below</h5>
                               {isLoading?
                                 <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' >
                                    <BeatLoader size={"8"}/>
@@ -113,7 +113,7 @@ export default function EditProductSeller() {
                                                                 {
                                                                     title:"Category",
                                                                     items:["Dogs","Cats"],
-                                                                    click:(e)=>setProduct({...product,category:e.target.value})
+                                                                    click:(e)=>setProduct({...product,categories:e.target.value})
 
                                                                 },
                                                                 {

@@ -11,10 +11,10 @@ export default function Sections({seller}) {
   return (
       <div className='py-4 flex flex-col w-full px-28'>
            <div className='w-full'>
-                <div className='border rounded-full flex items-center w-1/3 justify-between '>
+                <div className='border rounded-full flex items-center w-1/2 justify-between '>
                 {[
-               //    {text:"Home",link:""},
-                  {text:"Products",link:""},
+                  {text:"Home",link:""},
+                  {text:"Products",link:"products"},
                   {text:"Services",link:"services"},
                   {text:"Seller Information",link:"information"}
                   ].map((item)=>{

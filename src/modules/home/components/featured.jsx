@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import comb from "../../../assets/comb.png"
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { FaRegBookmark,FaRegStar } from "react-icons/fa";
+import { FaRegBookmark,FaBookmark   } from "react-icons/fa";
 import { MdOutlineStar } from "react-icons/md";
 import { collection,  onSnapshot,
   doc, getDocs,

@@ -3,10 +3,10 @@ import comb from "../../assets/comb.png"
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FaBookmark } from "react-icons/fa";
 import { MdOutlineStar } from "react-icons/md";
-
+import { CiBookmarkRemove } from "react-icons/ci";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
-
+import { IoTime } from "react-icons/io5";
 
 
 export default function Products({saved}) {
@@ -57,8 +57,8 @@ const Card=({id})=>{
               <div className='absolute top-0 z-30 w-full h-full'>
                     <div className='w-full h-full flex flex-col justify-between items-end px-4 py-2'>
                        <h5 className='bg-green-800 flex items-center justify-center p-1.5 rounded-full '>
-                           <FaBookmark 
-                           className='text-white'
+                           <CiBookmarkRemove
+                           className='text-white text-2xl font-bold'
                            />
  
                        </h5>

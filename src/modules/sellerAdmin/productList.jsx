@@ -75,7 +75,7 @@ export default function SellerProductList() {
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-white font-light text-sm'>Admin/Products</h5>
+                    <h5 className='text-black font-light text-sm'>Breeder/Products</h5>
                 </div>
 
 
@@ -240,8 +240,13 @@ const Row=({product})=>{
         }
           
             <Link to="/admin-seller/edit" state={{product}}>
-                <span className='font-semibold text-slate-400 hover:underline '>
-                      {product?.name}
+                <span className='font-semibold text-slate-400 hover:underline flex space-x-4'>
+                    <img src={product?.images[0]}
+                        className="h-8 w-8 rounded-lg"
+                      />
+                      <span>  {product?.name}</span>
+                    
+                    
                   </span>
             </Link>
      
@@ -250,7 +255,7 @@ const Row=({product})=>{
  
       <td className='text-sm font-light text-slate-500 py-2'>
          <select>
-            {product?.category?.map((opt)=>{
+            {product?.categories?.map((opt)=>{
                return(
                 <option>{opt?.value}</option>
                )
@@ -261,13 +266,15 @@ const Row=({product})=>{
          </select>
        
         </td>
-      <td className='text-sm font-light text-slate-500 py-2'>${product?.price}</td>
-      <td className='text-sm font-light text-slate-500 py-2'>{product?.sku}</td>
-      <td className='text-sm font-light text-slate-500 py-2'>{product?.qty}</td>
+      <td className='text-sm font-light text-slate-500 py-2 '>${product?.price}</td>
+      <td className='text-sm font-light text-slate-500 py-2 '>{product?.sku}</td>
+      <td className='text-sm font-light text-slate-500 py-2 '>{product?.qty}</td>
   
-      <td className='text-xs font-semibold  px-2  rounded-lg py-2 '>
-             <span className='font-semibold text-slate-500 text-green-600 bg-green-300 px-4 py-1 rounded-sm'>
-                  {product?.status?.value}
+      <td className='text-xs font-semibold  rounded-lg py-2  '>
+             <span className={product?.status?.value=="instock"?'font-semibold  text-green-600 px-4 py-1.5 rounded-lg':
+               `${product?.status?.value=="preorder"?'font-semibold text-slate-500 text-yellow-500  px-4 py-1':'font-semibold text-slate-500 text-red-500  px-4 py-1'}`
+              }>
+                  {product?.status?.label}
               </span>
       </td>
 

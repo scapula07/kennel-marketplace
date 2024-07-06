@@ -70,8 +70,8 @@ export default function Login() {
 
                             <div className='flex flex-col space-y-6 '>
                                   <div className='flex flex-col items-center space-y-5'>
-                                       <h5 className='text-4xl font-semibold'>Log in</h5>
-                                       <h5 className='text-slate-500'>Lorem ipsum dolor sit amet.</h5>
+                                       <h5 className='text-xl font-semibold'>Log in</h5>
+                                       {/* <h5 className='text-slate-500'>Lorem ipsum dolor sit amet.</h5> */}
 
                                   </div>
                                   {errorMsg && (
@@ -103,11 +103,11 @@ export default function Login() {
                                           ].map((item)=>{
                                             return(
                                                 <div className='flex flex-col space-y-1'>
-                                                    <label className='text-slate-500 text-lg font-light'>{item?.label}</label>
+                                                    <label className='text-slate-500 text-lg font-light text-sm'>{item?.label}</label>
                                                     <input 
                                                         type={item?.type}
                                                        placeholder={item?.desc}
-                                                       className="outline-none border py-3 px-2 rounded-xl "
+                                                       className="outline-none border py-3 px-2 rounded-xl text-xs "
                                                        onChange={(e)=>item?.click(e)}
                                                     />
                                                 </div>
@@ -115,7 +115,7 @@ export default function Login() {
                                           })
 
                                         }
-                                        <p className='text-blue-500 text-lg font-light'>Forgot your password?</p>
+                                        <p className='text-blue-500 text-lg font-light text-xs'>Forgot your password?</p>
 
                                   </div>
 
@@ -123,7 +123,7 @@ export default function Login() {
 
                                   <div className='flex flex-col w-full pt-3 space-y-6 items-center pb-2'>
                                         {!loader?
-                                            <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}
+                                            <button className='text-white py-2.5 space-x-4 px-4 rounded-lg flex justify-center items-center w-full text-sm' style={{background:"#C74A1F"}}
                                               onClick={login}
                                             >
                                               <span>Login</span>
@@ -133,12 +133,13 @@ export default function Login() {
                                                <ClipLoader 
                                                  color="#C74A1F"
                                                  loading={true}
+                                                 size="12"
                                                />
 
                                           }
 
 
-                                        <div className='flex items-center'>
+                                        <div className='flex items-center text-xs'>
                                              <h5>Don't have an account?</h5>
                                              <Link to={"/signup"}>
 

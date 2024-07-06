@@ -58,6 +58,8 @@ import User from './modules/admin/user'
 import Search from './modules/search'
 import Notifications from './modules/notifications'
 import ForgetPassword from './modules/auth/forgot'
+import Services from './modules/sellerAdmin/services'
+import AddService from './modules/sellerAdmin/addService'
 
 
 
@@ -98,8 +100,8 @@ function App() {
               <Route exact path="/forget"  element={<ForgetPassword/>} />
               <Route exact path="/breeder"  element={<Breader/>} />
               <Route exact path="/seller"  element={<Seller/>} >
-                   <Route exact path="home"  element={<SellerHome/>} />
-                   <Route exact path=""  element={<SellerProducts/>} />
+                   <Route exact path=""  element={<SellerHome/>} />
+                   <Route exact path="products"  element={<SellerProducts/>} />
                    <Route exact path="services"  element={<SellerServices/>} />
                    <Route exact path="information"  element={<Information/>} />
                 </Route>
@@ -129,11 +131,13 @@ function App() {
               <Route exact path="/admin-seller"  element={<SellerAdmin/>} >
                   <Route exact path="new-product"  element={<CreateProductSeller/>} />
                   <Route exact path="products"  element={<SellerProductList/>} />
-                  <Route exact path=""  element={<SellerOrderList/>} />
+                  <Route exact path="orders"  element={<SellerOrderList/>} />
                   <Route exact path="product"  element={<ProductDetailsSeller/>} />
                   <Route exact path="edit"  element={<EditProductSeller/>} />
                   <Route exact path="order"  element={<SellerOrder/>} />
-                  {/* <Route exact path=""  element={<OverviewSeller/>} /> */}
+                  <Route exact path="services"  element={<Services/>} />
+                  <Route exact path="add-service"  element={<AddService/>} />
+                  <Route exact path=""  element={<OverviewSeller/>} />
                 
 
               </Route>

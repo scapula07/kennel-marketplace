@@ -42,7 +42,7 @@ console.log(orders,"orooo")
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-white font-light text-sm'>Admin/orders</h5>
+                    <h5 className='text-black font-light text-sm'>Breeder/orders</h5>
                 </div>
 
 

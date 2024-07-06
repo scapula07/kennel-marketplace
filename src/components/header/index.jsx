@@ -29,14 +29,31 @@ export default function Header() {
      const currentURL = window.location.href;
      const parts = currentURL?.split('/');
      const lastPart = parts[parts.length - 1];
-     console.log(lastPart,"lastp"); 
+ 
      const part =`${"/" +lastPart}`
      const [active,setActive]=useState(part)
      const [search,setSearch]=useState("")
+     const [unseen,setUnseen]=useState()
 
      const navigate=useNavigate()
 
-     console.log(part)
+  
+   
+ 
+     useEffect(()=>{
+         if(currentUser?.id?.length >0){
+            const ref =doc(db,"misc",currentUser?.id)
+            const unsub = onSnapshot(ref, (doc) => {
+            console.log(doc?.data(),"unseee nn")
+            setUnseen(doc?.data())
+            });
+  
+  
+         }
+       },[currentUser])
+ 
+
+   
    
     useEffect(()=>{
     
@@ -137,7 +154,7 @@ export default function Header() {
                            
                             {currentUser?.role==="admin"?
                                <Link to="/admin">
-                                    <h5 className=' font-light hover:font-semibold hover:text-orange-800'>Dashboard</h5>
+                                    <h5 className=' font-light hover:font-semibold hover:text-orange-800'>Admin Dashboard</h5>
                                </Link>
                                 
 
@@ -145,7 +162,7 @@ export default function Header() {
                                  <>
                                    {currentUser?.role==="breeder"?
                                  <Link to="/admin-seller">
-                                        <h5 className=' font-light hover:font-semibold hover:text-orange-800'>Dashboard</h5>
+                                       <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>I'm a breader</button>
                                   </Link>
                                   :
                               
@@ -178,13 +195,25 @@ export default function Header() {
                                      
                                         </Link>
                                         <Link to={"/messages"}>
-                                          <IoChatbubbleEllipsesOutline 
-                                              className="text-2xl font-light text-slate-500"
-                                          />
+                                          <h5 className='flex '>
+                                              <IoChatbubbleEllipsesOutline 
+                                                  className="text-2xl font-light text-slate-500"
+                                              />
+                                                {unseen?.msg&&
+                                                    <span className='bg-red-500 lg:h-3 lg:w-3 h-1 w-1 rounded-full -ml-3 mt-0.5'></span>
+                                                  }
+                                          </h5>
                                      </Link>
-                                     <IoIosNotificationsOutline
-                                          className="text-2xl font-light text-slate-500"
-                                      />
+                                     <Link to={`/notifications`}>
+                                           <h5 className='flex '>
+                                                <IoIosNotificationsOutline
+                                                    className="text-2xl font-light text-slate-500"
+                                                />
+                                               {unseen?.notifications&&
+                                                <span className='bg-red-500 lg:h-3 lg:w-3 h-1 w-1 rounded-full -ml-3 mt-0.5'></span>
+                                              }
+                                          </h5>
+                                     </Link>
 
                                 </div>
                                 :

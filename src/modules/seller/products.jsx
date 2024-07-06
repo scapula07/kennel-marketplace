@@ -10,9 +10,12 @@ import { collection,  onSnapshot,
   doc, getDocs,
   query, orderBy, 
   limit,getDoc,setDoc ,
- updateDoc,addDoc ,where} from 'firebase/firestore'
+ updateDoc,addDoc ,where,or,and} from 'firebase/firestore'
  import { db } from '../firebase';
  import { useOutletContext } from 'react-router-dom';
+ import { productApi } from '../api/product';
+
+
 
 export default function SellerProducts() {
   const [seller]= useOutletContext();
@@ -21,7 +24,14 @@ export default function SellerProducts() {
      
     useEffect(()=>{
       if(seller?.id?.length >0){
-            const q = query(collection(db, "products"),where('creator',"==",seller?.id));
+            const q = query(collection(db, "products"),
+             and(where('creator',"==",seller?.id),
+              or(
+                where('status',"==",{ value: 'instock', label: 'In stock' }),
+                where('status',"==",{ value: 'outstock', label: 'Out stock' })
+               )
+              )
+              );
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const products = []
                 querySnapshot.forEach((doc) => {
@@ -80,7 +90,7 @@ const Card=({product})=>{
            const addTocart=async()=>{
               setLoader(true)
               try{
-                //   const res=await productApi.addToCart(product,currentUser)
+                  const res=await productApi.addToCart(product,currentUser)
                   res&&setLoader(false)
                 }catch(e){
                 console.log(e)
@@ -91,7 +101,7 @@ const Card=({product})=>{
            const save=async()=>{
             setSave(true)
             try{
-                // const res=await productApi.save(product,currentUser)
+                const res=await productApi.save(product,currentUser)
                 res&&setSave(false)
               }catch(e){
               console.log(e)

@@ -7,6 +7,10 @@ import { useRecoilValue ,useRecoilState} from 'recoil';
 import { orderApi } from '../api/order';
 import { ClipLoader } from 'react-spinners';
 import { alertTypeState } from '../recoil/state';
+import { analytics } from '../firebase';
+import { logEvent } from "firebase/analytics";
+import { IoAlertCircleOutline } from "react-icons/io5";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 export default function Checkout() {
       useEffect(() => {
@@ -19,7 +23,7 @@ export default function Checkout() {
        const [isLoading,setLoader]=useState(false)
        const currentUser=useRecoilValue(accountTypeState)
        const location =useLocation()
-       const [delivery,setDelivery]=useState({dispatch:"FedEx Office",payment:"Payment with Stripe",city:""})
+       const [delivery,setDelivery]=useState({dispatch:"FedEx Office",payment:"Payment with Stripe",city:"",state:'',address:'',postalCode:''})
        const [errorMsg, setErrorMsg] = useState(null)
 
 
@@ -31,6 +35,7 @@ export default function Checkout() {
         const create=async()=>{
               setLoader(true)
               setErrorMsg(null)
+             
               if (delivery?.city?.length < 3) {
                 setErrorMsg(' City is required! ');
                 setAlert({color:"danger",text:"City is required!"})
@@ -40,6 +45,7 @@ export default function Checkout() {
               }
               try{
                   const res=await orderApi.create(products,currentUser,delivery,total)
+                  logEvent(analytics, 'begin_checkout',{items:products})
                   setLoader(false)
                   console.log(res,"ressss")
                   res&&  navigate("/orders");
@@ -82,8 +88,14 @@ export default function Checkout() {
 
                                                      </div>
                                                      <div className='flex items-center w-full justify-between'>
-                                                           <h5 className='font-light text-slate-800 text-sm'>Delivery price</h5>
-                                                           <h5 className='text-blue-600 text-sm'>$130</h5>
+                                                           <h5 className='font-light text-slate-800 text-sm flex items-center space-x-0.5' >
+                                                             <IoAlertCircleOutline
+                                                               className='font-bold text-yellow-500 text-2xl'
+                                                              /> 
+                                                             <span className='text-xs font-semibold'>Delivery rate will be calculated on payment</span> 
+
+                                                           </h5>
+                                                           {/* <h5 className='text-blue-600 text-sm'>$130</h5> */}
 
                                                      </div>
                                                     
@@ -92,7 +104,7 @@ export default function Checkout() {
 
                                                <div className='flex items-center w-full justify-between'>
                                                            <h5 className='  text-sm font-semibold'>Total price</h5>
-                                                           <h5 className='text-blue-600 text-sm'>${parseInt(total) + 130}</h5>
+                                                           <h5 className='text-blue-600 text-sm'>${parseInt(total)}</h5>
 
                                                  </div>
                                                   {isLoading?

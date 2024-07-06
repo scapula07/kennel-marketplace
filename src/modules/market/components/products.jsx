@@ -15,6 +15,12 @@ import { db } from '../../firebase';
 import { useRecoilValue } from 'recoil';
 import { accountTypeState,saveTypeState } from '../../recoil/state';
 import ReactPaginate from 'react-paginate';
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { IoTime } from "react-icons/io5";
+import { convertToHumanReadableDate } from '../../util';
+
+const analytics = getAnalytics();
+
 
 export default function Products({products,setProducts}) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,8 +42,6 @@ export default function Products({products,setProducts}) {
 
 
         setProducts(products)
-
-
    
       });
    },[])
@@ -116,6 +120,7 @@ const Card=({product})=>{
             setLoader(true)
             try{
                 const res=await productApi.addToCart(product,currentUser)
+                logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                 res&&setLoader(false)
               }catch(e){
               console.log(e)
@@ -127,6 +132,7 @@ const Card=({product})=>{
           setSave(true)
           try{
               const res=await productApi.save(product,currentUser)
+              logEvent(analytics, 'add_to_wishlist', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
               res&&setSave(false)
             }catch(e){
             console.log(e)
@@ -200,15 +206,33 @@ const Card=({product})=>{
           </div>
           
  
-          <div className='flex flex-col space-y-3'>
+          <div className='flex flex-col space-y-3 h-36'>
               <Link  to={`/product`}
                     state={{
                        product
                   }}
-                  >                <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
+                  
+                  >          
+                 <h5 className='text-slate-500 text-xl font-semibold' onClick={()=>{
+                         logEvent(analytics, 'select_item',{items:[product]})
+                         console.log("produvct")
+                  }}>{product?.name}</h5>
             </Link>
-             <h5 className='text-slate-400 text-sm '>{product?.description?.slice(0,100)}</h5>
+               
+             <h5 className='text-slate-400 text-sm h-9'>{product?.description?.slice(0,70)}{product?.description?.length>70&&"..."}</h5>
              <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>
+             {product?.status?.value==="preorder"&&
+                <div className='flex w-full items-center py- justify-between'>
+                   <h5 className='flex items-center space-x-1'>
+                      <IoTime />
+                      <span className='text-sm font-semibold text-slate-700'>Available in</span>
+
+                   </h5>
+                   <h5 className='text-lg font-semibold'>{product?.availableDate}</h5>
+
+                </div>
+
+             }
  
           </div>
  
@@ -219,16 +243,27 @@ const Card=({product})=>{
               />
               :
              <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}
-                  onClick={addTocart}
-             >
+                  onClick={()=>{
+                     product?.status?.value==="instock" || product?.status?.value==="outstock"?
+                      addTocart()
+                       :
+                      save()
+                  }
+                   }
+                >
                   
-                            <MdOutlineShoppingCart 
-                                 className='text-xl' 
-                              />
-                              <span>Add to cart</span>
+                    <MdOutlineShoppingCart 
+                          className='text-xl' 
+                      />
+                       {product?.status?.value==="instock" || product?.status?.value==="outstock"?
+                         <span>Add to cart</span>
+                         :
+                         <span>Pre-order</span>
+                       }
+                      
  
-             </button>
-}
+                </button>
+              }
           </div>
  
       </div>

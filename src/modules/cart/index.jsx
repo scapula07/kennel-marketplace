@@ -11,6 +11,10 @@ import { ClipLoader } from 'react-spinners';
 import { productApi } from '../api/product';
 import { accountTypeState } from '../recoil/state';
 import { useRecoilValue } from 'recoil';
+import { analytics } from '../firebase';
+import { logEvent } from "firebase/analytics";
+
+
 export default function Cart() {
       useEffect(() => {
           
@@ -27,19 +31,22 @@ export default function Cart() {
 
         const currentUser=useRecoilValue(accountTypeState)
 
+        useEffect(()=>{
+          logEvent(analytics, 'view_item', {items:products});
+        },[products])
    
 
-       console.log(cart,"prodyct ")
+
        function calculateTotalPrice(products) {
-        let totalPrice = 0;
-  
-        products.forEach(product => {
-          const subtotal = parseFloat(product.price) * product.qty; 
-          totalPrice += subtotal; 
-        });
+            let totalPrice = 0;
       
-        return totalPrice.toFixed(2); 
-      }
+            products.forEach(product => {
+              const subtotal = parseFloat(product.price) * product.qty; 
+              totalPrice += subtotal; 
+            });
+          
+            return totalPrice.toFixed(2); 
+         }
 
       useEffect(()=>{
         const totalPrice = calculateTotalPrice(cart);
@@ -149,6 +156,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
            try{
 
             const res=await productApi.removeFromCart(item,currentUser)
+            logEvent(analytics, 'remove_from_cart',{items:[item]});
             setCart([])
             setCart(res)
             setLoading(false)
@@ -179,7 +187,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
    return(
     <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4 px-4 shadow'>
     <img 
-      src={product?.images[0]}
+      src={product?.images?.length !=undefined&&product?.images[0]}
       className="w-20 h-20"
     />
 

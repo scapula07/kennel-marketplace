@@ -4,7 +4,8 @@ import Gallery from './components/gallery'
 import Details from './components/details'
 import Actionsection from './components/actionsection'
 import { useLocation,useParams,} from "react-router-dom";
-
+import { analytics } from '../firebase'
+import { logEvent } from 'firebase/analytics'
 
 export default function Product() {
     
@@ -21,6 +22,9 @@ export default function Product() {
       const product=location?.state?.product
 
       console.log(product,"prodyct ")
+      useEffect(()=>{
+        logEvent(analytics, 'view_item',  {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
+      },[product])
   return (
     <Layout>
             <div className='h-full w-full flex flex-col px-28 py-10'>

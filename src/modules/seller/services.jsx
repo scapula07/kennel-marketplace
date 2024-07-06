@@ -20,21 +20,14 @@ export default function SellerServices() {
      
     useEffect(()=>{
       if(seller?.id?.length >0){
-            const q = query(collection(db, "products"),where('creator',"==",seller?.id));
+            const q = query(collection(db, "services"),where('creator',"==",seller?.id));
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const products = []
                 querySnapshot.forEach((doc) => {
-                  products.push({ ...doc.data(), id: doc.id })
-        
+                  products.push({ ...doc.data(), id: doc.id })      
                 });
-        
-        
-                setProducts(products)
-        
-        
-          
-              });
-        
+                setProducts(products)         
+              })     
       }
    
      },[seller])

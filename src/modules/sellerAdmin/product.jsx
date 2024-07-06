@@ -4,8 +4,11 @@ import { useLocation,useParams} from "react-router-dom";
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
 import { Link } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
+import { shippingApi } from '../api/shipping';
 export default function ProductDetailsSeller() {
     const [product,setProduct]=useState({images:[]})
+    const [loading,setLoader]=useState(false)
     const location =useLocation()
 
     const id=location?.state
@@ -23,6 +26,19 @@ export default function ProductDetailsSeller() {
           }
          },[])
 
+         useEffect(()=>{
+             const getParcelTemplates=async()=>{
+                 try{
+                     const result =await shippingApi.fetchPercel()
+                     console.log(result,"ress")
+                  }catch(e){
+                     console.log(e)
+                  }
+
+             }
+             getParcelTemplates()
+           },[product])
+
          console.log(product,"prod")
   return (
     <div className='w-full space-y-4'>
@@ -32,6 +48,16 @@ export default function ProductDetailsSeller() {
 
 
                 <div className='w-full bg-white rounded-lg py-6 px-4 flex flex-col space-y-10'>
+                        {/* <div className='flex w-full justify-center'>
+                            <h5 className='bg-orange-600 text-slate-800 font-semibold flex items-center px-3 py-1 rounded-sm'>
+                           
+                               <span className='text-xs'>Fetch parcels! Wait</span> 
+                                <BeatLoader 
+                                  size={4}
+                                />
+                              </h5>
+
+                        </div> */}
                         <div className='flex items-center justify-between'>
                               <h5 className='text-xl font-semibold text-black'>Product Details</h5>
                         </div>
@@ -83,7 +109,7 @@ export default function ProductDetailsSeller() {
                                                        <span className='text-xl font-semibold text-slate-700'>{product?.currency=="USD"?"$":"GBP"} {product?.price}</span>
 
                                                    </h5>
-                                                   <h5 className='bg-green-300 text-green-800 py-1 px-6 rounded-lg w-28 text-sm font-semibold'>In stock</h5>
+                                                   <h5 className='bg-green-300 text-green-800 py-1 px-6 rounded-lg w-28 text-sm font-semibold'>{product?.status?.label}</h5>
 
                                            </div>
 

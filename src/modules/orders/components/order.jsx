@@ -14,7 +14,8 @@ import { orderApi } from '../../api/order';
 import { stripeApi } from '../../api/stripe';
 import { IoMdClose } from "react-icons/io";
 import Review from './review';
-
+import Cancel from './cancel';
+import { shippingApi } from '../../api/shipping';
 
 export default function Order({order}) {
         const navigate=useNavigate()
@@ -27,6 +28,21 @@ export default function Order({order}) {
         const [state,setContractState]=useState(order?.contract == "sent" || order?.contract == "signed")
         const [vendor,setVendor]=useState({})
         const [trigger,setTrigger]=useState(false)
+        const [triggerCancel,setCancel]=useState(false)
+
+        useEffect(()=>{
+          const getShippingRate=async()=>{
+              try{
+                  const result =await shippingApi.getShippingRates("9cbf5727f9564801818fb3692b3a2d00")
+                  console.log(result)
+               }catch(e){
+                  console.log(e)
+               }
+  
+          }
+          getShippingRate()
+        },[order])
+  
 
 
        console.log(order,"order ")
@@ -47,7 +63,7 @@ export default function Order({order}) {
       const signContract=async()=>{
            setLoading(true)
           try{
-            const res=await orderApi.signContract(order,vendor,product)
+            const res=await orderApi.signContract(order,vendor,product,currentUser)
             
             setLoading(false)
             
@@ -61,11 +77,14 @@ export default function Order({order}) {
         setisLoading(true)
          try{
             const res = await stripeApi.checkout(vendor,product,order)
-            window.location.href =res?.data?.url;
+           if(res?.data?.url?.length >0){
+              window.location.href =res?.data?.url;
+           }
+       
             setisLoading(false)
            }catch(e){
             console.log(e)
-            // window.location.href =res?.data?.data?.url;
+      
             setisLoading(false)
 
          }
@@ -86,12 +105,13 @@ export default function Order({order}) {
          }
       }
 
-      const cancelOrder=async()=>{
+      const cancelOrder=async(reason)=>{
         setCanceling(true)
          try{
-            const res = await orderApi.cancelOrder(order,currentUser,product)
+            const res = await orderApi.cancelOrder(order,currentUser,product,reason)
             
             setCanceling(false)
+            setCancel(false)
            }catch(e){
             console.log(e)
           
@@ -356,7 +376,7 @@ export default function Order({order}) {
 
                                 </div>
                                  {order?.status==="active"&&
-                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
+                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&setCancel(true)}>
                                               {!cancel?
                                               "Cancel"
                                               :
@@ -391,7 +411,7 @@ export default function Order({order}) {
                     </div>
 
                  <div>
-                     <Review 
+                     <Review
                        product={product}
                        setTrigger={setTrigger}
                      />
@@ -404,6 +424,35 @@ export default function Order({order}) {
 
 
     </Modal>
+
+     <Modal trigger={triggerCancel}  cname="w-1/2 py-2   px-8 rounded-lg ">
+              <div className='bg-white w-full  rounded-lg px-4 py-4 space-y-4'>
+                      <div className='w-full justify-end flex '>
+                            
+                                  <IoMdClose
+                                        className='text-2xl font-light'
+                                        onClick={()=>setCancel(false)}
+                                />
+
+                      
+                            
+                      </div>
+
+                  <div>
+                      <Cancel 
+                        product={product}
+                        cancelOrder={cancelOrder}
+                        cancel={cancel}
+                      />
+
+
+
+                  </div>
+
+              </div>
+
+
+      </Modal>
 
     </>
   )

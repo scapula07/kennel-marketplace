@@ -9,7 +9,9 @@ import { IoMdRadioButtonOn } from "react-icons/io";
 import CreatableSelect from 'react-select/creatable';
 
 export default function Delivery({delivery,setDelivery}) {
-     const [cities, setSelectedCity] = useState();
+     const [cities, setSelectedCity] = useState([]);
+     const [states, setSelectedState] = useState([]);
+     const [state,selectState]=useState()
      const [city,selectCity]=useState()
      const [radio,setRadio]=useState("FedEx Office")
      
@@ -17,12 +19,31 @@ export default function Delivery({delivery,setDelivery}) {
           getCountries();
         }, []);
       
+    useEffect(() => {
+       getCities();
+    }, [state]);
+      
         async function getCountries() {
           await axios
-            .get("https://countriesnow.space/api/v0.1/countries/")
+            .post("https://countriesnow.space/api/v0.1/countries/states",{"country":"United States"})
             .then(async(response) => {
                console.log(response?.data?.data,"data")
-                setSelectedCity(response?.data?.data[216]?.cities)
+               setSelectedState(response?.data?.data?.states)
+
+
+            });
+        }
+
+        async function getCities() {
+          await axios
+            .post("https://countriesnow.space/api/v0.1/countries/state/cities",
+            {  country:"United States",
+               state:state?.value
+            }
+            )
+            .then(async(response) => {
+               console.log(response?.data?.data,"data")
+               setSelectedCity(response?.data?.data)
 
 
             });
@@ -34,13 +55,49 @@ export default function Delivery({delivery,setDelivery}) {
   return (
     <div className='w-full flex flex-col space-y-5'>
            <div className='flex flex-col space-y-2'>
+                <h5 className='text-slate-500 font-light '>Enter state name</h5>
+
+                                 <CreatableSelect
+                                     
+                                        placeholder="Select your state"
+                                        options={states?.length >0 &&
+                                          states?.map((item, index) => ({
+                                              label: item?.name,
+                                              value: item?.name
+                                            
+                                          }))}
+                                        value={state}
+                                        menuPlacement="auto"
+                                        menuPosition="fixed"
+                                        noOptionsMessage={(opt) => {
+                                          if (opt.inputValue === "") {
+                                            return "Select your  State";
+                                          } else {
+                                            return "no search results for " + opt.inputValue;
+                                          }
+                                        }}
+                                        components={{
+                                          IndicatorSeparator: () => null,
+                                        }}
+                                        onChange={(opt) => {
+                                          selectState(opt);
+                                          setDelivery({...delivery,state:opt?.value})
+                                        }}
+                                      />
+
+                                    
+                                         
+
+           </div>
+
+           <div className='flex flex-col space-y-2'>
                 <h5 className='text-slate-500 font-light '>Enter city name</h5>
 
                                  <CreatableSelect
                                         // styles={style}
-                                        placeholder="Select your City, State"
+                                        placeholder="Select your city"
                                         options={cities?.length >0 &&
-                                          cities?.slice(0,200)?.map((item, index) => ({
+                                          cities?.slice(0,1100)?.map((item, index) => ({
                                               label: item,
                                               value: item
                                             
@@ -68,6 +125,23 @@ export default function Delivery({delivery,setDelivery}) {
                                          
 
            </div>
+
+              <div className='flex flex-col space-y-2'>
+                    <h5 className='text-slate-500 font-light '>Address: Street 1</h5>
+                    <input 
+                      placeholder='Enter your street address'
+                      className='w-full border py-2 px-3 rounded-sm text-sm'
+                      onChange={(e) => {
+                      
+                        setDelivery({...delivery,address:e.target.value})
+                      }}
+                    />
+
+                                  
+                                        
+                                            
+
+              </div>
 
 
            <div className='bg-white px-6 py-4 w-full flex-col rounded-lg'>

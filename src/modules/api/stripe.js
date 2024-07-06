@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl="https://kennel-stripe-apis.onrender.com"
+const baseUrl="http://localhost:3003"
 export const stripeApi= {
     createAccount:async function () {
           try{
@@ -107,7 +107,9 @@ export const stripeApi= {
                         product:product,
                         accountId:vendor?.payments[0]?.accountId,
                         qty:order?.products[0]?.qty,
-                        orderId:order?.id
+                        orderId:order?.id,
+                        customerId:order?.creator,
+                        sellerId:vendor?.id
                       },
                       config
                 )

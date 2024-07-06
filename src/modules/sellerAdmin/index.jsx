@@ -11,7 +11,7 @@ export default function SellerAdmin() {
         
       }, []);
   return (
-   <div className='w-full overflow-x-hidden overflow-y-hidden h-screen pt-6 pb-4 px-10 ' 
+   <div className='w-full overflow-x-hidden overflow-y-hidden h-screen pt-6 pb-4 px-10 admin' 
         // style={{background: "rgba(242, 242, 242, 0.6)"}}
         >
            <div className='flex w-full h-full relative '>

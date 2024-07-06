@@ -37,7 +37,7 @@ export default function Order({products,delivery,setDelivery}) {
                    {products?.map((item)=>{
                       return(
                         <Product
-                           item={item}
+                            item={item}
                           
                          />
                       )

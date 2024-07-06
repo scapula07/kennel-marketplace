@@ -6,7 +6,7 @@ import { IoGrid } from "react-icons/io5";
 import { IoCart } from "react-icons/io5";
 import { BiSolidMessageSquareDots } from "react-icons/bi";
 import { useState } from 'react';
-import { MdKeyboardArrowDown ,MdKeyboardArrowUp} from "react-icons/md";
+import { MdKeyboardArrowDown ,MdKeyboardArrowUp,MdOutlineCleaningServices} from "react-icons/md";
 import { ImUsers } from "react-icons/im";
 import { Link } from 'react-router-dom';
 
@@ -27,24 +27,24 @@ export default function SidePanel() {
 
                    <div className='flex flex-col px-4 space-y-6'>
                         {[
-                            // {
-                            //     title:"Overview",
-                            //     icon:<IoGrid/>,
-                            //     link:""
+                            {
+                                title:"Overview",
+                                icon:<IoGrid/>,
+                                link:""
 
-                            // },
+                            },
                            
                             {
                              title:"Products",
                              icon:<IoBagHandleSharp />,
                              items:[
                                 {
-                                 name:"New product",
+                                 name:"Add new product",
                                  link:"new-product"
 
                                  },
                                 {
-                                    name:"Product List",
+                                    name:"Your Products",
                                     link:"products"
    
                                 }
@@ -53,12 +53,30 @@ export default function SidePanel() {
 
                               },
                               {
+                                title:"Services",
+                                icon:<MdOutlineCleaningServices />,
+                                items:[
+                                   {
+                                    name:"Add a service",
+                                    link:"add-service"
+   
+                                    },
+                                   {
+                                       name:"Your services",
+                                       link:"services"
+      
+                                   }
+                                  ]
+   
+   
+                                 },
+                              {
                                 title:"Orders",
                                 icon:<IoCart />,
                                 items:[
                                    {
-                                    name:"Order List",
-                                    link:""
+                                    name:"Manage orders",
+                                    link:"orders"
    
                                    }
                                   ]
@@ -106,7 +124,7 @@ const Card=({item,index})=>{
 
                       </div>
                   </Link>
-                      {["Products","Orders","Users"]?.includes(item?.title)&&
+                      {["Products","Orders","Users","Services"]?.includes(item?.title)&&
                               <>
                               {drop?
                                   <MdKeyboardArrowUp
@@ -130,7 +148,7 @@ const Card=({item,index})=>{
                      
 
                </div>
-               {["Products","Orders","Users"]?.includes(item?.title)&&
+               {["Products","Orders","Users","Services"]?.includes(item?.title)&&
                               <>
                  {drop&&
                     <div className='flex-col flex px-8 space-y-2 py-4'>

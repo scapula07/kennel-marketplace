@@ -19,8 +19,9 @@ import { accountTypeState } from '../recoil/state';
 import {ClipLoader} from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
-import { IoMdCheckbox } from "react-icons/io";
-
+import { IoMdCheckbox ,IoMdClose} from "react-icons/io";
+import Modal from '../../components/modal';
+import Shipment from './components/shipment';
 
 export default function SellerOrder() {
      const navigate=useNavigate()
@@ -34,27 +35,21 @@ export default function SellerOrder() {
     const location =useLocation()
     const [customer,setCustomer]=useState({})
     const [product,setProduct]=useState({images:[]})
+    const [trigger,setTrigger]=useState(false)
   
     const ordered=location?.state.order
 
       
     const handleClick = event => {
         hiddenFileInput.current.click()
-    }
-
-
+       }
         const handleChange = async(e)=> {
         const dir = e.target.files[0]
         console.log(dir,"dir")
         if (dir) {
-      
-            setFile(dir)
-
+          setFile(dir)
         }
-
-
-
-        }
+       }
   
 
     
@@ -78,7 +73,7 @@ export default function SellerOrder() {
             setLoader(true)
 
               try{
-                  const res=await orderApi.uploadContract(ordered,file)
+                  const res=await orderApi.uploadContract(ordered,file,product,currentUser,customer)
                   setLoader(false)
 
               }catch(e){
@@ -114,6 +109,8 @@ export default function SellerOrder() {
              }
           }
   return (
+    <>
+  
     <div className='w-full'>
                 <div className='flex flex-col space-y-3'>
                     <h5 className='text-white font-light text-sm'>Admin/Order</h5>
@@ -157,6 +154,7 @@ export default function SellerOrder() {
                                         customer={customer}
                                         product={product}
                                         setProduct={setProduct}
+                                        currentUser={currentUser}
                                       />
                                    </div>
 
@@ -306,7 +304,7 @@ export default function SellerOrder() {
                                           </div>
                                     </div>
 
-                                      <div className='w-1/4'>
+                                      <div className='w-1/4 flex flex-col space-y-2'>
                                             <h5 className='text-slate-500 font-semibold'>Order summary</h5>
                                             <div className='flex flex-col py-6'>
                                                  <h5 className='text-slate-500 font-light'>Product Price:        ${order?.total}</h5>
@@ -321,7 +319,21 @@ export default function SellerOrder() {
 
                                               }
                                             
-                                              </button>
+                                           </button>
+                                            {order?.shipmentId?.length ==0&&
+                                               <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm ' onClick={()=>setTrigger(true)}>
+                                               {!cancel?
+                                               "Prepare Shipment"
+                                               :
+                                               <BeatLoader size={10} color="orange" />
+
+                                               }
+                                           
+                                         </button>
+
+                                            }
+                                             
+                                            
                                     
                                     </div>
 
@@ -335,6 +347,25 @@ export default function SellerOrder() {
 
 
     </div>
+    <Modal trigger={trigger}  cname="w-3/5  flex justify-center   px-8 rounded-lg py-7">
+            <div className='bg-white w-4/5  rounded-lg px-4 py-4'>
+                    <div className='w-full justify-end flex '>
+                           
+                                <IoMdClose
+                                      className='text-2xl font-light'
+                                      onClick={()=>setTrigger(false)}
+                               />
+                     </div>
+                     <Shipment 
+                       order={order}
+                       customer={customer}
+                       currentUser={currentUser}
+                     />
+            </div>
+
+      </Modal>
+
+    </>
   )
 }
 
@@ -377,13 +408,13 @@ const Product=({item,product,setProduct})=>{
 
 
 
-const Tracker=({order})=>{
+const Tracker=({order,customer,currentUser,product})=>{
       const [inProgess,setProgressing]=useState(false)
       const [inDelivered,setDelivery]=useState(false)
      const deliverySent=async()=>{
             setProgressing(true)
          try{
-           const res=orderApi.sentPackage(order)
+           const res=orderApi.sentPackage(order,customer,currentUser,product)
            setProgressing(false)
          }catch(e){
           console.log(e)

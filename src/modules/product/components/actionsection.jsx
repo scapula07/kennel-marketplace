@@ -14,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilValue } from 'recoil';
 import { productApi } from '../../api/product';
+import { analytics } from '../../firebase';
+import {  logEvent } from "firebase/analytics";
+
 
 export default function Actionsection({product}) {
       const currentUser=useRecoilValue(accountTypeState)
@@ -53,6 +56,7 @@ export default function Actionsection({product}) {
              setLoading(true)
              try{
                  const res=await productApi.addToCart(product,currentUser)
+                 logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                  res&&setLoading(false)
                }catch(e){
                console.log(e)
@@ -64,6 +68,7 @@ export default function Actionsection({product}) {
            setSave(true)
            try{
                const res=await productApi.save(product,currentUser)
+               logEvent(analytics, 'add_to_wishlist', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                res&&setSave(false)
              }catch(e){
              console.log(e)
@@ -73,19 +78,15 @@ export default function Actionsection({product}) {
  
 
         function calculateAverageRating(reviews) {
-          // Initialize variables for sum and count
+    
           let sum = 0;
           let count = 0;
       
-          // Iterate over each review
+   
           reviews.forEach(review => {
-              // Add the rating to the sum
               sum += review.rating;
-              // Increment the count
               count++;
           });
-      
-          // Calculate the average rating
           const averageRating = count > 0 ? sum / count : 0;
       
           return averageRating;

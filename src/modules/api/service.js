@@ -16,9 +16,8 @@ const uploadFile=async(file)=>{
 
 }
 
-export const productApi= {
+export const serviceApi= {
     create:async function (product,user,files) {
-          console.log(files,"file")
          try{
               let directory=[]
               await Promise.all(files?.map(async(file)=>{
@@ -26,28 +25,20 @@ export const productApi= {
                   directory?.push(img)
               }))
 
-              console.log(directory,"diretc")
             const {features,...rest}=product
             const filteredArray = features.filter(obj => !('_isNew_' in obj));
             const newArray = filteredArray.map(({ label, value }) => ({ label, value }));
             console.log(newArray,"array")
 
-            const  snap = await addDoc(collection(db, "products"),{
+            const  snap = await addDoc(collection(db, "services"),{
                ...rest,
                  images:directory,
                  features:newArray,
                  creator:user?.id,
                  createdAt:new Date(),
-                 reviews:[],
-                 affiliation:user?.id,
-
-                 
-               })
-
-
-    
-             
-           const ref=doc(db,"products",snap?.id)
+                 reviews:[]
+                })           
+           const ref=doc(db,"services",snap?.id)
            const docSnap = await getDoc(ref);
            return {status:docSnap.exists(),id:docSnap?.id}
 
@@ -62,14 +53,14 @@ export const productApi= {
                 const ref =doc(db,"misc",user?.id)
                 const docSnap = await getDoc(ref);
                 console.log(docSnap?.data()?.cart?.some(item=>item?.id==product?.id),"here")
-                if(docSnap?.data()?.cart?.some(item=>item?.id==product?.id)){
+                 if(docSnap?.data()?.cart?.some(item=>item?.id==product?.id)){
                       return true
                     }else{
                         await updateDoc(doc(db,"misc",user?.id), {
-                      cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1,price:product?.price,vendor:product?.creator,img:product?.images[0]}]
+                        cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1,price:product?.price,vendor:product?.creator,img:product?.images[0]}]
                     })
 
-               return true
+                     return true
 
                 }
              
@@ -159,7 +150,7 @@ export const productApi= {
         try{
           const q = query(
             collection(db, 'products'),
-              or(where('categories', 'array-contains-any', filters),
+              or(where('category', 'array-contains-any', filters),
                 where('features', 'array-contains-any', filters)
                ),orderBy('createdAt', 'desc')
              );
@@ -210,7 +201,7 @@ export const productApi= {
       deleteProduct:async function (product) {
            try{
         
-              await deleteDoc(doc(db,"products",product?.id));
+              await deleteDoc(doc(db,"services",product?.id));
               return true
              }catch(e){
                 console.log(e)

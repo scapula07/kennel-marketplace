@@ -3,28 +3,18 @@ import { useState,useRef } from 'react'
 import Select from "react-select";
 import CreatableSelect from 'react-select/creatable';
 import { IoMdClose } from "react-icons/io";
-import { productApi } from '../api/product';
+import { serviceApi } from '../api/service';
 import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../recoil/state';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-export default function CreateProductSeller() {
+export default function AddService() {
       const navigate=useNavigate()
       const [num,setNum]=useState(1)
       const currentUser=useRecoilValue(accountTypeState)
-      const [product,setProduct]=useState({
-                                           name:"",
-                                           description:"",
-                                           qty:1,
-                                           currency:"USD",
-                                           categories:[],
-                                           features:[],
-                                           sku:"",
-                                           price:0,
-                                           status:{ value: 'instock', label: 'In stock'}
-                                          })
+      const [product,setProduct]=useState({name:"",description:"",qty:1,currency:"USD",category:[],features:[],sku:"",price:0})
       const [url,setUrl]=useState([])
       const [files,setFiles]=useState([])
       const [isLoading,setLoading]=useState(false)
@@ -62,13 +52,8 @@ export default function CreateProductSeller() {
             setNum(3)
             return;
           }
-          if (product?.sku.length < 3) {
-            setErrorMsg( "Product SKU is required!" );
-            setLoading(false);
-            setNum(3)
-            return;
-          }
-          if (product?.categories.length == 0) {
+     
+          if (product?.category.length == 0) {
             setErrorMsg( "Select a category" );
             setLoading(false);
             setNum(1)
@@ -81,9 +66,9 @@ export default function CreateProductSeller() {
             return;
           }
          try{
-             const res=await productApi.create(product,currentUser,files)
+             const res=await serviceApi.create(product,currentUser,files)
               res&&setLoading(false)
-              navigate("/admin-seller/product", { state:res?.id});
+            //   navigate("/admin-seller/product", { state:res?.id});
           }catch(e){
             console.log(e)
             setLoading(false)
@@ -93,14 +78,14 @@ export default function CreateProductSeller() {
 
       
 
-
+   console.log(product,"pppr")
 
   return (
     <div className='w-full'>
           <div className='flex flex-col space-y-3'>
-            <h5 className='text-black font-light text-sm'>Breeder/Product</h5>
+            <h5 className='text-black font-light text-sm'>Breeder/Service</h5>
             
-            <h5 className='text-lg font-semibold text-black'>New Product</h5>
+            <h5 className='text-lg font-semibold text-black'>New Service</h5>
 
           </div>
 
@@ -170,13 +155,13 @@ export default function CreateProductSeller() {
 const Info=({num,setNum,setProduct,product})=>{
       return(
          <div className='bg-white rounded-lg flex flex-col w-full py-6 px-6 space-y-6'>
-               <h5 className='text-lg font-semibold'>Product Information</h5>
+               <h5 className='text-lg font-semibold'>Service Information</h5>
                 <div className='flex w-full space-x-4'>
                         <div className='w-1/2 flex flex-col space-y-8 '>
                                 <div className='flex flex-col space-y-2'>
                                     <label className='text-sm font-semibold'>Name</label>
                                     <input 
-                                       placeholder='e.g Dogs feed'
+                                       placeholder='e.g Full check up'
                                        className='rounded-lg px-4 py-3 border text-sm'
                                        value={product?.name}
                                        onChange={(e)=>setProduct({...product,name:e.target.value})}
@@ -187,7 +172,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                 <div className='flex flex-col space-y-2'>
                                     <label className='text-sm font-semibold'>Description</label>
                                     <textarea 
-                                       placeholder='Product description'
+                                       placeholder='Service description'
                                        className='rounded-lg px-4 py-3 border text-sm h-28'
                                        value={product?.description}
                                        onChange={(e)=>setProduct({...product,description:e.target.value})}
@@ -196,8 +181,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                 </div>
 
                                 <div className='flex flex-col space-y-2'>
-                                    <label className='text-sm font-semibold'>Specifications and Key features</label>
-                                    <p className='text-xs font-light'>These are specifications that fit your product.Select or create a spec</p>
+                                    <label className='text-sm font-semibold'>Key Features</label>
                                     <CreatableSelect 
                                        isMulti 
                                        options={features}
@@ -207,7 +191,6 @@ const Info=({num,setNum,setProduct,product})=>{
                                            setProduct({...product,features:opt})
                                        }}
                                      />
-                                     
                                 </div>
 
 
@@ -216,16 +199,16 @@ const Info=({num,setNum,setProduct,product})=>{
 
                         <div className='w-1/2 flex flex-col space-y-4'> 
 
-                             <div className='flex flex-col space-y-2'>
-                                <label className='text-sm font-semibold'>Net Weight in kg</label>
+                             {/* <div className='flex flex-col space-y-2'>
+                                <label className='text-sm font-semibold'>Weight</label>
                                         <input 
-                                        placeholder='e.g 0.8'
+                                        placeholder='e.g 42'
                                         className='rounded-lg px-4 py-3 border text-sm'
                                         value={product?.weight}
                                         onChange={(e)=>setProduct({...product,weight:e.target.value})}
                                         />
 
-                                </div>
+                                </div> */}
                             {[
                                
                                  {
@@ -233,30 +216,26 @@ const Info=({num,setNum,setProduct,product})=>{
                                     items:items,
                                     value:product?.category,
                               
-                                    click:(opt)=>setProduct({...product,categories:opt})
+                                    click:(opt)=>setProduct({...product,category:opt})
 
                                   },
-                                {
-                                    title:"Size Variants",
-                                    value:product?.sizes,
-                                    items:[
-                                      {
-                                        label:"Large(above 100g)",
-                                        value:"50"
-                                      },
-                                      {
-                                        label:"Medium(50 to 100)",
-                                        value:"10"
-                                      },
-                                      {
-                                        label:"Small(less than 50g)",
-                                        value:"10"
-                                      },
+                                // {
+                                //     title:"Sizes",
+                                //     value:product?.sizes,
+                                //     items:[
+                                //       {
+                                //         label:"Large",
+                                //         value:"50"
+                                //       },
+                                //       {
+                                //         label:"Small",
+                                //         value:"10"
+                                //       },
 
-                                       ],
-                                    click:(opt)=>setProduct({...product,sizes:opt})
+                                //        ],
+                                //     click:(opt)=>setProduct({...product,sizes:opt})
 
-                                }
+                                // }
 
                              ]?.map((item)=>{
                                   return(
@@ -264,7 +243,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                     <label className='text-sm font-semibold'>{item?.title}</label>
                               
                                         <Select
-                                            defaultValue={[item?.items[0], item?.items[1],item?.items[2]]}
+                                            defaultValue={[item?.items[2], item?.items[3]]}
                                             isMulti
                                             name="colors"
                                             options={item?.items}
@@ -282,7 +261,7 @@ const Info=({num,setNum,setProduct,product})=>{
                             })
 
                             }
-                             <div className='flex flex-col space-y-2'>
+                             {/* <div className='flex flex-col space-y-2'>
                                 <label className='text-sm font-semibold'>Quantity</label>
                                         <input 
                                         placeholder='1'
@@ -292,7 +271,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                         onChange={(e)=>setProduct({...product,qty:e.target.value})}
                                         />
 
-                                </div>
+                                </div> */}
                         </div>
                       
 
@@ -340,7 +319,7 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
     console.log(files,"media")
     return(
        <div className='bg-white rounded-lg flex flex-col w-full py-6 px-6 space-y-6'>
-             <h5 className='text-lg font-semibold'>Media</h5>
+             <h5 className='text-lg font-semibold'>Images</h5>
 
 
               <div className='flex w-full space-x-4'>
@@ -400,7 +379,7 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
               </div>
 
               <div className='flex w-full justify-between'>
-                   <button className='bg-orange-300 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
+                   <button className='bg-orange-600 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                  
                     <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
                     
@@ -422,9 +401,8 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
 
 const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
     const options = [
-        { value: 'instock', label: 'In stock' },
-        { value: 'preorder', label: 'Pre-order' },
-        { value: 'outstock', label: 'Out stock' },
+        { value: 'available', label: 'Available' },
+        { value: 'unavailable', label: 'Unavailable' },
 
       ]
     return(
@@ -464,8 +442,8 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
 
                         </div>
 
-
-                        <div className='flex flex-col space-y-2 w-1/3'>
+                       {/* 
+                           <div className='flex flex-col space-y-2 w-1/3'>
                                     <label className='text-sm font-semibold'>SKU</label>
                                     <input 
                                        placeholder='1ABC5689'
@@ -474,7 +452,8 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                        onChange={(e)=>setProduct({...product,sku:e.target.value})}
                                     />
 
-                        </div>
+                             </div>
+                         */}
 
              </div>
 
@@ -491,26 +470,10 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                     />
              </div>
 
-              {
-                product?.status?.value==="preorder"&&
-           
-
-                <div className='flex flex-col w-full space-y-3'>
-                     
-                      <input 
-                          type={"date"}
-                          className="border-b py-3 w-1/3 outline-none px-4 text-xs font-semibold"
-                          placeholder='Available in'
-                          onChange={(e)=>setProduct({...product,availableDate:e.target.value})}
-                        />
-                         <h5 className='text-xs font-semibold text-slate-600'>Date for product availability</h5>
-                </div>
-               }
-
          
 
               <div className='flex w-full justify-between'>
-                   <button className='bg-orange-300 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
+                   <button className='bg-orange-600 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                      {isLoading?
                       <ClipLoader
                         color={"black"}

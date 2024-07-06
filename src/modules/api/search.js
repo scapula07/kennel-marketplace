@@ -9,7 +9,7 @@ export const searchApi= {
           try{
               const q = query(
                  collection(db, 'products'),
-                    or(where('category', 'array-contains-any',[{label:search,value:search}]),
+                    or(where('categories', 'array-contains-any',[{label:search,value:search}]),
                        where('features', 'array-contains-any',[{label:search,value:search}]),
                        where('name', '==',search)
                       ),//orderBy('createdAt', 'desc')

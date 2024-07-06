@@ -23,6 +23,7 @@ import { stripeApi } from '../api/stripe';
 import { BsStripe } from "react-icons/bs";
 import { alertTypeState } from '../recoil/state';
 
+
 export default function Payment() {
       const [alert,setAlert]=useRecoilState(alertTypeState)
       const [trigger,setTrigger]=useState(false)
@@ -64,8 +65,11 @@ export default function Payment() {
                const res=await stripeApi.createAccount()
                const res1=await paymentApi.addPayment(currentUser,[{text:"Stripe",accountId:res?.data?.data?.account_id,verification:false}])
                console.log(res?.data?.data,"res")
-               window.location.href =res?.data?.data?.link;
-               console.log(res?.data?.data?.account_id," account id")
+               if(res?.data?.data?.account_id?.link?.length >0){
+                 window.location.href=res?.data?.data?.link;
+               }
+          
+               
                setLoader(false)
                setPayment((prev)=>[...prev,text]) 
             
@@ -80,7 +84,7 @@ export default function Payment() {
 
        const getAccount=async()=>{
               try{
-                     const res=await stripeApi.retrieveAccount(currentUser)
+                  const res=await stripeApi.retrieveAccount(currentUser)
                      console.log(res?.data?.data?.charges_enabled)
                     setEnable(res?.data?.data?.charges_enabled)
                     res?.data?.data?.charges_enabled==false&& setAlert({color:"danger",text:"Stripe charges is not enable,please complete onboarding"})

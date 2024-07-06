@@ -22,8 +22,14 @@ export const authApi= {
                await setDoc(doc(db, "misc",user?.uid), {
                    notifications:false,
                    cart:[],
-                   saved:[]
+                   saved:[],
+                   msg:false
                  });
+              await setDoc(doc(db, "stats",user?.uid), {
+                 sales:[],
+                 completedOrders:[],
+                 cancelledOrders:[]
+               });
                 return {id:docSnap?.id,...docSnap?.data(),accessToken:user?.accessToken}
               } else {
                 

@@ -10,27 +10,33 @@ import { collection,  onSnapshot,
   doc, getDocs,
   query, orderBy, 
   limit,getDoc,setDoc ,
- updateDoc,addDoc } from 'firebase/firestore'
+ updateDoc,addDoc, where } from 'firebase/firestore'
  import { db } from '../firebase';
-
+ import { useOutletContext } from 'react-router-dom';
+ import { IoTime } from "react-icons/io5";
+ import { productApi } from '../api/product';
+ 
 export default function SellerHome() {
+    const [seller]= useOutletContext();
     const [products,setProducts]=useState([])
      
     useEffect(()=>{
-      const q = query(collection(db, "products"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-          const products = []
-          querySnapshot.forEach((doc) => {
-            products.push({ ...doc.data(), id: doc.id })
-  
-          });
-  
-  
-          setProducts(products)
-  
-  
-     
-        });
+      if(seller?.id?.length >0){
+          const q = query(collection(db, "products"),where('creator',"==",seller?.id), where('status',"==", { value: 'preorder', label: 'Pre-order' }));
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+              const products = []
+              querySnapshot.forEach((doc) => {
+                products.push({ ...doc.data(), id: doc.id })
+      
+              });
+      
+      
+              setProducts(products)
+      
+      
+        
+            });
+      }
      },[])
   
      console.log(products,"producys")
@@ -85,7 +91,7 @@ const Card=({product})=>{
            const save=async()=>{
             setSave(true)
             try{
-                // const res=await productApi.save(product,currentUser)
+                const res=await productApi.save(product,currentUser)
                 res&&setSave(false)
               }catch(e){
               console.log(e)
@@ -169,6 +175,18 @@ const Card=({product})=>{
               </Link>
                <h5 className='text-slate-400 text-sm '>{product?.description}</h5>
                <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>
+               {product?.status?.value==="preorder"&&
+                <div className='flex w-full items-center py- justify-between'>
+                   <h5 className='flex items-center space-x-1'>
+                      <IoTime />
+                      <span className='text-sm font-semibold text-slate-700'>Available in</span>
+
+                   </h5>
+                   <h5 className='text-lg font-semibold'>{product?.availableDate}</h5>
+
+                </div>
+
+             }
    
             </div>
    
@@ -179,7 +197,7 @@ const Card=({product})=>{
                 />
                 :
                <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}
-                    onClick={addTocart}
+                    onClick={save}
                >
                     
                               <MdOutlineShoppingCart 

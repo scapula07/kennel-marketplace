@@ -4,7 +4,7 @@ import { doc,getDoc,setDoc , updateDoc,collection,addDoc}  from "firebase/firest
 import {getStorage, ref, uploadBytes } from "firebase/storage"
 import { sendEmail } from "./email";
 
-const uploadFile=async(file)=>{
+export const uploadFile=async(file)=>{
     console.log("Uploading")
     const storage = getStorage();
     const fileId=Math.random().toString(36).substring(2,8+2);
@@ -20,37 +20,9 @@ export const orderApi= {
     create:async function (products,user,delivery,total) {
               console.log(products,"products")
               const orders = {};
+            
            try{
-                        // products.forEach(product => {
-                        //     const vendor = product.vendor;
-                        //     if (!orders[vendor]) {
-                        //     orders[vendor] = [];
-                        //     }
-                        //     orders[vendor].push(product);
-                        // });
-                        // const ordersArray = Object.values(orders);
-                        // console.log(ordersArray,"aordr arr")
-
-                        // const orderPromises = products.map(async (orderProducts) => {
-                        //     const total = orderProducts.reduce((acc, curr) => acc + parseFloat(curr.price), 0); // Calculate total price for the order
-                        
-                        //     const snap = await addDoc(collection(db, "orders"), {
-                        //       products: orderProducts,
-                        //       creator: user?.id,
-                        //       vendor: orderProducts[0].vendor, // Assuming all products in the order have the same vendor
-                        //       status: "active",
-                        //       total: total.toFixed(2), // Round total to 2 decimal places
-                        //       paid: false,
-                        //       contract: "waiting",
-                        //       time: Number(new Date()),
-                        //       delivery
-                        //     });
-                        
-                        //     return snap;
-                        //   });
-                        
-                        //   return Promise.all(orderPromises);
-
+                  
                         const orderPromises = products.map(async (product) => {
                             const total = parseFloat(product.price); // Total price for the order is just the price of the product
                       
@@ -64,13 +36,28 @@ export const orderApi= {
                               contract: "waiting",
                               time: Number(new Date()),
                               deliveryStatus:"pending",
+                              shipmentId:"",
                               delivery
                             });
-                                        try{
-                                            sendEmail(user?.email,`Kennel Breeder,Order confirmed!!`,`Order id:${snap?.id},Product name:${product?.name},amount:${product?.price}`)
-                                        }catch(e){
-                                            console.log(e)
-                                        }
+                              try{
+                                    await addDoc(collection(db, "notifications"), {
+                                          type:"Order update",
+                                          to:product.vendor,
+                                          from:user,
+                                          order:snap?.id,
+                                          product:product,
+                                          msg:"New order",
+                                          date:new Date()
+                                    });
+                                    await updateDoc(doc(db, "misc",product.vendor), {
+                                       notifications:true,
+                                
+                                    });
+                                    sendEmail(user?.email,`Kennel Breeder,Order confirmed!!`,`Order id:${snap?.id},Product name:${product?.name},amount:${product?.price}`)
+                               }catch(e){
+                                    console.log(e)
+                                    throw new Error(e)
+                              }
 
                             return snap;
                           });
@@ -81,10 +68,11 @@ export const orderApi= {
                   
                         }catch(e){
                             console.log(e)
+                            throw new Error(e)
                         }
 
        },
-       uploadContract:async function (order,file) {
+       uploadContract:async function (order,file,product,user,customer) {
             try{
                 const url=await uploadFile(file)
                  console.log(url,"uu")
@@ -96,6 +84,21 @@ export const orderApi= {
                         file:url
                     })
                     console.log(res,"resss")
+                    await addDoc(collection(db, "notifications"), {
+                      type:"Order update",
+                      to:order?.creator,
+                      from:user,
+                      order:order?.id,
+                      product:{img:product?.images[0]},
+                      msg:"Contract sent! Your order has been confirmed!!",
+                      date:new Date()
+                  });
+
+                  await updateDoc(doc(db, "misc",order?.creator), {
+                    notifications:true,
+             
+                 });
+                 sendEmail(customer?.email,`Kennel Breeder,Contract has been sent!!`,`Order id:${order?.id},Product name:${product?.name},amount:${product?.price}`)
     
                     return true
 
@@ -103,7 +106,7 @@ export const orderApi= {
                 console.log(e)
             }
        },
-       signContract:async function (order,vendor,product) {
+       signContract:async function (order,vendor,product,user) {
         try{
              const ref =doc(db,"order",order?.id)
              const docSnap = await getDoc(ref);
@@ -111,6 +114,19 @@ export const orderApi= {
                     contract:"signed",
                 })
   
+                await addDoc(collection(db, "notifications"), {
+                  type:"Order update",
+                  to:vendor?.id,
+                  from:user,
+                  order:order?.id,
+                  product:{img:product?.images[0]},
+                  msg:"Contract sent",
+                  date:new Date()
+              });
+
+              await updateDoc(doc(db, "misc",vendor?.id), {
+                notifications:true,
+                })
              
              try{
                    sendEmail(vendor?.email,`Kennel Breeder,Contract has been signed!!!`,`Order id:${docSnap?.id},Product name:${product?.name},amount:${product?.price} , Please message seller on app to discuss how to receive your package.`)
@@ -124,16 +140,28 @@ export const orderApi= {
         }
         
    },
-   sentPackage:async function (order,customer) {
+   sentPackage:async function (order,customer,user,product) {
     try{
          const ref =doc(db,"order",order?.id)
           const docSnap = await getDoc(ref);
           const res=  await updateDoc(doc(db,"orders",order?.id), {
                 deliveryStatus:"sent",
             })
+            await addDoc(collection(db, "notifications"), {
+              type:"Order update",
+              to:order?.creator,
+              from:user,
+              order:order?.id,
+              product:{img:product?.images[0]},
+              msg:"Your package is on the way",
+              date:new Date()
+          });
 
+          await updateDoc(doc(db, "misc",order?.creator), {
+            notifications:true,
+            })
             try{
-                sendEmail(customer?.email,`Kennel Breeder,Your Package has been sent!`,`Order id:${docSnap?.id}, Please message seller on app to discuss how to receive your package.`)
+                 sendEmail(customer?.email,`Kennel Breeder,Your Package has been sent!`,`Order id:${docSnap?.id}, Please message seller on app to discuss how to receive your package.`)
                   }catch(e){
                     console.log(e)
               }
@@ -183,12 +211,25 @@ export const orderApi= {
         console.log(e)
     }
    },
-   cancelOrder:async function (order,user) {
+   cancelOrder:async function (order,user,product,reason) {
     try{
          const ref =doc(db,"order",order?.id)
          const docSnap = await getDoc(ref);
          const res=  await updateDoc(doc(db,"orders",order?.id), {
                 status:"cancelled",
+         })
+         await addDoc(collection(db, "notifications"), {
+          type:"Order update",
+          to:order?.vendor,
+          from:user,
+          order:order?.id,
+          product:{img:product?.images[0]},
+          msg:`Cancelled!${reason}`,
+          date:new Date()
+      });
+
+        await updateDoc(doc(db, "misc",order?.vendor), {
+           notifications:true,
          })
             try{
             sendEmail(user?.email,`Kennel Breeder,Order cancelled!!`,`Order id:${docSnap?.id}`)
@@ -201,7 +242,21 @@ export const orderApi= {
     }catch(e){
         console.log(e)
     }
-   }
+   },
+   updateOrderShipment:async function (order,shipmentId) {
+    try{
+         const ref =doc(db,"order",order?.id)
+         const docSnap = await getDoc(ref);
+         const res=  await updateDoc(doc(db,"orders",order?.id), {
+                shipmentId:shipmentId,
+         })
+
+        return true
+
+    }catch(e){
+        console.log(e)
+    }
+  }
 
 }
 

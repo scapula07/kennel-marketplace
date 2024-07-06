@@ -12,6 +12,11 @@ import { accountTypeState } from '../recoil/state';
 import { db } from '../firebase';
 import { BeatLoader, ClipLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
+import { calculateTime } from '../util';
+import { uploadFile } from '../api/order';
+
+
+ 
 
 export default function Messages() {
      useEffect(() => {
@@ -98,18 +103,22 @@ export default function Messages() {
           setLoader(true)
   
           console.log(currentUser,"user >.>>>")
+           let img=""
+          if(url?.length >0){
+              img=await uploadFile(file)
+
+          }
           
           const message = {
             sender:currentUser?.id,
             text: newMessage,
+            img:img,
             conversationid:currentChat?.id,
             date:Number(Date.now()),
             time:new Date()
           };
-          const receiverId = currentChat?.members.find(
-            (member) => member !== currentUser.id
-          );
 
+         
        
    
             setTextsubmit(false)
@@ -118,11 +127,15 @@ export default function Messages() {
                 const docRef = await addDoc(collection(db, "messages"),message);
           
                const docSnap = await getDoc(docRef);
-               console.log(docSnap?.data(),"came")
+               await updateDoc(doc(db,"conversations",currentChat?.id), {
+                     lastText:newMessage,
+                     lastMessage:Number(new Date())
+                  })
                docSnap?.exists()&& setNewMessage("")
                docSnap?.exists()&& setLoader(false)
-               const receiver= currentChat?.members?.find((member)=>member !=currentUser?.id )
-               console.log(receiver,"reci")
+               docSnap?.exists()&&setFile({})
+               docSnap?.exists()&&setUrl("")
+             
              
   
          
@@ -211,12 +224,12 @@ export default function Messages() {
                                        }
 
                                         <div className='flex items-center space-x-8 justify-end'>
-                                                <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
+                                                  {/* <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
                                                         Archive
                                                 
 
-                                                    </button>
-                                                    {currentChat?.id?.length >0&&
+                                                    </button> */}
+                                             {currentChat?.id?.length >0&&
                                                    
                                                     <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
                                                         <span>Go to seller page</span>
@@ -234,7 +247,7 @@ export default function Messages() {
                                     </div>
 
                                     <div className=' h-full pt-20 flex flex-col   '>
-                                          <div className=' h-4/5 w-full'>
+                                          <div className=' h-4/5 w-full overflow-y-scroll'>
                                                 <ChatBox
                                                     currentChat={currentChat}
                                                     currentUser={currentUser}
@@ -243,8 +256,8 @@ export default function Messages() {
                                                  
 
                                           </div>
-                                          <div className=' h-1/5 w-full px-6 py-3'>
-                                              <div className='flex flex-col border rounded-xl bg-white h-full px-6 py-2 space-y-1' >
+                                          <div className=' h-1/3 w-full px-6 py-3'>
+                                              <div className='flex flex-col border rounded-xl bg-white h-full px-6 py-2 space-y-2' >
                                                   {url?.length==0?
                                                           <input 
                                                           placeholder='Enter a message'
@@ -254,11 +267,22 @@ export default function Messages() {
                                                           
                                                        />
                                                        :
-                                                       <div className='flex items-center'>
-                                                            <h5 className='text-sm font-semibold'>
+                                                       <div className='flex flex-col space-y-1 '>
+                                                            <img 
+                                                             src={url}
+                                                             className="w-8 h-8"
+                                                            />
+                                                            <h5 className='text-xs font-semibold'>
                                                               {file?.name}
 
                                                             </h5>
+
+                                                            <input 
+                                                                 placeholder='Enter caption'
+                                                                 className='outline-none text-black text-xs'
+                                                                 value={newMessage}
+                                                                 onChange={(e)=>setNewMessage(e.target.value)}
+                                                          />
                                                           
                                                        </div>
 
@@ -266,10 +290,10 @@ export default function Messages() {
                                                
                                                    <div className='flex justify-end'>
                                                         <div className='flex items-center space-x-2'>
-                                                              <FiSmile 
+                                                              {/* <FiSmile 
                                                                  className='text-slate-700 text-2xl'
                                                                
-                                                               />
+                                                               /> */}
                                                               <MdOutlineAttachment
                                                                     className='text-slate-700 text-2xl'
                                                                     onClick={handleClick}
@@ -339,20 +363,22 @@ const Contact=({conv,setCurrentChat,index,currentUser})=>{
              const { id, ...rest } = doc.data()
              setReceiver({...rest,receiverId:doc?.id})
 
+           if(index==0){
+               console.log("here")
+               setCurrentChat({...conv,...{...rest,receiverId:doc?.id}})
+            }
+
 
             });
            }
           },[])
 
-          // if(index==0){
-          //      console.log("here")
-          //      setCurrentChat({...conv,...receiver})
-          //   }
+   
          
        console.log(conv,"oo")
       return(
 
-          <div className='w-full flex flex-col space-y-1 hover:bg-slate-100 rounded-lg px-2 py-1' 
+          <div className='w-full flex flex-col space-y-1 hover:bg-slate-100 rounded-lg px-2 py-1 border-b border-slate-100' 
             onClick={()=>setCurrentChat({...conv,...receiver})}
           >
           <div className='w-full flex items-center space-x-3'>
@@ -371,7 +397,7 @@ const Contact=({conv,setCurrentChat,index,currentUser})=>{
 
                <div className='flex flex-col '>
                     <h5 className='text-slate-700 text-sm font-semibold'>{receiver?.name}</h5>
-                    <h5 className='text-xs font-light text-slate-600'></h5>
+                    <h5 className='text-xs font-light text-slate-600'>{calculateTime(conv?.lastMessage)}</h5>
                     
                </div>
             
@@ -379,7 +405,7 @@ const Contact=({conv,setCurrentChat,index,currentUser})=>{
           </div>
 
           <div className='w-full'>
-            {/* <p className=' text-xs font-light text-slate-800'>No message</p> */}
+            <p className=' text-xs font-light text-slate-800'>{conv?.lastText?.slice(0,100)}...</p>
           </div>
 
    </div>
@@ -430,7 +456,7 @@ const ChatBox=({currentChat,currentUser})=>{
 
 
       return(
-          <div className='flex flex-col py-4 overflow-y-scroll space-y-6 '  ref={chatRef}>
+          <div className='flex flex-col py-4 overflow-y-scroll space-y-6 h-full'  ref={chatRef}>
                {msgs?.map((msg,index)=>{
                      return(
 
@@ -469,6 +495,17 @@ const Msg=({msg,currentChat,currentUser,index})=>{
       
          
       return(
+        <div className='flex flex-col space-y-2'>
+           {msg?.img?.length >0 &&
+               
+               <div className={`flex px-4 ${msg?.sender !=currentUser?.id?`justify-start` :`justify-end`} w-full`}>
+                    <img src={msg?.img}
+                     className="w-16 h-16 rounded-sm"
+                    />
+               </div>
+                }
+             
+ 
           <div className='flex px-4 space-x-2'>
                {msg?.sender !=currentUser?.id&&
                      <> 
@@ -489,12 +526,17 @@ const Msg=({msg,currentChat,currentUser,index})=>{
             
 
 
-                <div className={`flex ${msg?.sender !=currentUser?.id?'bg-blue-100 px-6 py-1.5 rounded-lg text-slate-600 font-light':"bg-slate-100 px-6 py-1.5 rounded-lg text-slate-600 font-light"}`}>
-                    {msg?.text}
-
+                <div className={`flex flex-col w-11/12 ${msg?.sender !=currentUser?.id?'bg-blue-100 px-6 py-1.5 rounded-lg text-slate-600 font-light':"bg-slate-100 px-6 py-1.5 rounded-lg text-slate-600 font-light"}`}>
+                   <p>{msg?.text}</p>
                 </div>
+               
+               
               
 
+          </div>
+          <h5  className={`flex text-xs text-slate-600 px-4 ${msg?.sender !=currentUser?.id?`justify-start` :`justify-end`} w-full`}>
+               {calculateTime(msg?.time)}
+               </h5>
           </div>
       )
 }
