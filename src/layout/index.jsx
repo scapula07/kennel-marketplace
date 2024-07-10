@@ -24,16 +24,30 @@ export default function Layout({children}) {
            }
             
 
-        <div className='w-full py-6 fixed z-40 bg-white'>
+        <div className='w-full py-6 fixed z-40 bg-white hidden md:block'>
             <Header />
 
         </div>
 
 
-        <div className='w-full py-24 h-full' style={{background:"#fbfbfb"}}>
-            {children}
-        </div>
-        <Footer />
+            <div className='w-full py-24 h-full hidden md:block' style={{background:"#fbfbfb"}}>
+                {children}
+            </div>
+            <div className='w-full hidden md:block'>
+            <Footer />
+
+            </div>
+
+            <div className='w-full sm:block md:hidden h-screen'>
+                 <div className='h-full flex flex-col justify-center items-center w-full'>
+                    <h5 className='text-lg font-semibold'>Kennel Breeder is coming to mobile soon!</h5>
+                    <h5 className='text-lg font-semibold text-slate-700'>Please open on desktop mode</h5>
+                 </div>
+
+                  
+
+            </div>
+      
     </div>
   )
 }

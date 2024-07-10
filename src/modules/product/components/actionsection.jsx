@@ -55,7 +55,7 @@ export default function Actionsection({product}) {
           const addTocart=async()=>{
              setLoading(true)
              try{
-                 const res=await productApi.addToCart(product,currentUser)
+                 const res=await productApi.addToCart(product,currentUser,"product")
                  logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                  res&&setLoading(false)
                }catch(e){
@@ -67,7 +67,7 @@ export default function Actionsection({product}) {
           const save=async()=>{
            setSave(true)
            try{
-               const res=await productApi.save(product,currentUser)
+               const res=await productApi.save(product,currentUser,"product")
                logEvent(analytics, 'add_to_wishlist', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                res&&setSave(false)
              }catch(e){

@@ -101,7 +101,7 @@ export default function Header() {
                      <div className='border py-1 px-3 rounded-lg flex w-1/2 justify-between items-center'>
                         <input
                            placeholder='Search products,sellers and category'
-                           className='outline-none border-0 w-full'
+                           className='outline-none border-0 w-full text-xs text-black'
                            onChange={(e)=>setSearch(e.target.value)}
                           />
                          {search?.length >0?
@@ -136,7 +136,7 @@ export default function Header() {
 
 
                  <div className='flex items-center w-1/2 justify-end' >
-                     <div className='flex items-center justify-between w-3/4'>
+                     <div className='flex items-center justify-between w-3/4 text-sm'>
                             {[{text:"Home",link:"/"},{text:"Marketplace",link:"/market"},{text:"Sellers",link:"/sellers"}].map((item)=>{
                                 return(
                                    <Link to={item?.link}>
@@ -154,7 +154,7 @@ export default function Header() {
                            
                             {currentUser?.role==="admin"?
                                <Link to="/admin">
-                                    <h5 className=' font-light hover:font-semibold hover:text-orange-800'>Admin Dashboard</h5>
+                                    <h5 className=' font-light hover:font-semibold hover:text-orange-800 text-sm'>Admin Dashboard</h5>
                                </Link>
                                 
 

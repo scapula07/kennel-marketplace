@@ -112,7 +112,7 @@ const Product=({item})=>{
   useEffect(()=>{
    
    if(item?.id?.length != undefined){
-     const unsub = onSnapshot(doc(db,"products",item?.id), (doc) => {
+     const unsub = onSnapshot(doc(db,item?.type==="product"?"products":"services",item?.id), (doc) => {
        console.log(doc.data(),"daa")
    
        setProduct({...doc.data(),id:doc?.id})

@@ -2,7 +2,7 @@ import React from 'react'
 import logo from "../assets/logo white.png"
 export default function Footer() {
   return (
-    <div className='w-full flex  px-20 py-8' style={{background: "#282828"}}>
+    <div className='w-full flex  px-20 py-8 text-sm'  style={{background: "#282828"}}>
           <div className='w-1/2 flex flex-col space-y-10'>
                <div className='flex '>
                     <img
@@ -43,7 +43,7 @@ export default function Footer() {
 
           </div>
           <div className='w-1/2 text-white'>
-               <div className='w-full flex justify-between'>
+               <div className='w-full flex justify-between text-sm'>
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Main menu</h5>
                         <h5 className='font-extralight'>Home</h5>

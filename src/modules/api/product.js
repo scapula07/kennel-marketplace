@@ -57,7 +57,7 @@ export const productApi= {
             throw new Error(e);
          }
      },
-    addToCart:async function (product,user) {
+    addToCart:async function (product,user,type) {
           try{
                 const ref =doc(db,"misc",user?.id)
                 const docSnap = await getDoc(ref);
@@ -66,7 +66,7 @@ export const productApi= {
                       return true
                     }else{
                         await updateDoc(doc(db,"misc",user?.id), {
-                      cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1,price:product?.price,vendor:product?.creator,img:product?.images[0]}]
+                      cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1,price:product?.price,vendor:product?.creator,img:product?.images[0],type:type}]
                     })
 
                return true

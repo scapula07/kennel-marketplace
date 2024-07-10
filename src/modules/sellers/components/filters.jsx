@@ -115,7 +115,7 @@ const Card=({filter,filters,setFilter})=>{
      
       return(
         <div className='border-t border-b flex flex-col py-4 space-y-3'>
-             <h5 className='font-semibold'>{filter?.label}</h5>
+             <h5 className='font-semibold text-sm'>{filter?.label}</h5>
              {filter?.label=="Breeds"&&
                 <div className='border py-2 px-3 rounded-lg flex w-full justify-between'>
                         <input
@@ -177,7 +177,7 @@ const Item=({item,filters,setFilter,index})=>{
           className="text-orange-400"
       />
        }
-    <h5 className='font-light text-sm text-slate-600'>{item}</h5>
+    <h5 className='font-light text-xs text-slate-600'>{item}</h5>
 
 
 </div>

@@ -119,7 +119,7 @@ const Card=({product})=>{
          const addTocart=async()=>{
             setLoader(true)
             try{
-                const res=await productApi.addToCart(product,currentUser)
+                const res=await productApi.addToCart(product,currentUser,"product")
                 logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                 res&&setLoader(false)
               }catch(e){
@@ -144,7 +144,7 @@ const Card=({product})=>{
     return(
       <div className='flex flex-col w-full space-y-4'>
             
-          <div className='relative h-72 w-full'>
+          <div className='relative h-60 w-full'>
          
                 <img 
                     src={product?.images?.length !=undefined?product?.images[0] :""}
@@ -188,7 +188,7 @@ const Card=({product})=>{
                          {[1,2,3,4,5].map(()=>{
                            return(
                               <MdOutlineStar 
-                                className='text-slate-300 '
+                                className='text-slate-300 text-sm '
                               />
                            )
                          })
@@ -213,14 +213,14 @@ const Card=({product})=>{
                   }}
                   
                   >          
-                 <h5 className='text-slate-500 text-xl font-semibold' onClick={()=>{
+                 <h5 className='text-slate-700 text-lg font-semibold' onClick={()=>{
                          logEvent(analytics, 'select_item',{items:[product]})
                          console.log("produvct")
                   }}>{product?.name}</h5>
             </Link>
                
-             <h5 className='text-slate-400 text-sm h-9'>{product?.description?.slice(0,70)}{product?.description?.length>70&&"..."}</h5>
-             <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>
+             <h5 className='text-slate-800 text-xs h-9'>{product?.description?.slice(0,70)}{product?.description?.length>70&&"..."}</h5>
+             <h5 className=' text-xl font-semibold'>{product?.price} {product?.currency}</h5>
              {product?.status?.value==="preorder"&&
                 <div className='flex w-full items-center py- justify-between'>
                    <h5 className='flex items-center space-x-1'>
@@ -240,9 +240,10 @@ const Card=({product})=>{
          {isLoading?
               <ClipLoader 
                  color={"#C74A1F"}
+                 size="12"
               />
               :
-             <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}
+             <button className='text-white py-2.5 space-x-4 px-4 rounded-lg flex justify-center items-center w-full text-sm' style={{background:"#C74A1F"}}
                   onClick={()=>{
                      product?.status?.value==="instock" || product?.status?.value==="outstock"?
                       addTocart()

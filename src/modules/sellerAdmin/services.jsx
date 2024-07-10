@@ -155,7 +155,6 @@ const Table=({products,result})=>{
                             ,
                               "Catagories",
                             "Price",
-                            "status",
                             "Action"
 
                             ].map((text)=>{
@@ -236,9 +235,14 @@ const Row=({product})=>{
 
         }
           
-            <Link to="" state={{product}}>
-                <span className='font-semibold text-slate-400 hover:underline '>
-                      {product?.name}
+          <Link to="" state={{product}}>
+                <span className='font-semibold text-slate-400 hover:underline flex space-x-4'>
+                    <img src={product?.images[0]}
+                        className="h-8 w-8 rounded-lg"
+                      />
+                      <span>  {product?.name}</span>
+                    
+                    
                   </span>
             </Link>
      
@@ -261,11 +265,11 @@ const Row=({product})=>{
       <td className='text-sm font-light text-slate-500 py-2'>${product?.price}</td>
      
   
-      <td className='text-xs font-semibold  px-2  rounded-lg py-2 '>
+      {/* <td className='text-xs font-semibold  px-2  rounded-lg py-2 '>
              <span className='font-semibold text-slate-500 text-green-600 bg-green-300 px-4 py-1 rounded-sm'>
                   {product?.status?.value}
               </span>
-      </td>
+      </td> */}
 
       <td className='text-xs font-semibold  px-2  rounded-lg flex items-center  space-x-3 py-2'>
             <FaRegUser

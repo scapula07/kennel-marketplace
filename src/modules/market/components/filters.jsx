@@ -13,7 +13,7 @@ export default function Filters({filters,setFilter,apply,isLoading,prices,setPri
   return (
     <div className='flex flex-col w-full h-full'>
          <div className='flex items-center w-full justify-between'>
-             <h5 className='text-lg '>Filters</h5>
+             <h5 className='text- '>Filters</h5>
              <h5 className='text-sm text-red-500 font-light flex items-center space-x-4'>
               {!isLoading? 
                    <span className='font-semibold text-orange-500 text-xs  hover:bg-orange-100 hover:py-1.5 hover:rounded-lg hover:px-3' onClick={apply}> Apply</span>
@@ -124,7 +124,7 @@ const Card=({filter,filters,setFilter})=>{
      
       return(
         <div className='border-t border-b flex flex-col py-4 space-y-3'>
-             <h5 className='font-semibold'>{filter?.label}</h5>
+             <h5 className='font-semibold text-sm'>{filter?.label}</h5>
              {filter?.label=="Breeds"&&
                 <div className='border py-2 px-3 rounded-lg flex w-full justify-between'>
                         <input
@@ -174,7 +174,7 @@ const Item=({item,filters,setFilter,index})=>{
   }
   console.log(filters,"filters")
    return(
-    <div className='flex items-center space-x-2'>
+    <div className='flex items-center space-x-2 '>
     {!onRadio?
      <IoRadioButtonOffSharp 
         onClick={()=>setRadio(true) || setFilter(prev=>[...prev,{label:item,value:item}])}
@@ -186,7 +186,7 @@ const Item=({item,filters,setFilter,index})=>{
           className="text-orange-400"
       />
        }
-    <h5 className='font-light text-sm text-slate-600'>{item}</h5>
+    <h5 className='font-light text-xs text-slate-600'>{item}</h5>
 
 
 </div>

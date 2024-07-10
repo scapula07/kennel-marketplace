@@ -23,7 +23,7 @@ export default function Product() {
 
       console.log(product,"prodyct ")
       useEffect(()=>{
-        logEvent(analytics, 'view_item',  {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
+        logEvent(analytics, 'view_item',  {items:[{...product,affiliation:product?.creator,category:product?.categories[0]}]});
       },[product])
   return (
     <Layout>

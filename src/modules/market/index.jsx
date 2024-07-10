@@ -44,7 +44,7 @@ export default function Market() {
   return (
     <Layout>
         <div className='w-full px-28 py-10 '>
-             <h5 className='text-3xl font-semibold '>Marketplace</h5>
+             <h5 className='text-2xl font-semibold '>Marketplace</h5>
 
              <div className='flex w-full py-6 space-x-10'>
                    <div className='w-1/5 overflow-y-scroll '>

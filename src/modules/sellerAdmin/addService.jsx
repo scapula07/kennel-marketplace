@@ -14,7 +14,7 @@ export default function AddService() {
       const navigate=useNavigate()
       const [num,setNum]=useState(1)
       const currentUser=useRecoilValue(accountTypeState)
-      const [product,setProduct]=useState({name:"",description:"",qty:1,currency:"USD",category:[],features:[],sku:"",price:0})
+      const [product,setProduct]=useState({name:"",description:"",qty:1,currency:"USD",category:[],features:[],sku:"",price:0,calendly:""})
       const [url,setUrl]=useState([])
       const [files,setFiles]=useState([])
       const [isLoading,setLoading]=useState(false)
@@ -65,10 +65,16 @@ export default function AddService() {
             setNum(1)
             return;
           }
+          if (product?.calendly.length == 0) {
+            setErrorMsg( "Your booking link is missing" );
+            setLoading(false);
+            setNum(3)
+            return;
+          }
          try{
              const res=await serviceApi.create(product,currentUser,files)
               res&&setLoading(false)
-            //   navigate("/admin-seller/product", { state:res?.id});
+              navigate("/admin-seller/services");
           }catch(e){
             console.log(e)
             setLoading(false)
@@ -162,7 +168,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                     <label className='text-sm font-semibold'>Name</label>
                                     <input 
                                        placeholder='e.g Full check up'
-                                       className='rounded-lg px-4 py-3 border text-sm'
+                                       className='rounded-sm  px-4 py-3 border text-sm'
                                        value={product?.name}
                                        onChange={(e)=>setProduct({...product,name:e.target.value})}
                                     />
@@ -173,7 +179,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                     <label className='text-sm font-semibold'>Description</label>
                                     <textarea 
                                        placeholder='Service description'
-                                       className='rounded-lg px-4 py-3 border text-sm h-28'
+                                       className='rounded-sm px-4 py-3 border text-sm h-28'
                                        value={product?.description}
                                        onChange={(e)=>setProduct({...product,description:e.target.value})}
                                     />
@@ -324,9 +330,9 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
 
               <div className='flex w-full space-x-4'>
                       <div className='flex flex-col w-full space-y-3'>
-                                <h5>Product images</h5>
+                             
                                 {url?.length ==0?
-                                   <div className='flex w-full justify-center items-center h-36 rounded-xl border'>
+                                   <div className='flex w-full justify-center items-center h-36 rounded-sm border'>
                                          <h5 className='text-sm font-light text-slate-500 hover:underline'   onClick={handleClick}>Click to upload images</h5>
     
                                          <input
@@ -338,7 +344,7 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
     
                                     </div>
                                     :
-                                    <div className='flex flex-col w-full space-y-2  h-36 rounded-xl border py-4 px-6'>
+                                    <div className='flex flex-col w-full space-y-2  h-36 rounded-sm border py-4 px-6'>
                                        <h5 className='text-sm font-light text-slate-500 hover:underline text-center'   onClick={handleClick}>Click to upload images</h5>
                                          <div className='flex items-center space-x-4'>
                                               {url?.map((item,index)=>{
@@ -416,7 +422,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                     <input 
                                        placeholder='1'
                                        type={"number"}
-                                       className='rounded-lg px-4 py-2 border text-sm'
+                                       className='rounded-sm px-4 py-2 border text-sm'
                                        value={product?.price}
                                        onChange={(e)=>setProduct({...product,price:Number(e.target.value)})}
                                     />
@@ -427,7 +433,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                     <label className='text-sm font-semibold'>Currency</label>
                                     <select 
                                    
-                                       className='rounded-lg px-4 py-2 border text-sm outline-none'
+                                       className='rounded-sm px-4 py-2 border text-sm outline-none'
                                        onChange={(e)=>setProduct({...product,currency:e.target.value})}
                                     >
                                         {["USD"].map((tag)=>{
@@ -457,7 +463,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
 
              </div>
 
-             <div className='flex flex-col w-full space-y-3'>
+             {/* <div className='flex flex-col w-full space-y-3'>
                    <h5 className='text-sm font-semibold'>Tags</h5>
                     <Select
                         defaultValue={options[0]}
@@ -468,7 +474,21 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                         value={product?.status}
                         onChange={(opt)=>setProduct({...product,status:opt})}
                     />
-             </div>
+             </div> */}
+
+                <div className='flex flex-col w-full space-y-3'>
+                     
+                     <input 
+                    
+                         className="border py-3 w-1/3 outline-none px-4 text-xs font-semibold"
+                         placeholder='Your calendly booking link'
+                         onChange={(e)=>setProduct({...product,calendly:e.target.value})}
+                       />
+                        <h5 className='text-xs font-semibold text-slate-600'>We prefer you create a Calendly scheduler for your available days</h5>
+                   </div>
+
+
+
 
          
 
@@ -476,7 +496,8 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                    <button className='bg-orange-600 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                      {isLoading?
                       <ClipLoader
-                        color={"black"}
+                        color={"yellow"}
+                        size="12"
                       />
                       :
 
