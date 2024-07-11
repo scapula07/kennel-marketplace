@@ -144,6 +144,24 @@ export default function Delivery({delivery,setDelivery}) {
               </div>
 
 
+              <div className='flex flex-col space-y-2'>
+                    <h5 className='text-slate-500 font-light '>Postal /Zip code</h5>
+                    <input 
+                      placeholder='Enter your street address'
+                      className='w-full border py-2 px-3 rounded-sm text-sm'
+                      onChange={(e) => {
+                      
+                        setDelivery({...delivery,postalCode:e.target.value})
+                      }}
+                    />
+
+                                  
+                                        
+                                            
+
+              </div>
+
+
            <div className='bg-white px-6 py-4 w-full flex-col rounded-lg'>
                  <div className='flex flex-col space-y-1.5'>
                        <h5 className='text-slate-600'>Choose option</h5>

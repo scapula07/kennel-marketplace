@@ -25,7 +25,7 @@ export default function Overview() {
       const year= date.getFullYear()
       const formattedDate = `${day},${monthNames[month]},${year}`;
 
-      console.log(formattedDate);
+
 
 
       useEffect(()=>{
@@ -56,9 +56,9 @@ export default function Overview() {
                   const dimensions = {
                     itemBrand: entry.dimensionValues[0].value,
                     itemCategory: entry.dimensionValues[1].value,
-                    itemCategory2: entry.dimensionValues[2].value,
-                    itemId: entry.dimensionValues[3].value,
-                    itemName: entry.dimensionValues[4].value
+                    
+                    itemId: entry.dimensionValues[2].value,
+                    itemName: entry.dimensionValues[3].value
                   };
                 
                   const metrics = {
@@ -69,9 +69,9 @@ export default function Overview() {
                     itemsViewed: entry.metricValues[4].value
                   };
                 
-                  return { dimensions, metrics };
+                  return { ...dimensions, ...metrics };
                 });
-                console.log(data2,"2")
+           
                 setProductStat(data2)
 
                
@@ -85,10 +85,11 @@ export default function Overview() {
       },[currentUser])
 
 
-      console.log(stats,"Start")
+   
 
   return (
-    <div className='w-full'>
+    <div className='w-full text-black'>
+                
                 <div className='flex flex-col space-y-3'>
                 <h5 className='text-white font-light text-sm'>Admin/Overview</h5>
                 
@@ -154,10 +155,10 @@ export default function Overview() {
 
                 <div className='flex flex-col w-full '>
                     <div className='w-full border px-4 py-4 bg-white'>
-                        <h5 className='font-semibold'>Top 5 products</h5>
+                        <h5 className='font-semibold'>Top products</h5>
 
-                        <div className='flex w-full justify-between py-4 space-x-2 '>
-                          {productStat?.slice(0,5)?.map((stat)=>{
+                        <div className='grid grid-cols-4  w-full justify-between py-4 gap-4 '>
+                          {productStat?.sort((a, b) => parseInt(b.itemsAddedToCart) - parseInt(a.itemsAddedToCart))?.map((stat)=>{
                              return(
                                <Product 
                                  stat={stat}
@@ -189,13 +190,13 @@ const Product=({stat})=>{
     // console.log(stat,"staa")
     useEffect(()=>{
       
-    if(stat?.dimensions?.itemId?.length != undefined ){
-      const unsub = onSnapshot(doc(db,"products",stat?.dimensions?.itemId), (doc) => {
+    if(stat?.itemId?.length != undefined ){
+      const unsub = onSnapshot(doc(db,"products",stat?.itemId), (doc) => {
         setProduct({...doc.data(),id:doc?.id})
        });
       }
     },[])
-    // console.log(product,"pp")
+ 
    return(
     <div className='flex flex-col py-4 px-2 border w-full'>
     <div className='flex justify-between w-full'>
@@ -204,7 +205,7 @@ const Product=({stat})=>{
           className="w-8 h-8 rounded-lg"
         />
         <h5 className='flex items-center space-x-0.5'>
-           <span className='text-xs text-slate-600 font-light'>{stat?.metrics?.itemsViewed}</span>
+           <span className='text-xs text-slate-600 font-light'>{stat?.itemsViewed}</span>
 
            <AiOutlineEye 
              className='text-orange-600 font-bold'
@@ -215,7 +216,7 @@ const Product=({stat})=>{
     <div className='space-y-3'>
       <h5>{product?.name}</h5>
       <p className='text-slate-700 text-xs'>{product?.description?.slice(0,100)}</p>
-      <h5 className='text-xs font-semibold'>Total items in cart:{stat?.metrics?.itemsAddedToCart}</h5>
+      <h5 className='text-xs font-semibold'>Total items in cart:{stat?.itemsAddedToCart}</h5>
    </div>
 </div>
    )

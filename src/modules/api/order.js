@@ -256,7 +256,22 @@ export const orderApi= {
     }catch(e){
         console.log(e)
     }
+  },
+  updateDeliveryRate:async function (order,rate) {
+    try{
+         const ref =doc(db,"order",order?.id)
+         const docSnap = await getDoc(ref);
+         const res=  await updateDoc(doc(db,"orders",order?.id), {
+                rate:rate,
+         })
+
+        return true
+
+    }catch(e){
+        console.log(e)
+    }
   }
+
 
 }
 

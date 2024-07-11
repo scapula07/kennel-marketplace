@@ -56,7 +56,7 @@ export const stripeApi= {
           }
 
     },
-    completeOnboarding:async function (user) {
+       completeOnboarding:async function (user) {
                 try{
                     
               const url=`${baseUrl}/api/v1/stripe/get-onboarding-link`
@@ -109,7 +109,8 @@ export const stripeApi= {
                         qty:order?.products[0]?.qty,
                         orderId:order?.id,
                         customerId:order?.creator,
-                        sellerId:vendor?.id
+                        sellerId:vendor?.id,
+                        rate:order?.rate
                       },
                       config
                 )

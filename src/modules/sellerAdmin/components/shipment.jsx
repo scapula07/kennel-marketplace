@@ -6,7 +6,7 @@ import { ClipLoader } from 'react-spinners'
 import { orderApi } from '../../api/order'
 
 
-export default function Shipment({order,customer,currentUser}) {
+export default function Shipment({order,customer,currentUser,setTrigger}) {
       const [cities, setSelectedCity] = useState([]);
       const [carriers,setCarriers]=useState([])
       const [carrier,setCarrier]=useState()
@@ -15,7 +15,10 @@ export default function Shipment({order,customer,currentUser}) {
       const [city,selectCity]=useState()
       const [shipping,setShipping]=useState({weight:0,templateToken:""})
       const [isLoading,setLoading]=useState(false)
-
+      
+      const [rates,setRates]=useState([])
+ 
+      const [rateProvider,setProvider]=useState({})
 
       useEffect(()=>{
         const getParcelTemplates=async()=>{
@@ -42,7 +45,7 @@ export default function Shipment({order,customer,currentUser}) {
         await axios
           .post("https://countriesnow.space/api/v0.1/countries/states",{"country":"United States"})
           .then(async(response) => {
-             console.log(response?.data?.data,"data")
+         
              setSelectedState(response?.data?.data?.states)
 
 
@@ -63,7 +66,7 @@ export default function Shipment({order,customer,currentUser}) {
 
           });
       }
-      console.log(carriers,"carii")
+      console.log(order,"carii")
 
       const createShipment=async()=>{
           setLoading(true)
@@ -77,9 +80,9 @@ export default function Shipment({order,customer,currentUser}) {
                     "street1":order?.delivery?.address,
                     "city": order?.delivery?.city,
                     "state":order?.delivery?.state,
-                    "zip": "94103",
+                    "zip": order?.delivery?.postalCode,
                     "country": "US",
-                    "phone": "4151234567",
+                    "phone": "4151234507",
                     "email": customer?.email
                     },
                   {
@@ -98,6 +101,7 @@ export default function Shipment({order,customer,currentUser}) {
               console.log(shipment,"shhio")
               shipment?.object_id?.length>0 && await orderApi.updateOrderShipment(order,shipment?.object_id)
               shipment?.object_id?.length>0 && setLoading(false)
+              setTrigger(false)
           }catch(e){
             setLoading(false)
             console.log(e)
@@ -105,8 +109,21 @@ export default function Shipment({order,customer,currentUser}) {
       }
 
       console.log(shipping,currentUser,"carii")
+
+      const saveRate=async()=>{
+             setLoading(true)
+          try{
+             rates?.length>0 && await orderApi.updateDeliveryRate(order,rateProvider)
+             rates?.length>0 && setLoading(false)
+             setTrigger(false)
+
+            }catch(e){
+               console.log(e)
+               setLoading(false)
+            }
+      }
   return (
-    <div className='w-full'>
+    <div className='w-full h-full overflow-y-scroll'>
           <div className='w-full border-b py-3 '>
                <h5 className='font-semibold text-lg'>New Shipment</h5>
                <p className='text-xs font-semibold'>Creating a shipment will help calculate shipping rate for this order</p>
@@ -237,20 +254,130 @@ export default function Shipment({order,customer,currentUser}) {
 
           </div>
 
-          <div className='w-full flex justify-end'>
-              {isLoading?
-                 <ClipLoader
-                   size={12}
-                  />
-                 :
-                 <button className='bg-orange-500 text-sm py-2 px-6' onClick={createShipment}>Create</button>
+          {order?.shipmentId?.length >0&&
+               <Rates 
+                    id={order?.shipmentId} 
+                    rates={rates}
+                    setRates={setRates}
+                    rateProvider={rateProvider}
+                    setProvider={setProvider}
+                />
+          }
+          {rates?.length >0?
+                    <div className='w-full flex justify-end'>
+                    {isLoading?
+                      <ClipLoader
+                        size={12}
+                        />
+                        :
+                      <button className='bg-orange-500 text-sm py-2 px-6' onClick={()=>saveRate()}>Save rate</button>
+    
+                     }
+            
+    
+                  </div>
+                     :
+                  <div className='w-full flex justify-end'>
+                   {isLoading?
+                    <ClipLoader
+                      size={12}
+                      />
+                    :
+                    <button className='bg-orange-500 text-sm py-2 px-6' onClick={createShipment}>Create</button>
+  
+                   }
+          
+  
+                </div>
 
-              }
-       
+          }
+          
 
-          </div>
+
+           
+
+      
 
 
     </div>
     )
+}
+
+
+
+const Rates=({id,rates,setRates,rateProvider,setProvider})=>{
+
+   const [rate,setRate]=useState({})
+
+
+   console.log(id,"idddd")
+
+  useEffect(()=>{
+    const getShippingRate=async()=>{
+        try{
+            const result =await shippingApi.getShippingRates(id)
+            console.log(result,"res")
+            setRates(result?.results)
+            setProvider(result?.results[0])
+            setRate({
+              label:`${result?.results[0]?.provider} - ${result?.results[0]?.amount} Dollars($)`,
+              value:result?.results[0]
+            })
+         }catch(e){
+            console.log(e)
+         }
+
+    }
+ getShippingRate()
+    
+  },[id])
+
+  console.log(rateProvider,"pp")
+
+  return(
+     <div className='w-full py-8 flex flex-col' >
+          <div className='w-full flex flex-col space-y-2' >
+                     <h5 className='text-xs font-semibold'>Select a rate from a carrier provider</h5>
+                       <Select                  
+                            placeholder="Select a carrier provider"
+                            className='text-sm  text-black'
+                            options={rates?.length >0 &&
+                            rates?.map((item, index) => ({
+                                label:`${item?.provider} - ${item?.amount} Dollars($)`,
+                                value:item
+                                
+                            }))}
+                            value={rate}
+                            noOptionsMessage={(opt) => {
+                            if (opt.inputValue === "") {
+                                return "Select a rate";
+                            } else {
+                                return "no search results for " + opt.inputValue;
+                            }
+                            }}
+                            components={{
+                            IndicatorSeparator: () => null,
+                            }}
+                            onChange={(opt) => {
+                              setRate(opt);
+                                // setShipping({...shipping,token:opt?.value})
+                                setProvider(opt?.value)
+                            }}
+                            />
+              
+          </div>
+
+            <div className='flex py-2 items-center space-x-2'>
+                <img 
+                  src={rateProvider?.provider_image_200}
+                  className="w-10 h-10"
+                />
+                <h5 className='text-sm font-semibold'>{rateProvider?.duration_terms}</h5>
+
+            </div>
+
+         
+
+     </div>
+  )
 }

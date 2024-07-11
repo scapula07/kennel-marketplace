@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 
 
 export default function SidePanel() {
+  const [active,setActive]=useState("")
   return (
     <div className='w-full bg-slate-100 h-full rounded-xl py-6 px-4 overflow-y-scroll'>
           <div className='flex flex-col space-y-16'>
@@ -94,6 +95,8 @@ export default function SidePanel() {
                                 <Card 
                                    item={item}
                                    index={index}
+                                   active={active}
+                                   setActive={setActive}
                                 />
                               )
                           })
@@ -111,13 +114,19 @@ export default function SidePanel() {
 
 
 
-const Card=({item,index})=>{
+const Card=({item,index,active,setActive})=>{
        const [drop,setDrop]=useState(true)
        const colors=["text-blue-300","text-slate-300","text-orange-300","text-green-300 ","text-red-300"]
       return(
         <div className='flex flex-col w-full'>
                <div className='flex items-center w-full justify-between'>
-               <Link to={item?.link}>
+               <Link to={item?.link}
+                    className={
+                    `${active ==item?.link&&item?.link !=undefined ?"w-full px-4 bg-orange-400 rounded-sm shadow py-2":
+                       "w-full px-4 hover:bg-orange-400 rounded-sm hover:shadow hover:py-2"}`
+                      }
+                      onClick={()=>setActive(item?.link)}
+               >
                      <div className='flex items-center space-x-3'>
                           <h5 className={` text-lg ${colors[index]}`}>{item?.icon}</h5>
                           <h5 className='text-slate-800 text-sm font-light'>{item?.title}</h5>
@@ -154,8 +163,14 @@ const Card=({item,index})=>{
                     <div className='flex-col flex px-8 space-y-2 py-4'>
                          {item?.items?.map((tag)=>{
                               return(
-                                <Link to={tag?.link}>
-                                     <h5 className='text-xs text-slate-500 font-light'>{tag?.name}</h5>
+                                <Link to={tag?.link}
+                                   className={
+                                    `${active ==tag?.link ?"w-full px-3 bg-orange-400 rounded-sm shadow py-2":
+                                     "w-full px-3 hover:bg-orange-400 rounded-sm hover:shadow hover:py-2"}`
+                                    }
+                                    onClick={()=>setActive(tag?.link)}
+                                >
+                                     <h5 className='text-xs text-slate-700 font-light'>{tag?.name}</h5>
                                 </Link>
 
                               )

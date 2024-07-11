@@ -45,7 +45,7 @@ export default function SellerOrder() {
        }
         const handleChange = async(e)=> {
         const dir = e.target.files[0]
-        console.log(dir,"dir")
+    
         if (dir) {
           setFile(dir)
         }
@@ -59,15 +59,13 @@ export default function SellerOrder() {
       
         if(ordered?.id?.length != undefined){
           const unsub = onSnapshot(doc(db,"orders",ordered?.id), (doc) => {
-            console.log(doc.data(),"daa")
-        
             setOrder({...doc.data(),id:doc?.id})
            });
           }
          },[])
 
 
-         console.log(ordered,"ooo")
+   
 
          const uploadContract=async()=>{
             setLoader(true)
@@ -108,6 +106,7 @@ export default function SellerOrder() {
     
              }
           }
+          // console.log(order,"oo")
   return (
     <>
   
@@ -320,18 +319,24 @@ export default function SellerOrder() {
                                               }
                                             
                                            </button>
-                                            {order?.shipmentId?.length ==0&&
+                                            {order?.shipmentId?.length ==0?
                                                <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm ' onClick={()=>setTrigger(true)}>
-                                               {!cancel?
-                                               "Prepare Shipment"
-                                               :
-                                               <BeatLoader size={10} color="orange" />
+                                        
+                                               Prepare Shipment
+                                               </button>
+                                                   :
+                                               <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm ' onClick={()=>setTrigger(true)}>
+                                        
+                                                Update Shipment
+                                               </button>
+                                              
+                                              
 
                                                }
                                            
-                                         </button>
+                                      
 
-                                            }
+                                            
                                              
                                             
                                     
@@ -347,7 +352,7 @@ export default function SellerOrder() {
 
 
     </div>
-    <Modal trigger={trigger}  cname="w-3/5  flex justify-center   px-8 rounded-lg py-7">
+    <Modal trigger={trigger}  cname="w-3/5  flex justify-center   px-8 rounded-lg py-7 overflow-y-scroll">
             <div className='bg-white w-4/5  rounded-lg px-4 py-4'>
                     <div className='w-full justify-end flex '>
                            
@@ -360,6 +365,7 @@ export default function SellerOrder() {
                        order={order}
                        customer={customer}
                        currentUser={currentUser}
+                       setTrigger={setTrigger}
                      />
             </div>
 
