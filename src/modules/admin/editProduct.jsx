@@ -70,19 +70,19 @@ export default function EditProduct() {
   return (
     <div className='w-full space-y-4 '>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-white font-light text-sm'>Edit product</h5>
+                    <h5 className='text-white font-light text-sm'>Product</h5>
                 </div>
                 <div className='w-full text-white py-6 px-4 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
-                              <h5 className='text-2xl font-semibold text-white'>Make the changes below</h5>
-                              {isLoading?
+                              <h5 className='text-2xl font-semibold text-white'></h5>
+                              {/* {isLoading?
                                 <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' >
                                    <BeatLoader size={"8"}/>
                                 </button>
                                 :
                                 <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' onClick={edit}>Save</button>
 
-                              }
+                              } */}
                   
                         </div>
 
@@ -110,8 +110,8 @@ export default function EditProduct() {
                                     </div>
 
                                     <div className='flex items-center space-x-3'>
-                                          <button className='bg-orange-500 text-white rounded-lg px-6 py-2 text-sm'  onClick={handleClick}>Edit</button>
-                                   
+                                          {/* <button className='bg-orange-500 text-white rounded-lg px-6 py-2 text-sm'  onClick={handleClick}>Edit</button>
+                                    */}
                                           <input
                                               type="file"
                                               className='hidden'
@@ -140,7 +140,7 @@ export default function EditProduct() {
                                                                 <label className='text-sm font-semibold text-black'>Weight</label>
                                                                      <input 
                                                                         placeholder='e.g 42'
-                                                                        className='rounded-lg px-4 py-3 border text-sm text-black'
+                                                                        className='rounded-sm px-4 py-3 border text-sm text-black'
                                                                         value={product?.weight}
                                                                         onChange={(e)=>setProduct({...product,weight:e.target.value})}
                                                                         />
@@ -167,8 +167,9 @@ export default function EditProduct() {
                                                                     <label className='text-sm font-semibold text-black'>{item?.title}</label>
                                                                     <select 
                                                                       placeholder='e.g Dogs feed'
-                                                                      className='rounded-lg px-4 py-3 border text-sm outline-none text-black'
+                                                                      className='rounded-sm px-4 py-3 border text-sm outline-none text-black'
                                                                       onChange={(e)=>item?.click(e)}
+                                                                      readOnly
                                                                     >
                                                                         {item?.items?.map((tag)=>{
                                                                             return(
@@ -230,9 +231,10 @@ const Info=({setProduct,product})=>{
                                 <input 
                                    placeholder='e.g Dogs feed'
                                    type={"text"}
-                                   className='rounded-lg px-4 py-3 border text-sm text-black'
+                                   className='rounded-sm px-4 py-3 border text-sm text-black font-semibold'
                                    value={product?.name}
                                    onChange={(e)=>setProduct({...product,name:e.target.value})}
+                                   readOnly
                                 />
 
                             </div>
@@ -241,9 +243,10 @@ const Info=({setProduct,product})=>{
                                 <label className='text-sm font-semibold'>Description</label>
                                 <textarea 
                                    placeholder='Product description'
-                                   className='rounded-lg px-4 py-3 border text-sm h-28'
+                                   className='rounded-sm px-4 py-3 border text-xs h-28 font-semibold'
                                    value={product?.description}
                                    onChange={(e)=>setProduct({...product,description:e.target.value})}
+                                   readOnly
                                 />
 
                             </div>
@@ -290,9 +293,10 @@ const Pricing=({setProduct,product})=>{
                                   <input 
                                      placeholder='1'
                                      type={"number"}
-                                     className='rounded-lg px-4 py-2 border text-sm text-black'
+                                     className='rounded-sm px-4 py-2 border text-sm text-black'
                                      value={product?.price}
                                      onChange={(e)=>setProduct({...product,price:e.target.value})}
+                                     readOnly
                                   />
 
                       </div>
@@ -301,7 +305,7 @@ const Pricing=({setProduct,product})=>{
                                   <label className='text-sm font-semibold'>Currency</label>
                                   <select 
                                  
-                                     className='rounded-lg px-4 py-2 border text-sm outline-none text-black'
+                                     className='rounded-sm px-4 py-2 border text-sm outline-none text-black'
                                      onChange={(e)=>setProduct({...product,currency:e.target.value})}
                                   >
                                       {["USD","GBP"].map((tag)=>{
@@ -321,9 +325,10 @@ const Pricing=({setProduct,product})=>{
                                   <label className='text-sm font-semibold'>SKU</label>
                                   <input 
                                      placeholder='1ABC5689'
-                                     className='rounded-lg px-4 py-2 border text-sm text-black'
+                                     className='rounded-sm px-4 py-2 border text-sm text-black'
                                      value={product?.sku}
                                      onChange={(e)=>setProduct({...product,sku:e.target.value})}
+                                     readOnly
                                   />
 
                       </div>
@@ -380,13 +385,13 @@ return(
         className="h-full w-full rounded-lg"
       />
 
-      <div className='absolute top-0 w-full h-full flex items-center justify-center bg-black opacity-60 rounded-lg'>
+      {/* <div className='absolute top-0 w-full h-full flex items-center justify-center bg-black opacity-60 rounded-lg'>
             <IoMdClose 
                 className="text-4xl text-white"
                 onClick={remove}
             />
 
-      </div>
+      </div> */}
   </div>
 )
 }

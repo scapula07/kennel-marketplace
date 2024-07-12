@@ -87,10 +87,10 @@ export default function Customers() {
                         </div>
 
                         <div className='flex w-full justify-start'>
-                                 <div className='border py-1.5 px-3 rounded-lg flex w-1/4 justify-between bg-white'>
+                                 <div className='border py-2 px-3 rounded-sm flex w-1/4 justify-between bg-white text-black'>
                                  <input
                                        placeholder='Search with name,email '
-                                       className='outline-none border-0 w-full text-sm font-light '
+                                       className='outline-none border-0 w-full text-sm font-light text-xs  '
                                        onChange={(e)=>setQuery(e.target.value)}
                                     
                                       />
@@ -138,8 +138,8 @@ export default function Customers() {
 const Table=({products,result})=>{
       return(
         <div>
-            <table class="table-auto w-full border-separate border-spacing-0.5">
-                    <thead className='py-2'>
+            <table class="table-auto w-full border-separate  border-spacing-1">
+                    <thead className='py-2 '>
                     <tr >
                           {
                             ["User",
@@ -148,7 +148,7 @@ const Table=({products,result})=>{
                             "Action"
                             ].map((text)=>{
                                 return(
-                                <th className='py-1 text-xs text-slate-500 text-start'>{text}</th>
+                                <th className='py-1 border  text-xs text-slate-500 text-start px-2 py-2'>{text}</th>
                             )
                             })
                         }
@@ -209,7 +209,7 @@ const Row=({product})=>{
 }
     return(
       <tr className={`${onSelect?'border-b shadow-lg py-4 ':'border-b'}`}>
-         <td className='flex items-center space-x-8'>
+         <td className='flex items-center space-x-8  border border px-2 py-1.5'>
                 {onSelect?
                     <IoMdCheckbox
                     className="text-2xl text-orange-500"
@@ -222,18 +222,37 @@ const Row=({product})=>{
                     />
 
                   } 
-            <Link to="/seller" state={{seller:product}}>
-                <span className='font-semibold text-slate-400 hover:underline '>
+            <Link to="/seller" state={{seller:product}} className="flex items-center space-x-2">
+                
+              {product?.img?.length ===0?
+                        <h5 className='rounded-full bg-orange-400 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
+                        >
+                          {product?.name?.slice(0,1) }
+                                            
+                            
+                          </h5>
+                          :
+                          <img 
+                            src={product?.img}
+                            className="rounded-full lg:w-8 lg:h-8 w-6 h-6"
+                          
+                          />
+
+
+                    }
+                 <span className='font-semibold text-slate-400 hover:underline '>
                       {product?.name}
                   </span>
+
+                  
             </Link>
      
     </td>  
     
  
-      <td className='text-sm font-light text-slate-500'>{product?.email}</td>
-      <td className='text-sm font-light text-slate-500'>{product?.phone}</td>
-      <td className='text-xs font-semibold  px-2  rounded-lg flex items-center  space-x-3 py-2'>
+      <td className='text-sm font-light text-slate-500  border border px-2'>{product?.email}</td>
+      <td className='text-sm font-light text-slate-500  border border px-2'>{product?.phone}</td>
+      <td className='text-xs font-semibold  px-2    flex items-center  space-x-3 py-2  border px-2'>
         
              
             {ondelete?

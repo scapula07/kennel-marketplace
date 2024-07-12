@@ -48,18 +48,18 @@ console.log(orders,"orooo")
                         <div className='flex items-center justify-between'>
                             
 
-                              <div className='flex items-center justify-end w-full'>
+                              {/* <div className='flex items-center justify-end w-full'>
                                   <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm'>Filters</button>
 
-                              </div>
+                              </div> */}
 
                         </div>
 
                         <div className='flex w-full justify-end'>
-                                 <div className='border py-1.5 px-3 rounded-lg flex w-1/4 justify-between bg-white'>
+                                 <div className='border py-1.5 px-3 rounded-sm py-2 flex w-1/4 justify-between bg-white'>
                                     <input
                                        placeholder='Search'
-                                       className='outline-none border-0 w-3/5 text-sm font-light '
+                                       className='outline-none border-0 w-3/5 text-sm font-light text-xs'
                                     
                                       />
                                     <FiSearch
@@ -79,6 +79,7 @@ console.log(orders,"orooo")
                                     <ClipLoader 
                                           color={"orange"}
                                           loading={true}
+                                          size="12"
                                     />
                                 </div>
                                 }
@@ -105,7 +106,7 @@ console.log(orders,"orooo")
 const Table=({orders})=>{
       return(
         <div>
-            <table class="table-auto w-full border-separate border-spacing-0.5">
+            <table class="table-auto w-full border-separate border-spacing-1">
                     <thead className='py-2'>
                     <tr >
                           {
@@ -119,7 +120,7 @@ const Table=({orders})=>{
 
                             ].map((text)=>{
                                 return(
-                                <th className='py-1 text-xs text-slate-400 text-start'>{text}</th>
+                                <th className='py-1 text-xs text-slate-400 text-start border px-2 py-2'>{text}</th>
                             )
                             })
                         }
@@ -198,32 +199,32 @@ const Row=({order})=>{
     return(
       <tr className='border-b '>
           <Link to="/admin/order" state={{order}}>
-      <td className='flex items-center space-x-4'>
+      <td className='flex items-center space-x-4 border px-2 py-2'>
           <input
              type={"checkbox"}
              className="py-2 px-2"
            />
-           <span className='text-sm font-light text-slate-500'>#{order?.id?.slice(0,4)}</span>
+           <span className='text-sm font-light text-slate-500'>{order?.id}</span>
 
       </td>
       </Link>
-      <td className='text-sm font-light text-slate-500'>{formattedDate}</td>
-      <td className='text-sm font-light text-slate-500'>
+      <td className='text-sm font-light text-slate-500 border px-2 py-2'>{formattedDate}</td>
+      <td className='text-sm font-light text-slate-500 border px-2 py-2'>
        {order?.status=="active"?
           <span className='text-yellow-500'>{"Pending"}</span>
           :
           <span>{order?.status}</span>
        }
       </td>
-      <td className='text-sm font-light text-slate-500 flex items-center space-x-1'>
+      <td className='text-sm font-light text-slate-500 flex items-center space-x-1 border px-2 py-2'>
         <span className='rounded-full bg-orange-400 text-white text-xs font-semibold h-4 w-4 flex items-center justify-center'>{customer?.name?.slice(0,1)}</span>
        <span> {customer?.name}</span>
         </td>
-      <td className='text-sm font-light text-slate-500'>
+      <td className='text-sm font-light text-slate-500 border px-2 py-2'>
           {products?.name}
 
       </td>
-      <td className='text-sm font-light text-slate-500'>${order?.total}</td>
+      <td className='text-sm font-light text-slate-500 border px-2 py-2'>${order?.total}</td>
     
 
  </tr>

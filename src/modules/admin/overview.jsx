@@ -6,11 +6,11 @@ import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { MdOutlineCardGiftcard } from "react-icons/md";
 import { FaUsers } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi2";
-import PieChart from './components/piechart';
 import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
 import { db } from '../firebase';
 import { AiOutlineEye } from "react-icons/ai";
-
+import PieChartComponent from './components/piechart';
+import TopCities from './components/cities';
 const monthNames = [
     "","January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"
@@ -20,6 +20,7 @@ export default function Overview() {
       const currentUser=useRecoilValue(accountTypeState)
       const [stats,setStats]=useState([{metrics:{}}])
       const [productStat,setProductStat]=useState([])
+      const [cities,setCities]=useState([])
       const day = date.getDate();
       const month = date.getMonth() + 1; // Month is zero-based, so adding 1
       const year= date.getFullYear()
@@ -33,7 +34,8 @@ export default function Overview() {
             try{
                 const result =await analyticApi.userAnalytics()
                 const result1 =await analyticApi.productAnalytics()
-                console.log(result1?.data?.data)
+                const result2 =await analyticApi.locationAnalytics()
+                console.log(result?.data?.data,"tttt")
 
                 const data = result?.data?.data?.map((entry) => {
                   const metrics = {
@@ -42,7 +44,8 @@ export default function Overview() {
                     newUsers: entry.metricValues[2].value,
                     totalPurchasers: entry.metricValues[3].value,
                     totalUsers: entry.metricValues[4].value,
-                    userEngagementDuration: entry.metricValues[5].value
+                    userEngagementDuration: entry.metricValues[5].value,
+                    engagementRate: entry.metricValues[6].value
                   };   
                  
 
@@ -50,8 +53,27 @@ export default function Overview() {
              
                 
                 });
-                 setStats(data)   
-              console.log(data,"data")
+                 setStats(data) 
+                 
+                 
+                 const data3 = result2?.data?.data?.map((entry) => {
+                      const dimensions = {
+                        city: entry.dimensionValues[0].value,
+                    
+                      };
+                      const metrics = {
+                        rate: entry.metricValues[0].value,
+                      
+                      };   
+                 
+
+                      return { ...dimensions, ...metrics };
+             
+                
+                });
+
+                setCities(data3)
+            
                 const data2 =result1?.data?.data?.map((entry, index) => {
                   const dimensions = {
                     itemBrand: entry.dimensionValues[0].value,
@@ -88,7 +110,7 @@ export default function Overview() {
    
 
   return (
-    <div className='w-full text-black'>
+    <div className='w-full text-black pb-10'>
                 
                 <div className='flex flex-col space-y-3'>
                 <h5 className='text-white font-light text-sm'>Admin/Overview</h5>
@@ -100,7 +122,7 @@ export default function Overview() {
 
                 <div className='flex w-full'>
 
-                        <div className='grid grid-cols-2 w-1/2 gap-3 py-6'>
+                        <div className='grid grid-cols-2  gap-3 py-6'>
                               {[
                               {
                                 title:"Total products",
@@ -142,18 +164,24 @@ export default function Overview() {
 
                               }
 
+                        <TopCities 
+                            data={cities}
+                          />
+
                         </div>
 
-                        <div className='w-1/2'>
-                            <PieChart 
-                               data={[...stats]} 
+                        <div className='w-1/3 px-6 flex '>
+                       
+                            < PieChartComponent
+                               value={stats[0]?.metrics?.engagementRate} 
                             />
+                          
 
                         </div>
 
                 </div>
 
-                <div className='flex flex-col w-full '>
+                <div className='flex flex-col w-full space-y-10'>
                     <div className='w-full border px-4 py-4 bg-white'>
                         <h5 className='font-semibold'>Top products</h5>
 
@@ -172,6 +200,20 @@ export default function Overview() {
 
 
                     </div>
+
+
+
+                    <div className='w-full border px-4 py-4 bg-white'>
+                        <h5 className='font-semibold'>Active orders</h5>
+
+                         <div className='grid grid-cols-4  w-full justify-between py-4 gap-4 '>
+                         
+
+                         </div>
+
+
+                       </div>
+              
               
                 </div>
 

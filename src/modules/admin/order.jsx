@@ -206,7 +206,7 @@ export default function SellerOrder() {
                                                
                                                     <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
                                                       style={{background: "#F3F3F3"}}
-                                                      onClick={handleClick}
+                                                      // onClick={handleClick}
                                                     >
                                                          <MdOutlineFileUpload 
                                                            className='text-xl font-light'
@@ -226,7 +226,7 @@ export default function SellerOrder() {
                                                     <div className='flex space-x-4 items-center'>
                                                             <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
                                                                     style={{background: "#F3F3F3"}}
-                                                                    onClick={handleClick}
+                                                                    // onClick={handleClick}
                                                                 >
                                                                 
                                                                     <h5 className='text-slate-500 font-light text-sm'>{file?.name}</h5>
@@ -313,7 +313,7 @@ export default function SellerOrder() {
 
                                             </div>
 
-                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
+                                            {/* <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
                                               {!cancel?
                                               "Cancel order"
                                               :
@@ -321,7 +321,7 @@ export default function SellerOrder() {
 
                                               }
                                             
-                                              </button>
+                                              </button> */}
                                     
                                     </div>
 
@@ -464,7 +464,7 @@ const Tracker=({order,customer,product})=>{
                                       :
                              
                                   <MdOutlineCheckBoxOutlineBlank 
-                                     onClick={deliverySent}
+                                    //  onClick={deliverySent}
                                      className='text-green-400 text-xl'
                                      />
                                   }
@@ -505,7 +505,7 @@ const Tracker=({order,customer,product})=>{
                                       :
                              
                                   <MdOutlineCheckBoxOutlineBlank 
-                                     onClick={deliveryReceived}
+                                    //  onClick={deliveryReceived}
                                      className='text-green-400 text-xl'
                                      />
                                   }

@@ -13,7 +13,7 @@ export default function ProductDetailsSeller() {
 
     const id=location?.state
 
-    console.log(id)
+    console.log(id,"id")
 
     useEffect(()=>{
       

@@ -15,3 +15,7 @@
     /* Center the background horizontally */
     background-position: center top;
 }
+
+.clip-half {
+    clip: rect(0, auto, auto, 50%);
+  }

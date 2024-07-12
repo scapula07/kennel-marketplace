@@ -94,7 +94,7 @@ export default function Header() {
                     <div>
                         <img 
                           src={logo}
-                          className="w-26 h-10"
+                          className="w-20 h-8"
                         />
 
                     </div>

@@ -1,39 +1,39 @@
 import React from 'react';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
-const PieChart = ({ data }) => {
-    console.log(data,"dara")
-  const totalEngagementDuration = data?.reduce((acc, curr) => acc + parseInt(curr.metrics.userEngagementDuration, 10), 0);
 
+const PieChartComponent = ({ value }) => {
+
+  const percentage =  value * 100;
+  const angle = 360 * (percentage / 100);
+
+  const data = [
+    { name: 'User Engagement rate', value: percentage },
+    { name: 'Remaining', value: 100 - percentage }
+  ];
+  const COLORS = ['#FF8042','grey'];
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-48 h-48 rounded-full">
-        {data.map((entry, index) => {
-          const percentage = (parseInt(entry.metrics.userEngagementDuration, 10) / totalEngagementDuration) * 100;
-          const rotation = data.slice(0, index).reduce((acc, curr) => acc + (parseInt(curr.metrics.userEngagementDuration, 10) / totalEngagementDuration) * 360, 0);
+          <PieChart width={350} height={350}>
+          <Pie
+            data={data}
+            cx={200}
+            cy={200}
+            innerRadius={60}
+            outerRadius={100}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="value"
+            className='text-sm'
           
-          return (
-            <div
-              key={index}
-              className="absolute w-full h-full rounded-full"
-              style={{
-                background: `conic-gradient(from ${rotation}deg, ${
-                  index % 2 === 0 ? '#4caf50' : '#ffeb3b'
-                } 0% ${percentage}%, transparent ${percentage}% 100%)`
-              }}
-            ></div>
-          );
-        })}
-         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-gray-800 flex flex-col w-full items-center">
-          <span className='text-xs'>Engagement Duration</span>
-          <h5>
-            {data[0]?.metrics?.userEngagementDuration}
-          </h5>
-          <h5>Seconds</h5>
-         
-        </div>
-      </div>
-    </div>
-  );
+          >
+            {
+              data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+            }
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+        );
 };
 
-export default PieChart;
+export default  PieChartComponent;
