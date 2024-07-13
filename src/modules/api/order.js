@@ -53,7 +53,7 @@ export const orderApi= {
                                        notifications:true,
                                 
                                     });
-                                    sendEmail(user?.email,user?.name,'created'`Kennel Breeder,Order confirmed!!`,`Order id:${snap?.id},Product name:${product?.name},amount:${product?.price}`)
+                                    sendEmail(user?.email,user?.name,'created',snap?.id,`has been confirmed!!,Product name:${product?.name},amount:${product?.price}`)
                                }catch(e){
                                     console.log(e)
                                     throw new Error(e)
@@ -98,7 +98,7 @@ export const orderApi= {
                     notifications:true,
              
                  });
-                 sendEmail(customer?.email,`Kennel Breeder,Contract has been sent!!`,`Order id:${order?.id},Product name:${product?.name},amount:${product?.price}`)
+                 sendEmail(customer?.email,customer?.name,',contract sent',order?.id,`contract has been sent!!`,`Order id:${order?.id},Product name:${product?.name},amount:${product?.price}`)
     
                     return true
 
@@ -129,7 +129,7 @@ export const orderApi= {
                 })
              
              try{
-                   sendEmail(vendor?.email,`Kennel Breeder,Contract has been signed!!!`,`Order id:${docSnap?.id},Product name:${product?.name},amount:${product?.price} , Please message seller on app to discuss how to receive your package.`)
+                   sendEmail(vendor?.email,vendor?.name,',contract signed',order?.id,`contract has been signed!!!`,`Order id:${docSnap?.id},Product name:${product?.name},amount:${product?.price} , Please message seller on app to discuss how to receive your package.`)
                   }catch(e){
                     console.log(e)
               }
@@ -161,7 +161,7 @@ export const orderApi= {
             notifications:true,
             })
             try{
-                 sendEmail(customer?.email,`Kennel Breeder,Your Package has been sent!`,`Order id:${docSnap?.id}, Please message seller on app to discuss how to receive your package.`)
+                 sendEmail(customer?.email,customer?.name,'delivery is on the way',order?.id,`,Your Package has been sent!`,`Order id:${docSnap?.id}, Please message seller on app to discuss how to receive your package.`)
                   }catch(e){
                     console.log(e)
               }
@@ -199,7 +199,7 @@ export const orderApi= {
 
 
          try{
-            sendEmail(user?.email,`Kennel Breeder,Order is complete`,`Order id:${docSnap?.id} , Please leave a review!  Dispute or for product return,please contact seller on app or report to admin.Phoen number +11111111111 `)
+            sendEmail(user?.email,user?.name,'completed',order?.id,`, is completed`,`Order id:${docSnap?.id} , Please leave a review!  Dispute or for product return,please contact seller on app or report to admin.Phone number +11111111111 `)
               }catch(e){
                 console.log(e)
           }
