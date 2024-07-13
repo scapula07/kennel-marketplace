@@ -43,7 +43,9 @@ export default function Login() {
          localStorage.clear();
          localStorage.setItem('user',JSON.stringify(user));
          setcurrentUser(user)
-         user?.id.length >0&& navigate(`/market`)
+         user?.role ==="admin" && navigate(`/admin`)
+         user?.role ==="user" && navigate(`/market`)
+         user?.role ==="breeder"&& navigate(`/admin-seller`)
 
      }catch(e){
          setLoader(false)

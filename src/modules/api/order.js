@@ -53,7 +53,7 @@ export const orderApi= {
                                        notifications:true,
                                 
                                     });
-                                    sendEmail(user?.email,`Kennel Breeder,Order confirmed!!`,`Order id:${snap?.id},Product name:${product?.name},amount:${product?.price}`)
+                                    sendEmail(user?.email,user?.name,'created'`Kennel Breeder,Order confirmed!!`,`Order id:${snap?.id},Product name:${product?.name},amount:${product?.price}`)
                                }catch(e){
                                     console.log(e)
                                     throw new Error(e)

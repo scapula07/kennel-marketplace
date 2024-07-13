@@ -46,7 +46,7 @@ export default function ProductDetails() {
                                           />
                                      </div>
 
-                                     <div className='flex items-center space-x-4'>
+                                     <div className='grid grid-cols-3 gap-3 items-center space-x-4'>
                                          {product?.images?.map((src)=>{
                                               return(
                                                 <img 
@@ -59,6 +59,13 @@ export default function ProductDetails() {
                                          }
 
                                      </div>
+
+                                     <div>
+                                      
+                                     </div>
+
+
+
 
                                 </div>
 

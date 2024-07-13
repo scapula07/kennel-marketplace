@@ -6,6 +6,7 @@ import Select from "react-select";
 import { productApi } from '../api/product';
 import { BeatLoader } from 'react-spinners';
 import { IoMdClose } from "react-icons/io";
+import { FaStar } from "react-icons/fa";
 
 export default function EditProduct() {
   const [product,setProduct]=useState({images:[]})
@@ -68,29 +69,21 @@ export default function EditProduct() {
    
 
   return (
-    <div className='w-full space-y-4 '>
+    <div className='w-full space-y-4 pb-8 '>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-white font-light text-sm'>Product</h5>
+                    <h5 className='text-white font-light text-sm'>Admin/Product</h5>
                 </div>
                 <div className='w-full text-white py-6 px-4 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
-                              <h5 className='text-2xl font-semibold text-white'></h5>
-                              {/* {isLoading?
-                                <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' >
-                                   <BeatLoader size={"8"}/>
-                                </button>
-                                :
-                                <button className='bg-white rounded-lg px-6 py-2 text-black text-sm font-semibold' onClick={edit}>Save</button>
-
-                              } */}
-                  
+                              <h5 className='text-2xl font-semibold text-white'>Product overview</h5>
+                         
                         </div>
 
 
 
                         <div className='w-full flex space-x-4 pb-8'>
-                              <div className='bg-white w-2/5 min-h-min rounded-xl flex flex-col px-4 py-6 space-y-4'>
-                                    <h5 className='text-xl font-semibold text-slate-700 '>Product Image</h5>
+                              <div className='bg-white w-2/5 min-h-min rounded-xl flex flex-col px-4 py-6 space-y-4 overflow-y-scroll'>
+                                    <h5 className='text-xl font-semibold text-slate-700 '>Product Images</h5>
                                     <div className='grid grid-flow-row grid-cols-3 gap-3'>
                                       {urls?.map((url,index)=>{
                                          return(
@@ -109,15 +102,49 @@ export default function EditProduct() {
 
                                     </div>
 
-                                    <div className='flex items-center space-x-3'>
-                                          {/* <button className='bg-orange-500 text-white rounded-lg px-6 py-2 text-sm'  onClick={handleClick}>Edit</button>
-                                    */}
-                                          <input
-                                              type="file"
-                                              className='hidden'
-                                              ref={hiddenFileInput}
-                                              onChange={handleChange}
-                                         />
+                                    <div className='py-6 text-black' >
+                                         <h5 className='text-black font-semibold'>Key Features/Specifications</h5>
+                                          <div className='flex flex-wrap space-x-4 py-4'>
+                                            {product?.features?.map((text)=>{
+                                                return(
+                                                    <div className='border py-2 px-4 rounded-sm'>
+                                                            <h5 className='text-sm font-semibold text-slate-800'>
+                                                            {text?.label}
+
+                                                            </h5>
+                                                       
+                                                    </div>
+                                                )
+                                              })
+
+                                            }
+                                           
+
+                                         </div>
+
+                                         <div className='flex flex-col space-y-6 text-black py-4 '>
+                                              <h5 className='text-sm font-semibold'>COMMENTS FROM VERIFIED PURCHASES({product?.reviews?.length}) </h5>
+                                              {product?.reviews?.slice(0,5)?.map((rev)=>{
+                                                  return(
+                                                      <diiv className="flex flex-col space-y-1">
+                                                            <div className='flex items-center space-x-1'>
+                                                              {Array(rev.rating).fill(1)?.map(()=>{
+                                                                  return(
+                                                                      <FaStar className='text-yellow-400 text-2xl' />
+                                                                  )
+                                                              })}
+                                                            </div>
+                                                            <h5>{rev?.text}</h5>
+                                                            <h5 className='text-slate-500 font-light'>by {rev?.user}</h5>
+
+                                                      </diiv>
+                                                  )
+                                              })
+
+                                              }
+                                          </div>
+                                      
+
                                     </div>
 
                               </div>
@@ -137,7 +164,7 @@ export default function EditProduct() {
 
                                                          <div className='w-1/2 flex flex-col space-y-3'>
                                                          <div className='flex flex-col space-y-2'>
-                                                                <label className='text-sm font-semibold text-black'>Weight</label>
+                                                                <label className='text-sm font-semibold text-black'>Net Weight(kg)</label>
                                                                      <input 
                                                                         placeholder='e.g 42'
                                                                         className='rounded-sm px-4 py-3 border text-sm text-black'

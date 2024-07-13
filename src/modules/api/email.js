@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const baseUrl="https://kennel-stripe-apis.onrender.com"
-export const sendEmail=async(to,text,msg)=>{
+export const sendEmail=async(to,text,name,state,msg)=>{
        try{
              const url=`${baseUrl}/api/v1/stripe/send-email`
 
@@ -20,7 +20,8 @@ export const sendEmail=async(to,text,msg)=>{
                         {
                             receiver:to,
                             subject:text,
-                            message:msg
+                            user:name,
+                            state:state
                         },
                         config
                   )

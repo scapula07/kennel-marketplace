@@ -50,7 +50,7 @@ export default function Header() {
                             {[{text:"Home",link:"/"},{text:"Marketplace",link:"/market"},{text:"Sellers",link:"/sellers"}].map((item)=>{
                                 return(
                                    <Link to={item?.link}>
-                                       <h5 className=' font-light hover:font-semibold hover:text-orange-800'>{item?.text}</h5>
+                                       <h5 className=' font-light hover:font-semibold hover:text-orange-800 text-sm'>{item?.text}</h5>
                                    </Link>
                           
 

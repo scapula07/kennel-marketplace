@@ -83,7 +83,7 @@ export default function Services() {
 
                               <div className='flex items-center'>
                               <Link to="/admin-seller/add-service" >
-                              <button className='bg-orange-400 text-white rounded-lg py-2 px-4 text-sm'>+ New service</button>
+                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New service</button>
                               </Link>
 
 
@@ -92,10 +92,10 @@ export default function Services() {
                         </div>
 
                         <div className='flex w-full justify-start'>
-                                 <div className='border py-1.5 px-3 rounded-lg flex w-2/5 justify-between bg-white'>
+                                 <div className='border py-2 px-3 rounded-sm flex w-2/5 justify-between bg-white'>
                                     <input
                                        placeholder='Search with product name,category ,price or sku '
-                                       className='outline-none border-0 w-full text-sm font-light '
+                                       className='outline-none border-0 w-full text-sm font-light text-sm '
                                        onChange={(e)=>setQuery(e.target.value)}
                                     
                                       />
@@ -147,19 +147,19 @@ export default function Services() {
 const Table=({products,result})=>{
       return(
         <div>
-            <table class="table-auto w-full border-separate border-spacing-0.5 ">
+            <table class="table-auto w-full border-separate border-spacing-1 ">
                     <thead className='py-2'>
                     <tr >
                           {
                             ["Service"
                             ,
-                              "Catagories",
+                              // "Catagories",
                             "Price",
                             "Action"
 
                             ].map((text)=>{
                                 return(
-                                <th className='py-1 text-xs text-slate-500 text-start'>{text}</th>
+                                <th className='py-1 text-xs text-slate-500 text-start border py-2 px-2'>{text}</th>
                             )
                             })
                         }
@@ -221,7 +221,7 @@ const Row=({product})=>{
           }
     return(
       <tr className={`${onSelect?'border-b shadow-lg py-4 ':'border-b'}`}>
-      <td className='flex items-center space-x-8 py-2'>
+      <td className='flex items-center space-x-8 py-2 border px-2'>
         {onSelect?
            <IoMdCheckbox
            className="text-2xl text-orange-500"
@@ -249,7 +249,7 @@ const Row=({product})=>{
       </td>  
     
  
-      <td className='text-sm font-light text-slate-500 py-2'>
+      {/* <td className='text-sm font-light text-slate-500 py-2'>
          <select>
             {product?.category?.map((opt)=>{
                return(
@@ -261,8 +261,8 @@ const Row=({product})=>{
 
          </select>
        
-        </td>
-      <td className='text-sm font-light text-slate-500 py-2'>${product?.price}</td>
+        </td> */}
+      <td className='text-sm font-light text-slate-500 py-2 border px-2'>${product?.price}</td>
      
   
       {/* <td className='text-xs font-semibold  px-2  rounded-lg py-2 '>
@@ -271,7 +271,7 @@ const Row=({product})=>{
               </span>
       </td> */}
 
-      <td className='text-xs font-semibold  px-2  rounded-lg flex items-center  space-x-3 py-2'>
+      <td className='text-xs font-semibold  px-2  rounded-lg flex items-center  space-x-3 py-2 border px-2'>
             <FaRegUser
               className={`${onSelect?'text-xl font-light text-orange-500 hover:text-orange-400 ':'text-lg text-slate-500'}`}
              />

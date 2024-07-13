@@ -125,7 +125,7 @@ export default function SellerOrder() {
                        <div className='w-4/5 bg-white  rounded-xl px-6 py-8'>
                             <div className='flex flex-col border-b pb-4'>
                                     <h5 className='text-lg  text-slate-700'>Order Details</h5>
-                                    <h5 className='text-sm font-light  text-slate-700'>Order no:</h5>
+                                    <h5 className='text-sm font-light  text-slate-700'>Order id:{order?.id}</h5>
                              </div>
 
 
@@ -224,7 +224,7 @@ export default function SellerOrder() {
                                                     </div>
                                                     :
                                                     <div className='flex space-x-4 items-center'>
-                                                            <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
+                                                            <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-sm space-x-4'
                                                                     style={{background: "#F3F3F3"}}
                                                                     // onClick={handleClick}
                                                                 >
@@ -261,7 +261,7 @@ export default function SellerOrder() {
                                                     :
                                                     <>
                                                     {ordered?.contract==="sent"?
-                                                         <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-lg space-x-4'
+                                                         <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
                                                                style={{background: "#F3F3F3"}}
                                                            
                                                              >
@@ -283,7 +283,7 @@ export default function SellerOrder() {
                                                                    
                                                              </div>
                                                           :
-                                                   <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-lg space-x-4'
+                                                   <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
                                                           style={{background: "#F3F3F3"}}
                                                       
                                                         >

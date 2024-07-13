@@ -6,6 +6,7 @@ import Select from "react-select";
 import { productApi } from '../api/product';
 import { BeatLoader } from 'react-spinners';
 import { IoMdClose } from "react-icons/io";
+import CreatableSelect from 'react-select/creatable';
 
 export default function EditProduct() {
   const [product,setProduct]=useState({images:[]})
@@ -68,7 +69,7 @@ export default function EditProduct() {
    
 
   return (
-    <div className='w-full space-y-4 '>
+    <div className='w-full space-y-4 pb-10 text-black'>
                 <div className='flex flex-col space-y-2 '>
                     <h5 className='text-white font-light text-sm'>Edit product</h5>
                 </div>
@@ -120,6 +121,20 @@ export default function EditProduct() {
                                          />
                                     </div>
 
+
+                                    <div className='py-4 space-y-4'>
+                                    <h5 className='text-black font-semibold'>Key Features/Specifications</h5>
+                                        <CreatableSelect 
+                                               isMulti 
+                                              defaultValue={product?.features?.length >0?[...product?.features]:[]}
+                                              value={product?.features}
+                                              onChange={(opt) => {
+                                              console.log(opt,"opt")
+                                              setProduct({...product,features:opt})
+                                          }}
+                                        />
+                                    </div>
+
                               </div>
 
 
@@ -140,7 +155,7 @@ export default function EditProduct() {
                                                                 <label className='text-sm font-semibold text-black'>Weight</label>
                                                                      <input 
                                                                         placeholder='e.g 42'
-                                                                        className='rounded-lg px-4 py-3 border text-sm text-black'
+                                                                        className='rounded-sm px-4 py-3 border text-sm text-black'
                                                                         value={product?.weight}
                                                                         onChange={(e)=>setProduct({...product,weight:e.target.value})}
                                                                         />
@@ -167,7 +182,7 @@ export default function EditProduct() {
                                                                     <label className='text-sm font-semibold text-black'>{item?.title}</label>
                                                                     <select 
                                                                       placeholder='e.g Dogs feed'
-                                                                      className='rounded-lg px-4 py-3 border text-sm outline-none text-black'
+                                                                      className='rounded-sm px-4 py-3 border text-sm outline-none text-black'
                                                                       onChange={(e)=>item?.click(e)}
                                                                     >
                                                                         {item?.items?.map((tag)=>{
@@ -230,7 +245,7 @@ const Info=({setProduct,product})=>{
                                 <input 
                                    placeholder='e.g Dogs feed'
                                    type={"text"}
-                                   className='rounded-lg px-4 py-3 border text-sm text-black'
+                                   className='rounded-sm px-4 py-3 border text-sm text-black'
                                    value={product?.name}
                                    onChange={(e)=>setProduct({...product,name:e.target.value})}
                                 />
@@ -241,7 +256,7 @@ const Info=({setProduct,product})=>{
                                 <label className='text-sm font-semibold'>Description</label>
                                 <textarea 
                                    placeholder='Product description'
-                                   className='rounded-lg px-4 py-3 border text-sm h-28'
+                                   className='rounded-sm px-4 py-3 border text-sm h-28'
                                    value={product?.description}
                                    onChange={(e)=>setProduct({...product,description:e.target.value})}
                                 />
@@ -290,7 +305,7 @@ const Pricing=({setProduct,product})=>{
                                   <input 
                                      placeholder='1'
                                      type={"number"}
-                                     className='rounded-lg px-4 py-2 border text-sm text-black'
+                                     className='rounded-sm px-4 py-2 border text-sm text-black'
                                      value={product?.price}
                                      onChange={(e)=>setProduct({...product,price:e.target.value})}
                                   />
@@ -301,7 +316,7 @@ const Pricing=({setProduct,product})=>{
                                   <label className='text-sm font-semibold'>Currency</label>
                                   <select 
                                  
-                                     className='rounded-lg px-4 py-2 border text-sm outline-none text-black'
+                                     className='rounded-sm px-4 py-2 border text-sm outline-none text-black'
                                      onChange={(e)=>setProduct({...product,currency:e.target.value})}
                                   >
                                       {["USD","GBP"].map((tag)=>{
@@ -321,7 +336,7 @@ const Pricing=({setProduct,product})=>{
                                   <label className='text-sm font-semibold'>SKU</label>
                                   <input 
                                      placeholder='1ABC5689'
-                                     className='rounded-lg px-4 py-2 border text-sm text-black'
+                                     className='rounded-sm px-4 py-2 border text-sm text-black'
                                      value={product?.sku}
                                      onChange={(e)=>setProduct({...product,sku:e.target.value})}
                                   />
