@@ -9,10 +9,15 @@ import { useState } from 'react';
 import { MdKeyboardArrowDown ,MdKeyboardArrowUp,MdOutlineCleaningServices} from "react-icons/md";
 import { ImUsers } from "react-icons/im";
 import { Link } from 'react-router-dom';
-
+import { SiDocsify } from "react-icons/si";
+import { VscWorkspaceUnknown } from "react-icons/vsc";
+import { accountTypeState } from '../../recoil/state';
+import { useRecoilValue } from 'recoil';
 
 export default function SidePanel() {
-  const [active,setActive]=useState("")
+     const currentUser =useRecoilValue(accountTypeState)
+     const [active,setActive]=useState(currentUser?.status==="pending"?"kyc":"")
+    
   return (
     <div className='w-full bg-slate-100 h-full rounded-xl py-6 px-4 overflow-y-scroll'>
           <div className='flex flex-col space-y-16'>
@@ -34,6 +39,7 @@ export default function SidePanel() {
                                 link:""
 
                             },
+                           
                            
                             {
                              title:"Products",
@@ -71,33 +77,53 @@ export default function SidePanel() {
    
    
                                  },
+                                {
+                                  title:"Orders",
+                                  icon:<IoCart />,
+                                  items:[
+                                    {
+                                      name:"Manage orders",
+                                      link:"orders"
+    
+                                    }
+                                    ]
+   
+   
+                              },
                               {
-                                title:"Orders",
-                                icon:<IoCart />,
-                                items:[
-                                   {
-                                    name:"Manage orders",
-                                    link:"orders"
-   
-                                   }
-                                  ]
-   
-   
-                                 },
+                                  title:"Messages",
+                                  icon:<BiSolidMessageSquareDots />,
+                                  link:"/messages"
+                              },
+                              
+                              {
+                                title:"KYC",
+                                icon:<VscWorkspaceUnknown />,
+                                link:"kyc"
+
+                              },
                             {
-                                title:"Messages",
-                                icon:<BiSolidMessageSquareDots />,
-                                link:"/messages"
-                            },
+                              title:"Guide",
+                              icon:<SiDocsify />,
+                              link:"guide"
+
+                             }
 
                            ].map((item,index)=>{
                               return(
-                                <Card 
-                                   item={item}
-                                   index={index}
-                                   active={active}
-                                   setActive={setActive}
-                                />
+                                <>
+                                {currentUser?.status !="pending" || ["KYC","Guide"]?.includes(item?.title)&&
+                                  <Card 
+                                    item={item}
+                                    index={index}
+                                    active={active}
+                                    setActive={setActive}
+                                   />
+
+                                }
+                                
+                                </>
+                              
                               )
                           })
 

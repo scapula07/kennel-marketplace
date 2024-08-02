@@ -29,7 +29,7 @@ export const breederApi= {
                if(file?.name?.length !=undefined){
                 const image=await uploadFile(file)
                 const {img,...rest}=newUser
-                await updateDoc(doc(db,"users",user?.id),{...rest,img:image,role:"breeder",tags:tags,status:"active"})
+                await updateDoc(doc(db,"users",user?.id),{...rest,img:image,role:"breeder",tags:newArray,status:"pending"})
 
                }else{
                 await updateDoc(doc(db,"users",user?.id),{...user,role:"breeder",tags:tags})

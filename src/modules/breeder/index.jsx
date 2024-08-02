@@ -92,7 +92,7 @@ export default function Breader() {
           setcurrentUser(user?.data)
           setLoader(false)
           setAlert({text:"Successfull!",color:"success"})
-          user?.status&& navigate(`/admin-seller`)
+          user?.status&& navigate(`/admin-seller/kyc`)
 
      }catch(e){
          setLoader(false)
@@ -211,7 +211,7 @@ const handleChange = async(e)=> {
                                     <label className='text-sm font-semibold '>Business Name</label>
                                     <input 
                                       placeholder='Enter your business name'
-                                      className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                      className='w-full bg-white rounded-sm border py-2.5 px-4 text-sm text-slate-800'
                                       value={currentUser?.name}
                                       onChange={(e)=>setcurrentUser({...currentUser,name:e.target.value})}
                                     />
@@ -222,7 +222,7 @@ const handleChange = async(e)=> {
                                     <label  className='text-sm font-semibold '>Business Description</label>
                                     <textarea 
                                       placeholder='Enter your business name'
-                                      className='w-full bg-white rounded-lg rounded-lg border py-5 px-4 text-sm text-slate-400'
+                                      className='w-full bg-white rounded-sm border py-5 px-4 text-sm text-slate-800'
                                       value={currentUser?.bio}
                                       onChange={(e)=>setcurrentUser({...currentUser,bio:e.target.value})}
                                     />
@@ -236,7 +236,7 @@ const handleChange = async(e)=> {
                                             <label className='text-sm font-semibold '>Email</label>
                                             <input 
                                               placeholder='Enter your email'
-                                              className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                              className='w-full bg-white rounded-sm rounded-lg border py-2.5 px-4 text-sm text-slate-800'
                                               value={currentUser?.email}
                                               onChange={(e)=>setcurrentUser({...currentUser,email:e.target.value})}
                                             />
@@ -247,7 +247,7 @@ const handleChange = async(e)=> {
                                             <label  className='text-sm font-semibold '>Phone number</label>
                                             <input
                                               placeholder='+1'
-                                              className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                              className='w-full bg-white rounded-sm  border py-2.5 px-4 text-sm text-slate-800'
                                               value={currentUser?.phone}
                                               onChange={(e)=>setcurrentUser({...currentUser,phone:e.target.value})}
                                             />
@@ -261,7 +261,7 @@ const handleChange = async(e)=> {
                                     <label  className='text-sm font-semibold '>Address</label>
                                     <input
                                         placeholder='Add your address,City,Country.'
-                                        className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                        className='w-full bg-white rounded-sm border py-2.5 px-4 text-sm text-slate-800'
                                         value={currentUser?.address}
                                         onChange={(e)=>setcurrentUser({...currentUser,address:e.target.value})}
                                       />
@@ -293,7 +293,7 @@ const handleChange = async(e)=> {
                                                <div className='flex items-center justify-center p-4 bg-slate-200 rounded-full'
                                                   onClick={handleClick}
                                                >
-                                                  <MdOutlineCameraAlt className='text-2xl text-slate-500'
+                                                  <MdOutlineCameraAlt className='text-xl text-slate-800'
                                                       
                                                   />
                                                         <input
@@ -325,7 +325,7 @@ const handleChange = async(e)=> {
                                         </>
 
                                   }
-                                    <h5 className=' text-lg'>Upload your profile pic</h5>
+                                    <h5 className=' text-sm'>Upload your profile pic</h5>
 
                               </div>
 
@@ -334,7 +334,7 @@ const handleChange = async(e)=> {
                  </div>
 
                  <div className='w-full flex justify-end'>
-                      <button className='bg-orange-600 py-3 px-5 text-white rounded-lg' onClick={()=>setNum(num+1)}>Next</button>
+                      <button className='bg-orange-600 py-2 px-5 text-white text-sm rounded-sm' onClick={()=>setNum(num+1)}>Next</button>
                   
                 </div>
 
@@ -356,7 +356,7 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
                                   <label className='text-sm font-semibold '>X handle</label>
                                   <input 
                                     placeholder='@johnjones'
-                                    className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                    className='w-full bg-white rounded-sm rounded-lg border py-2.5 px-4 text-sm text-slate-800'
                                     value={currentUser?.social}
                                     onChange={(e)=>setcurrentUser({...currentUser,social:e.target.value})}
                                   />
@@ -372,7 +372,7 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
                                           <input 
                                             type={"date"}
                                             placeholder='Enter your email'
-                                            className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                            className='w-full bg-white rounded-sm rounded-lg border py-2.5 px-4 text-sm text-slate-800'
                                             value={currentUser?.establishDate}
                                             onChange={(e)=>setcurrentUser({...currentUser,establishDate:e.target.value})}
                                           />
@@ -384,7 +384,7 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
                                           <input
                                            type={"number"}
                                             placeholder='1'
-                                            className='w-full bg-white rounded-lg rounded-lg border py-2.5 px-4 text-sm text-slate-400'
+                                            className='w-full bg-white rounded-sm rounded-lg border py-2.5 px-4 text-sm text-slate-800'
                                             value={currentUser?.businessSize}
                                             onChange={(e)=>setcurrentUser({...currentUser,businessSize:e.target.value})}
 
@@ -397,8 +397,7 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
 
                       <div className='flex flex-col space-y-3'>
                                   <label  className='text-sm font-semibold '>Species Specialization</label>
-                                  <Select 
-                                       
+                                  <Select                     
                                           options={species}
                                           value={currentUser?.animal}
                                           onChange={(opt) => {
@@ -430,16 +429,16 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
                </div>
 
                <div className='w-full flex justify-end px-8'>
-                    <div className='flex w-1/3 space-x-4 '>
-                    <button className='border py-3 px-5 rounded-lg text-black' onClick={()=>setNum(num-1)}>Back</button>
+                    <div className='flex w-1/3 space-x-4 items-center'>
+                    <button className='border py-2 px-5 rounded-sm text-black' onClick={()=>setNum(num-1)}>Back</button>
                       {!loader?
-                           <button className='bg-orange-600 py-3 px-5 text-white rounded-lg' onClick={create}>Continue</button>
-                           :
-                           <ClipLoader 
-                             color='orange'
-                           />
-
-                      }
+                           <button className='bg-orange-600 py-2 px-5 text-white rounded-sm text-sm' onClick={create}>Continue</button>
+                            :
+                            <ClipLoader 
+                              color='orange'
+                              size={12}
+                            />
+                           }
                  
 
                     </div>
@@ -450,6 +449,11 @@ const Form2=({num,setNum,currentUser,setcurrentUser,create,loader})=>{
       </div>
   )
 }
+
+
+
+
+
 
 
 

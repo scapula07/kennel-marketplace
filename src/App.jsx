@@ -60,8 +60,8 @@ import Notifications from './modules/notifications'
 import ForgetPassword from './modules/auth/forgot'
 import Services from './modules/sellerAdmin/services'
 import AddService from './modules/sellerAdmin/addService'
-
-
+import Guide from './modules/sellerAdmin/guide'
+import KYC from './modules/sellerAdmin/kyc'
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -137,6 +137,8 @@ function App() {
                   <Route exact path="order"  element={<SellerOrder/>} />
                   <Route exact path="services"  element={<Services/>} />
                   <Route exact path="add-service"  element={<AddService/>} />
+                  <Route exact path="guide"  element={<Guide/>} />
+                  <Route exact path="kyc"  element={<KYC/>} />
                   <Route exact path=""  element={<OverviewSeller/>} />
                 
 

@@ -17,7 +17,8 @@ import Modal from "../modal"
 import { searchApi } from '../../modules/api/search';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
-
+import { MdBlock,MdOutlineLock } from "react-icons/md";
+import { IoMdLock } from "react-icons/io";
 
 export default function Header() {
      const currentUser=useRecoilValue(accountTypeState)
@@ -160,18 +161,41 @@ export default function Header() {
 
                                  :
                                  <>
-                                   {currentUser?.role==="breeder"?
-                                 <Link to="/admin-seller">
-                                       <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>I'm a breader</button>
-                                  </Link>
-                                  :
-                              
-                                  <Link to={`${currentUser?.id?.length ==undefined? "/login":"/breeder" }`}>
-                                       <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
-                                  </Link>
-                                 }
-                                 </>
-                            }
+                                 {currentUser?.role==="breeder"?
+                                      <>
+                                       {currentUser?.status==="active"?
+                                        <Link to="/admin-seller">
+                                            <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>I'm a breader</button>
+                                        </Link>
+                                        :
+                                        <>
+                                            {currentUser?.status==="blocked"?
+                                              <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>
+                                                   <MdBlock
+                                                     className="bg-orange-400 text-white rounded-full p-1 text-2xl"
+                                                  />
+                                              </button>
+                                              :
+                                              <Link to="/admin-seller">
+                                                  <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>
+                                                    
+                                                      I'm a breader
+                                                  </button>
+                                              </Link>
+                                            }
+                                        </>
+
+
+                                        }
+                                      </>
+                                      :
+                                  
+                                      <Link to={`${currentUser?.id?.length ==undefined? "/login":"/breeder" }`}>
+                                          <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
+                                      </Link>
+                                    }
+                                    </>
+                                }
                            
                              {currentUser?.id?.length >0?
                                 <div className='flex items-center space-x-2'>
