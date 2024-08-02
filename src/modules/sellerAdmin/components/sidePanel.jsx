@@ -4,6 +4,7 @@ import { MdArrowDropDown,MdArrowDropUp } from "react-icons/md";
 import { IoBagHandleSharp } from "react-icons/io5";
 import { IoGrid } from "react-icons/io5";
 import { IoCart } from "react-icons/io5";
+import { IoMdPricetags } from "react-icons/io";
 import { BiSolidMessageSquareDots } from "react-icons/bi";
 import { useState } from 'react';
 import { MdKeyboardArrowDown ,MdKeyboardArrowUp,MdOutlineCleaningServices} from "react-icons/md";
@@ -13,6 +14,7 @@ import { SiDocsify } from "react-icons/si";
 import { VscWorkspaceUnknown } from "react-icons/vsc";
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilValue } from 'recoil';
+import { MdBookmarkBorder } from "react-icons/md";
 
 export default function SidePanel() {
      const currentUser =useRecoilValue(accountTypeState)
@@ -60,6 +62,24 @@ export default function SidePanel() {
 
                               },
                               {
+                                title:"Litters",
+                                icon:<MdBookmarkBorder />,
+                                items:[
+                                   {
+                                    name:"Upcoming litter",
+                                    link:"litter"
+   
+                                    },
+                                   {
+                                       name:"Pre-orders",
+                                       link:"preorders"
+      
+                                   }
+                                  ]
+   
+   
+                                 },
+                              {
                                 title:"Services",
                                 icon:<MdOutlineCleaningServices />,
                                 items:[
@@ -102,6 +122,12 @@ export default function SidePanel() {
                                 link:"kyc"
 
                               },
+                              {
+                                title:"Pricing",
+                                icon:<IoMdPricetags />,
+                                link:"guide"
+  
+                               },
                             {
                               title:"Guide",
                               icon:<SiDocsify />,
@@ -112,13 +138,23 @@ export default function SidePanel() {
                            ].map((item,index)=>{
                               return(
                                 <>
-                                {currentUser?.status !="pending" || ["KYC","Guide"]?.includes(item?.title)&&
+                                {currentUser?.status ==="active"?
+
+                                ["KYC","Guide"]?.includes(item?.title)&&
                                   <Card 
                                     item={item}
                                     index={index}
                                     active={active}
                                     setActive={setActive}
                                    />
+                                   :
+                                   <Card 
+                                   item={item}
+                                   index={index}
+                                   active={active}
+                                   setActive={setActive}
+                                  />
+
 
                                 }
                                 
@@ -142,7 +178,16 @@ export default function SidePanel() {
 
 const Card=({item,index,active,setActive})=>{
        const [drop,setDrop]=useState(true)
-       const colors=["text-blue-300","text-slate-300","text-orange-300","text-green-300 ","text-red-300"]
+       const colors=[
+        "text-blue-300",
+        "text-slate-300",
+        "text-orange-300",
+        "text-green-300 ",
+        "text-red-300",
+        "text-purple-300",
+        "text-black",
+        "text-rose-600"
+      ]
       return(
         <div className='flex flex-col w-full'>
                <div className='flex items-center w-full justify-between'>
@@ -159,7 +204,7 @@ const Card=({item,index,active,setActive})=>{
 
                       </div>
                   </Link>
-                      {["Products","Orders","Users","Services"]?.includes(item?.title)&&
+                      {["Products","Litters","Orders","Users","Services"]?.includes(item?.title)&&
                               <>
                               {drop?
                                   <MdKeyboardArrowUp
@@ -183,7 +228,7 @@ const Card=({item,index,active,setActive})=>{
                      
 
                </div>
-               {["Products","Orders","Users","Services"]?.includes(item?.title)&&
+               {["Products","Litters","Orders","Users","Services"]?.includes(item?.title)&&
                               <>
                  {drop&&
                     <div className='flex-col flex px-8 space-y-2 py-4'>

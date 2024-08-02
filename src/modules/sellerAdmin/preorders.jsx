@@ -12,7 +12,7 @@ import { IoMdCheckbox } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { serviceApi } from '../api/service';
+import { productApi } from '../api/product';
 import Fuse from "fuse.js"
 
 
@@ -25,7 +25,7 @@ const monthNames = [
 
 
 
-export default function Services() {
+export default function PreOrders() {
 
         const [products,setProducts]=useState([])
         const [areContacts,setContacts]=useState("")
@@ -33,24 +33,26 @@ export default function Services() {
         const currentUser=useRecoilValue(accountTypeState)
 
         useEffect(()=>{
-           if(currentUser?.id?.length >0){         
-                const q = query(collection(db, "services"),where('creator','==',currentUser?.id));
-                    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-                    const products = []
-                    querySnapshot.forEach((doc) => {
-                        products.push({ ...doc.data(), id: doc.id })
-            
-                    });
-            
-                    products?.length===0 &&setContacts("No contact")
-                    products?.length >0 &&setContacts("")
-                    setProducts(products)
-                });
+          if(currentUser?.id?.length >0){
 
-             }
+          
+            const q = query(collection(db, "products"),where('creator',"==",currentUser?.id), where('status',"==", { value: 'preorder', label: 'Pre-order' }));
+                const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                  const products = []
+                  querySnapshot.forEach((doc) => {
+                    products.push({ ...doc.data(), id: doc.id })
         
-            },[currentUser])
- 
+                  });
+        
+                  products?.length===0 &&setContacts("No contact")
+                  products?.length >0 &&setContacts("")
+                   setProducts(products)
+            });
+
+          }
+        
+        },[currentUser])
+        console.log(products,"pp")
 
         const fuse =new Fuse([...products],{
           isCaseSensitive: false,
@@ -73,17 +75,17 @@ export default function Services() {
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-black font-light text-sm'>Breeder/Services</h5>
+                    <h5 className='text-black font-light text-sm'>Breeder/Products</h5>
                 </div>
 
 
                 <div className='w-full bg-white rounded-lg py-6 px-8 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
-                              <h5 className='text-xl font-semibold text-black'>All Services</h5>
+                              <h5 className='text-xl font-semibold text-black'>All Products</h5>
 
                               <div className='flex items-center'>
-                              <Link to="/admin-seller/add-service" >
-                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New service</button>
+                              <Link to="/admin-seller/new-product" >
+                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New product</button>
                               </Link>
 
 
@@ -95,7 +97,7 @@ export default function Services() {
                                  <div className='border py-2 px-3 rounded-sm flex w-2/5 justify-between bg-white'>
                                     <input
                                        placeholder='Search with product name,category ,price or sku '
-                                       className='outline-none border-0 w-full text-sm font-light text-sm '
+                                       className='outline-none border-0 w-full text-xs font-light '
                                        onChange={(e)=>setQuery(e.target.value)}
                                     
                                       />
@@ -127,7 +129,7 @@ export default function Services() {
                                                     
                                 {products?.length ===0&&areContacts?.length >0&&
                                 <div className='w-full flex justify-center  top-0'>
-                                <h5 className="text-sm font-semibold">You have no service</h5>
+                                <h5 className="text-sm font-semibold">You have no upcoming litters</h5>
                                 </div>
                                 }
 
@@ -152,15 +154,17 @@ const Table=({products,result})=>{
                     <thead className='py-2'>
                     <tr >
                           {
-                            ["Service"
-                            ,
+                            ["Product",
                               // "Catagories",
                             "Price",
+                            "SKU",
+                            "Quantity",
+                            "status",
                             "Action"
 
                             ].map((text)=>{
                                 return(
-                                <th className='py-1 text-xs text-slate-500 text-start border py-2 px-2'>{text}</th>
+                                <th className='py-1 text-xs text-slate-500 text-start border py-2 px-4'>{text}</th>
                             )
                             })
                         }
@@ -213,7 +217,7 @@ const Row=({product})=>{
       const deleteProduct=async()=>{
                 setisDeleting(true)
             try{
-               const res=await serviceApi.deleteProduct(product)
+               const res=await productApi.deleteProduct(product)
               res&&setisDeleting(false)
               }catch(e){
                 setisDeleting(false)
@@ -236,7 +240,7 @@ const Row=({product})=>{
 
         }
           
-          <Link to="" state={{product}}>
+            <Link to="/admin-seller/edit" state={{product}}>
                 <span className='font-semibold text-slate-400 hover:underline flex space-x-4'>
                     <img src={product?.images[0]}
                         className="h-8 w-8 rounded-lg"
@@ -250,9 +254,9 @@ const Row=({product})=>{
       </td>  
     
  
-      {/* <td className='text-sm font-light text-slate-500 py-2'>
+      {/* <td className='text-sm font-light text-slate-500 py-2 border px-2'>
          <select>
-            {product?.category?.map((opt)=>{
+            {product?.categories?.map((opt)=>{
                return(
                 <option>{opt?.value}</option>
                )
@@ -264,15 +268,18 @@ const Row=({product})=>{
        
         </td> */}
       <td className='text-sm font-light text-slate-500 py-2 border px-2'>${product?.price}</td>
-     
+      <td className='text-sm font-light text-slate-500 py-2 border px-2 '>{product?.sku}</td>
+      <td className='text-sm font-light text-slate-500 py-2 border px-2'>{product?.qty}</td>
   
-      {/* <td className='text-xs font-semibold  px-2  rounded-lg py-2 '>
-             <span className='font-semibold text-slate-500 text-green-600 bg-green-300 px-4 py-1 rounded-sm'>
-                  {product?.status?.value}
+      <td className='text-xs font-semibold   py-2 border px-2 '>
+             <span className={product?.status?.value=="instock"?'font-semibold  text-green-600 px-4 py-1.5 rounded-lg':
+               `${product?.status?.value=="preorder"?'font-semibold text-slate-500 text-yellow-500  px-4 py-1':'font-semibold text-slate-500 text-red-500  px-4 py-1'}`
+              }>
+                  {product?.status?.label}
               </span>
-      </td> */}
+      </td>
 
-      <td className='text-xs font-semibold  px-2  rounded-lg flex items-center  space-x-3 py-2 border px-2'>
+      <td className='text-xs font-semibold  px-2   flex items-center  space-x-3 py-3 border px-2'>
             <FaRegUser
               className={`${onSelect?'text-xl font-light text-orange-500 hover:text-orange-400 ':'text-lg text-slate-500'}`}
              />

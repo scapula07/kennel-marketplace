@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { db } from '../firebase';
 import { useRecoilValue } from 'recoil';
 import { accountTypeState,saveTypeState } from '../recoil/state';
-import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy}  from "firebase/firestore";
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,query,onSnapshot,where,orderBy,or,and}  from "firebase/firestore";
 import {getStorage, ref, uploadBytes } from "firebase/storage"
 import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
@@ -36,7 +36,14 @@ export default function SellerProductList() {
           if(currentUser?.id?.length >0){
 
           
-            const q = query(collection(db, "products"),where('creator','==',currentUser?.id));
+            const q = query(collection(db, "products"),
+            and(where('creator',"==",currentUser?.id),
+             or(
+               where('status',"==",{ value: 'instock', label: 'In stock' }),
+               where('status',"==",{ value: 'outstock', label: 'Out stock' })
+              )
+             )
+             );
                 const unsubscribe = onSnapshot(q, (querySnapshot) => {
                   const products = []
                   querySnapshot.forEach((doc) => {

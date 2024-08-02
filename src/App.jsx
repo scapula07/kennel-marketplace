@@ -62,6 +62,9 @@ import Services from './modules/sellerAdmin/services'
 import AddService from './modules/sellerAdmin/addService'
 import Guide from './modules/sellerAdmin/guide'
 import KYC from './modules/sellerAdmin/kyc'
+import PreOrders from './modules/sellerAdmin/preorders'
+import Litter from './modules/sellerAdmin/litter'
+
 
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
@@ -140,6 +143,8 @@ function App() {
                   <Route exact path="guide"  element={<Guide/>} />
                   <Route exact path="kyc"  element={<KYC/>} />
                   <Route exact path=""  element={<OverviewSeller/>} />
+                  <Route exact path="litter"  element={<Litter/>} />
+                  <Route exact path="preorders"  element={<PreOrders/>} />
                 
 
               </Route>

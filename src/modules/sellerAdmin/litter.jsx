@@ -10,7 +10,7 @@ import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-export default function CreateProductSeller() {
+export default function Litter() {
       const navigate=useNavigate()
       const [num,setNum]=useState(1)
       const currentUser=useRecoilValue(accountTypeState)
@@ -23,7 +23,7 @@ export default function CreateProductSeller() {
                                            features:[],
                                            sku:"",
                                            price:0,
-                                           status:{ value: 'instock', label: 'In stock'}
+                                           status:{ value: 'pre-order', label: 'Pre-order'}
                                           })
       const [url,setUrl]=useState([])
       const [files,setFiles]=useState([])
@@ -177,7 +177,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                     <label className='text-sm font-semibold'>Name</label>
                                     <input 
                                        placeholder='e.g Dogs feed'
-                                       className='rounded-lg px-4 py-3 border text-sm'
+                                       className='rounded-sm px-4 py-3 border text-sm'
                                        value={product?.name}
                                        onChange={(e)=>setProduct({...product,name:e.target.value})}
                                     />
@@ -188,7 +188,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                     <label className='text-sm font-semibold'>Description</label>
                                     <textarea 
                                        placeholder='Product description'
-                                       className='rounded-lg px-4 py-3 border text-sm h-28'
+                                       className='rounded-sm px-4 py-3 border text-sm h-28'
                                        value={product?.description}
                                        onChange={(e)=>setProduct({...product,description:e.target.value})}
                                     />
@@ -220,7 +220,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                 <label className='text-sm font-semibold'>Net Weight in kg</label>
                                         <input 
                                         placeholder='e.g 0.8'
-                                        className='rounded-lg px-4 py-3 border text-sm'
+                                        className='rounded-sm px-4 py-3 border text-sm'
                                         value={product?.weight}
                                         onChange={(e)=>setProduct({...product,weight:e.target.value})}
                                         />
@@ -286,7 +286,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                 <label className='text-sm font-semibold'>Quantity</label>
                                         <input 
                                         placeholder='1'
-                                        className='rounded-lg px-4 py-3 border text-sm'
+                                        className='rounded-sm px-4 py-3 border text-sm'
                                         value={product?.qty}
                                         type="number"
                                         onChange={(e)=>setProduct({...product,qty:e.target.value})}
@@ -299,7 +299,7 @@ const Info=({num,setNum,setProduct,product})=>{
                 </div>
 
                 <div className='flex w-full justify-end'>
-                      <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
+                      <button className='bg-slate-800 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
                       
 
                  </div>
@@ -347,7 +347,7 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
                       <div className='flex flex-col w-full space-y-3'>
                                 <h5>Product images</h5>
                                 {url?.length ==0?
-                                   <div className='flex w-full justify-center items-center h-36 rounded-xl border'>
+                                   <div className='flex w-full justify-center items-center h-36 rounded-sm border'>
                                          <h5 className='text-sm font-light text-slate-500 hover:underline'   onClick={handleClick}>Click to upload images</h5>
     
                                          <input
@@ -359,7 +359,7 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
     
                                     </div>
                                     :
-                                    <div className='flex flex-col w-full space-y-2  h-36 rounded-xl border py-4 px-6'>
+                                    <div className='flex flex-col w-full space-y-2  h-36 rounded-sm border py-4 px-6'>
                                        <h5 className='text-sm font-light text-slate-500 hover:underline text-center'   onClick={handleClick}>Click to upload images</h5>
                                          <div className='flex items-center space-x-4'>
                                               {url?.map((item,index)=>{
@@ -400,9 +400,9 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
               </div>
 
               <div className='flex w-full justify-between'>
-                   <button className='bg-orange-300 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
+                   <button className='bg-orange-300 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                  
-                    <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
+                    <button className='bg-slate-800 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
                     
 
                </div>
@@ -422,8 +422,8 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
 
 const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
     const options = [
-        { value: 'instock', label: 'In stock' },
-       ]
+     { value: 'preorder', label: 'Pre-order' },
+     ]
     return(
        <div className='bg-white rounded-lg flex flex-col w-full py-6 px-6 space-y-6'>
              <h5 className='text-lg font-semibold'>Pricing</h5>
@@ -435,7 +435,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                     <input 
                                        placeholder='1'
                                        type={"number"}
-                                       className='rounded-lg px-4 py-2 border text-sm'
+                                       className='rounded-sm px-4 py-2 border text-sm'
                                        value={product?.price}
                                        onChange={(e)=>setProduct({...product,price:Number(e.target.value)})}
                                     />
@@ -446,7 +446,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                     <label className='text-sm font-semibold'>Currency</label>
                                     <select 
                                    
-                                       className='rounded-lg px-4 py-2 border text-sm outline-none'
+                                       className='rounded-sm px-4 py-2 border text-sm outline-none'
                                        onChange={(e)=>setProduct({...product,currency:e.target.value})}
                                     >
                                         {["USD"].map((tag)=>{
@@ -466,7 +466,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                                     <label className='text-sm font-semibold'>SKU</label>
                                     <input 
                                        placeholder='1ABC5689'
-                                       className='rounded-lg px-4 py-2 border text-sm'
+                                       className='rounded-sm px-4 py-2 border text-sm'
                                        value={product?.sku}
                                        onChange={(e)=>setProduct({...product,sku:e.target.value})}
                                     />
@@ -507,14 +507,14 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
          
 
               <div className='flex w-full justify-between'>
-                   <button className='bg-orange-300 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
+                   <button className='bg-orange-300 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                      {isLoading?
                       <ClipLoader
                         color={"black"}
                       />
                       :
 
-                       <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={create}>Submit</button>
+                       <button className='bg-slate-800 text-white rounded-sm py-2 px-4 text-sm' onClick={create}>Submit</button>
 
                    }
                     
