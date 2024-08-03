@@ -109,7 +109,7 @@ export default function ProductDetailsSeller() {
                                                        <span className='text-xl font-semibold text-slate-700'>{product?.currency=="USD"?"$":"GBP"} {product?.price}</span>
 
                                                    </h5>
-                                                   <h5 className='bg-green-300 text-green-800 py-1 px-6 rounded-lg w-28 text-sm font-semibold'>{product?.status?.label}</h5>
+                                                   <h5 className=' text-green-800 py-1 px-2 bg-green-300 text-center rounded-sm w-28 text-sm font-semibold'>{product?.status?.label}</h5>
 
                                            </div>
 
@@ -123,8 +123,11 @@ export default function ProductDetailsSeller() {
                                         </div>
 
                                         <div>
-                                          <Link to="/admin-seller/edit">
-                                             <button className='bg-orange-400 py-2 px-6 rounded-lg text-white '>Edit product</button>
+                                          <Link 
+                                            to="/admin-seller/edit"
+                                            state={{product}}
+                                           >
+                                             <button className='bg-orange-400 py-2 px-6 rounded-sm text-white text-sm '>Edit product</button>
                                           </Link>
                                         
                                         </div>

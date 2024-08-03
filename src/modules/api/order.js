@@ -18,7 +18,7 @@ export const uploadFile=async(file)=>{
 
 export const orderApi= {
     create:async function (products,user,delivery,total) {
-              console.log(products,"products")
+
               const orders = {};
             
            try{
@@ -39,7 +39,18 @@ export const orderApi= {
                               shipmentId:"",
                               delivery
                             });
+
+
                               try{
+                                const ref=doc(db,"products",product?.id)
+                                const docSnap = await getDoc(ref);
+                                const newQty=Number(docSnap?.data()?.qty)-Number(product?.qty)
+                                await updateDoc(doc(db,"products",product?.id),
+                                  {
+                                     qty:newQty
+                                
+                                  }
+                               )
                                     await addDoc(collection(db, "notifications"), {
                                           type:"Order update",
                                           to:product.vendor,
@@ -51,8 +62,10 @@ export const orderApi= {
                                     });
                                     await updateDoc(doc(db, "misc",product.vendor), {
                                        notifications:true,
-                                
                                     });
+                                    await updateDoc(doc(db,"misc",user?.id), {
+                                      cart:[]
+                                    })
                                     sendEmail(user?.email,user?.name,'created',snap?.id,`has been confirmed!!,Product name:${product?.name},amount:${product?.price}`)
                                }catch(e){
                                     console.log(e)

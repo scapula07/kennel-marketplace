@@ -232,7 +232,7 @@ export default function Order({order}) {
                          
                                <ol className='flex flex-col font-light text-slate-500 space-y-1 text-sm'>
                                   <li>Customer delivery address & service / Seller address:{order?.delivery?.city},USA </li>
-                                  <li>Delivery time:</li>
+                                  <li className='font-semibold'>Delivery time: will be estimated on payment .Message Seller for more information</li>
                                   <li>Customer name:{currentUser?.name}</li>
                                   <li>Seller name:{vendor?.name}</li>
                                   <li>Customer email:{currentUser?.email}</li>
@@ -241,18 +241,18 @@ export default function Order({order}) {
                   
                            <div className='flex flex-col space-y-4'> 
                                 <div className='flex items-center w-1/2 justify-between'> 
-                                     <h5 className='text-lg font-semibold text-slate-700'>Payment:</h5>
+                                     <h5 className='text-sm font-semibold text-slate-700'>Payment:</h5>
                                      <h5 className='text-semibold text-slate-900 f'>via:{order?.delivery?.payment}</h5>
                                 </div>
 
-                                <div className='flex items-center w-1/2 justify-between'> 
-                                     <h5  className='text-lg font-semibold text-slate-700 '>Delivery price:</h5>
-                                     <h5 className='text-light text-slate-400'>$</h5>
+                                <div className='flex items-center  justify-between'> 
+                                     <h5  className='text-sm font-semibold text-slate-700 font-semibold'>Delivery price:</h5>
+                                     <h5 className='text-light text-slate-800 w-4/5'>Will be calculated on payment.Message seller for more information</h5>
                                 </div>
 
                                 <div className='flex items-center w-1/2 justify-between'> 
-                                     <h5  className='text-lg font-semibold text-slate-700'>Total price:</h5>
-                                     <h5 className='text-light text-slate-400'>${order?.total}</h5>
+                                     <h5  className='text-sm font-semibold text-slate-700'>Total price:</h5>
+                                     <h5 className='text-light text-slate-600'>${order?.total}</h5>
                                 </div>
                                  {state==true &&
                                       <div className='flex items-center w-1/2 justify-between'> 

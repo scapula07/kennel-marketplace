@@ -22,6 +22,7 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { IoMdCheckbox ,IoMdClose} from "react-icons/io";
 import Modal from '../../components/modal';
 import Shipment from './components/shipment';
+import Cancel from './components/cancel';
 
 export default function SellerOrder() {
      const navigate=useNavigate()
@@ -36,6 +37,7 @@ export default function SellerOrder() {
     const [customer,setCustomer]=useState({})
     const [product,setProduct]=useState({images:[]})
     const [trigger,setTrigger]=useState(false)
+    const [triggerCancel,setTriggeringCancel]=useState(false)
   
     const ordered=location?.state.order
 
@@ -98,7 +100,10 @@ export default function SellerOrder() {
              try{
                 const res = await orderApi.cancelOrder(order,customer)
                 
+                
                 setCanceling(false)
+
+                setTriggeringCancel(false)
                }catch(e){
                 console.log(e)
               
@@ -121,7 +126,7 @@ export default function SellerOrder() {
                        <div className='w-4/5 bg-white  rounded-xl px-6 py-8'>
                             <div className='flex flex-col border-b pb-4'>
                                     <h5 className='text-lg  text-slate-700'>Order Details</h5>
-                                    <h5 className='text-sm font-light  text-slate-700'>Order no:</h5>
+                                    <h5 className='text-sm font-light  text-slate-700'>Order ID:{order?.id}</h5>
                              </div>
 
 
@@ -201,7 +206,7 @@ export default function SellerOrder() {
 
 
                                                
-                                                    <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
+                                                    <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-sm space-x-4'
                                                       style={{background: "#F3F3F3"}}
                                                       onClick={handleClick}
                                                     >
@@ -221,7 +226,7 @@ export default function SellerOrder() {
                                                     </div>
                                                     :
                                                     <div className='flex space-x-4 items-center'>
-                                                            <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-lg space-x-4'
+                                                            <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-sm space-x-4'
                                                                     style={{background: "#F3F3F3"}}
                                                                     onClick={handleClick}
                                                                 >
@@ -258,7 +263,7 @@ export default function SellerOrder() {
                                                     :
                                                     <>
                                                     {ordered?.contract==="sent"?
-                                                         <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-lg space-x-4'
+                                                         <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
                                                                style={{background: "#F3F3F3"}}
                                                            
                                                              >
@@ -280,7 +285,7 @@ export default function SellerOrder() {
                                                                    
                                                              </div>
                                                           :
-                                                   <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-lg space-x-4'
+                                                   <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
                                                           style={{background: "#F3F3F3"}}
                                                       
                                                         >
@@ -310,22 +315,18 @@ export default function SellerOrder() {
 
                                             </div>
 
-                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm' onClick={()=>!cancel&&cancelOrder()}>
-                                              {!cancel?
-                                              "Cancel order"
-                                              :
-                                              <BeatLoader size={10} color="orange" />
-
-                                              }
+                                            <button className='text-orange-400 border border-orange-400 py-2 px-6 rounded-sm text-sm' onClick={()=>setTriggeringCancel(true)}>
+                                           
+                                                 Cancel order
                                             
-                                           </button>
+                                            </button>
                                             {order?.shipmentId?.length ==0?
-                                               <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm ' onClick={()=>setTrigger(true)}>
+                                               <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-sm text-sm ' onClick={()=>setTrigger(true)}>
                                         
                                                Prepare Shipment
                                                </button>
                                                    :
-                                               <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-xl text-sm ' onClick={()=>setTrigger(true)}>
+                                               <button className='bg-orange-400 border border-orange-400 py-2 px-6 rounded-sm text-sm ' onClick={()=>setTrigger(true)}>
                                         
                                                 Update Shipment
                                                </button>
@@ -368,6 +369,34 @@ export default function SellerOrder() {
                        setTrigger={setTrigger}
                      />
             </div>
+
+      </Modal>
+      <Modal trigger={triggerCancel}  cname="w-1/2 py-2   px-8 rounded-lg ">
+              <div className='bg-white w-full  rounded-lg px-4 py-4 space-y-4'>
+                      <div className='w-full justify-end flex '>
+                            
+                                  <IoMdClose
+                                        className='text-2xl font-light'
+                                        onClick={()=>setTriggeringCancel(false)}
+                                />
+
+                      
+                            
+                      </div>
+
+                  <div>
+                      <Cancel 
+                        product={product}
+                        cancelOrder={cancelOrder}
+                        cancel={cancel}
+                      />
+
+
+
+                  </div>
+
+              </div>
+
 
       </Modal>
 

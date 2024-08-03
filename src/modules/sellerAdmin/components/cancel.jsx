@@ -5,14 +5,13 @@ import { BeatLoader } from 'react-spinners';
 
 export default function Cancel({cancelOrder,cancel}) {
     const options = [
-        { value: 'Not interested in order anymore', label: 'Not interested in order anymore' },
-        { value: 'Change in Financial Situatione', label: 'Change in Financial Situation' },
-        { value: 'Unsatisfactory Animal health report', label: 'Unsatisfactory Animal health report' },
-        { value: 'Change Mind', label: 'Change Mind' },
-        { value: 'Wrong Product', label: 'Wrong Product' },
-        { value: 'Breeding Conditions', label: 'Breeding Conditions' },
-        { value: 'Behavior Concerns', label: 'Behavior Concerns' },
-        { value: 'Change of Personal Circumstances.', label: 'Change of Personal Circumstances.' },
+        { value: 'Health issues of the animal', label: 'Health issues of the animal' },
+        { value: 'Unsuitable buyer', label: 'Unsuitable buyer' },
+        { value: 'Contractual Disputes', label: 'Contractual Disputes' },
+        { value: 'Change of Circumstances', label: 'Change of Circumstances' },
+        { value: 'Animal Behavior Concerns', label: 'Animal Behavior Concerns' },
+        { value: 'Transportation Issues', label: 'Transportation Issues' },
+        { value: 'Buyer Backing Out', label: 'Buyer Backing Out' },
         { value: 'Others', label: 'Others' },
       ]
       const [reason,setReason]=useState({})

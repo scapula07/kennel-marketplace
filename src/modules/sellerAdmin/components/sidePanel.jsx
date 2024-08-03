@@ -21,7 +21,7 @@ export default function SidePanel() {
      const [active,setActive]=useState(currentUser?.status==="pending"?"kyc":"")
     
   return (
-    <div className='w-full bg-slate-100 h-full rounded-xl py-6 px-4 overflow-y-scroll'>
+    <div className='w-full bg-slate-100 h-full rounded-xl py-6 px-4 overflow-y-scroll no-scrollbar'>
           <div className='flex flex-col space-y-16'>
                 <div className='w-full space-y-3 px-4'>
                      <img 
@@ -138,7 +138,7 @@ export default function SidePanel() {
                            ].map((item,index)=>{
                               return(
                                 <>
-                                {currentUser?.status ==="active"?
+                                {currentUser?.status ==="pending"?
 
                                 ["KYC","Guide"]?.includes(item?.title)&&
                                   <Card 

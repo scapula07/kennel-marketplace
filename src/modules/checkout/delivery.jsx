@@ -184,7 +184,7 @@ export default function Delivery({delivery,setDelivery}) {
 
                  </div>
 
-
+              {/* 
                  <div className='flex flex-col space-y-2 py-4'>
                         <h5 className='text-slate-500 font-light '>Choose Office</h5>
 
@@ -193,7 +193,7 @@ export default function Delivery({delivery,setDelivery}) {
 
                         </select>
 
-                  </div>
+                  </div> */}
 
                 <div className='flex flex-col space-y-2.5 py-5'>
                      {["United States Postal Service","UPS (United Parcel Service)","Blue Dart Shipping","Directly from seller"].map((text)=>{

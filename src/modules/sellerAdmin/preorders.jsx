@@ -84,8 +84,8 @@ export default function PreOrders() {
                               <h5 className='text-xl font-semibold text-black'>All Products</h5>
 
                               <div className='flex items-center'>
-                              <Link to="/admin-seller/new-product" >
-                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New product</button>
+                              <Link to="/admin-seller/litter" >
+                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New litter</button>
                               </Link>
 
 

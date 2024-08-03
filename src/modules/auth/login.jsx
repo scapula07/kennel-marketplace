@@ -14,7 +14,7 @@ export default function Login() {
   const [loader,setLoader]=useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
   let navigate = useNavigate();
-  console.log(credentail,"cred")
+  
 
   const login=async()=>{
     setErrorMsg(null)
@@ -43,9 +43,28 @@ export default function Login() {
          localStorage.clear();
          localStorage.setItem('user',JSON.stringify(user));
          setcurrentUser(user)
-         user?.role ==="admin" && navigate(`/admin`)
-         user?.role ==="user" && navigate(`/market`)
-         user?.role ==="breeder"&& navigate(`/admin-seller`)
+         console.log(user,"userr")
+        //  user?.role ==="admin" && navigate(`/admin`)
+        //  user?.role ==="user" && navigate(`/market`)
+        //  user?.role ==="breeder"&&user?.status ==="pending"? navigate(`/admin-seller/kyc`): navigate(`/admin-seller`)
+        switch (user?.role) {
+        
+          case 'admin':
+            navigate(`/admin`)
+          break;
+          case 'user':
+            navigate(`/market`)
+          break;
+          case 'breeder':
+            if(user?.status==="pending"){
+              navigate(`/admin-seller/kyc`)
+            }else if(user?.status==="active"){
+              navigate(`/admin-seller`)
+            }else{
+              navigate(`/market`)
+            }
+          
+        }
 
      }catch(e){
          setLoader(false)

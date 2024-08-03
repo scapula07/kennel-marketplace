@@ -19,3 +19,8 @@
 .clip-half {
     clip: rect(0, auto, auto, 50%);
   }
+
+.no-scrollbar::-webkit-scrollbar,
+body::-webkit-scrollbar{
+   display:none !important;
+}

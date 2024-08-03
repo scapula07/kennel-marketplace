@@ -13,6 +13,7 @@ import { accountTypeState } from '../recoil/state';
 import { useRecoilValue } from 'recoil';
 import { analytics } from '../firebase';
 import { logEvent } from "firebase/analytics";
+import { IoWarningOutline } from "react-icons/io5";
 
 
 export default function Cart() {
@@ -55,15 +56,15 @@ export default function Cart() {
   return (
     <Layout>
         <div className='w-full h-full flex justify-center py-10'>
-                <div className='flex flex-col w-3/4 space-y-10'> 
+                <div className='flex flex-col w-3/4'> 
                         <div className='flex w-full justify-between '>
-                            <h5 className='text-4xl font-semibold '>My cart</h5>
+                            <h5 className='text-xl font-semibold '>My cart</h5>
                        </div>
 
 
                        <div className='flex flex-col space-y-4 w-full '>
                                  <div className='py-4 '>
-                                    <h5 className='text-lg font-light text-blue-600'>You have {cart?.length} items in your cart</h5>
+                                    <h5 className='text-sm font-semibold text-blue-600'>You have {cart?.length} items in your cart</h5>
 
                                  </div>
 
@@ -91,15 +92,15 @@ export default function Cart() {
                     {cart?.length >0&&
                     <div className='flex w-3/5 justify-end'>
                              <div className='flex items-center space-x-4'>
-                                 <h5>Total:${total}</h5>
+                                 <h5 className='text-sm'>Total:${total}</h5>
                                  <Link to="/checkout"
                                     state={{
-                                      products,
-                                      total:total
+                                       products,
+                                       total:total
                                       }}
                                  >
                                
-                                      <button className='bg-orange-600 py-3 px-6 rounded-lg text-white' >Checkout</button>
+                                      <button className='bg-orange-600 py-2.5  px-6 rounded-sm text-xs text-white' >Checkout</button>
                                  </Link>
 
                              </div>
@@ -192,13 +193,15 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
     />
 
     <div className='flex w-full items-center justify-between'>
-        <div className='flex flex-col'>
-              <div className='flex flex-col space-y-3'>
+        <div className='flex flex-col space-y-1'>
+              <div className='flex flex-col space-y-1'>
                    <h5 className='text-lg text-slate-700 font-light'>{product?.name}</h5>
-                   <h5 className='text-sm text-slate-500 '>{product?.description?.slice(0,30)}...</h5>
+                   <h5 className='text-xs text-slate-500 '>{product?.description?.slice(0,50)}...</h5>
               </div>
 
-              <div className='flex items-center'>
+              <div className='flex items-center space-x-1'>
+                <IoWarningOutline className='text-sm text-red-500' />
+                <h5 className='text-xs text-red-500'>{product?.qty} units left</h5>
               </div>
         </div>
       
@@ -206,15 +209,15 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
          <div className='flex items-center w-1/4'>
                <div className='flex items-center space-x-5'>
                      <BsDash
-                        className='text-3xl font-semibold text-slate-600'
+                        className='text-xl font-semibold text-slate-600'
                         onClick={()=>qty !=1&&decrement()}
                       />
                       <input 
-                         className='h-10 w-10 rounded-lg border px-3 text-center'
+                         className='h-10 w-10 rounded-sm text-xs border px-3 text-center'
                          value={qty}
                      />
                      <IoMdAdd
-                         className='text-3xl font-semibold text-slate-600'
+                         className='text-xl font-semibold text-slate-600'
                          onClick={increment}
 
                       />
@@ -229,11 +232,12 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
 
                       <ClipLoader 
                         color='orange'
+                        size={12}
                       />
                       :
 
                       <MdOutlineDeleteOutline 
-                      className='text-slate-500 text-2xl'
+                      className='text-red-500 text-2xl'
                       onClick={remove}
                       />
 

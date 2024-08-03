@@ -98,9 +98,9 @@ export default function Litter() {
   return (
     <div className='w-full'>
           <div className='flex flex-col space-y-3'>
-            <h5 className='text-black font-light text-sm'>Breeder/Product</h5>
+            <h5 className='text-black font-light text-sm'>Breeder/Litter</h5>
             
-            <h5 className='text-lg font-semibold text-black'>New Product</h5>
+            <h5 className='text-lg font-semibold text-black'>Upcoming Litter</h5>
 
           </div>
 
@@ -488,8 +488,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                     />
              </div>
 
-              {
-                product?.status?.value==="preorder"&&
+         
            
 
                 <div className='flex flex-col w-full space-y-3'>
@@ -502,7 +501,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                         />
                          <h5 className='text-xs font-semibold text-slate-600'>Date for product availability</h5>
                 </div>
-               }
+               
 
          
 
@@ -511,6 +510,7 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
                      {isLoading?
                       <ClipLoader
                         color={"black"}
+                        size="12"
                       />
                       :
 

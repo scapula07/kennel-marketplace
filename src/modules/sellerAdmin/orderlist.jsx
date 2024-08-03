@@ -211,11 +211,11 @@ const Row=({order})=>{
       </td>
       </Link>
       <td className='text-sm font-light text-slate-500 border py-2 px-2'>{formattedDate}</td>
-      <td className='text-sm font-light text-slate-500 border py-2 px-2'>
+      <td className='text-sm font-semibold text-slate-500 border py-2 px-2'>
        {order?.status=="active"?
-          <span className='text-yellow-500'>{"Pending"}</span>
+          <span className='text-yellow-500'>{"ACTIVE"}</span>
           :
-          <span>{order?.status}</span>
+          <span className={order?.status=="cancelled"?'text-red-500':'text-green-500'}>{order?.status?.toUpperCase()}</span>
        }
       </td>
       <td className='text-sm font-light text-slate-500 flex items-center space-x-1 border py-2 px-2'>

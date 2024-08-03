@@ -59,7 +59,7 @@ export default function Checkout() {
              <div className='w-full h-full flex justify-center py-10'>
                    <div className='flex flex-col w-3/4 space-y-10'> 
                             <div className='flex w-full justify-between '>
-                                <h5 className='text-4xl font-semibold '>Checkout</h5>
+                                <h5 className='text-xl font-semibold '>Checkout</h5>
 
                             </div>
 
@@ -111,6 +111,7 @@ export default function Checkout() {
                                                        <div className='w-full flex justify-center'>
                                                              <ClipLoader 
                                                                 color='#C74A1F'
+                                                                size={12}
                                                              />
                                                       </div>
                                                        :

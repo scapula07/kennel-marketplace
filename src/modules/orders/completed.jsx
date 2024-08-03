@@ -57,6 +57,7 @@ export default function Completed() {
                                     <ClipLoader 
                                           color={"orange"}
                                           loading={true}
+                                          size='12'
                                     />
                                 </div>
                                 }

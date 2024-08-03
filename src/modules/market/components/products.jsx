@@ -67,6 +67,7 @@ export default function Products({products,setProducts}) {
           <div className='flex w-full justify-center py-20'>
               <ClipLoader 
                  color='orange'
+                 size={16}
               />
 
           </div>
