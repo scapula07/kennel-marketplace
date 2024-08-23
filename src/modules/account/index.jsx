@@ -33,7 +33,7 @@ export default function Accoount() {
             <div className='w-full h-full flex justify-center py-10'>
                  <div className='flex flex-col w-3/4 space-y-10'> 
                           <div className='flex w-full justify-between '>
-                              <h5 className='text-4xl font-semibold '>My account</h5>
+                              <h5 className='text-xl font-semibold '>My account</h5>
 
                               <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600' onClick={logout}>Log out</button>
 
@@ -56,10 +56,10 @@ export default function Accoount() {
                             } 
 
                                <div className='flex flex-col space-y-2'>
-                                  <h5 className='text-2xl font-semibold '>{currentUser?.name}</h5>
+                                  <h5 className='text-xl font-semibold '>{currentUser?.name}</h5>
                                   <p>{currentUser?.bio}</p>
                                   <Link to="/profile">
-                                    <button className='text-blue-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>View profile</button>
+                                    <button className='text-blue-600 py-1.5 text-xs px-4 rounded-lg border border-blue-600'>View profile</button>
                                   </Link>
                                
 

@@ -12,7 +12,7 @@ export default function TopProduct() {
            <div className='flex w-full items-center justify-between' >
 
                   <div className='flex flex-col space-y-2'>
-                      <h5 className='text-6xl font-semibold'>Top selling products</h5>
+                      <h5 className='text-4xl font-semibold'>Top selling products</h5>
                       <h5 className='text-slate-500  '>Want to pre-order favourite animal? Check upcoming litter drops</h5>
 
                   </div>

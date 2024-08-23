@@ -13,7 +13,7 @@ export default function Kennel() {
            <div className='flex w-full items-center justify-between' >
 
                   <div className='flex flex-col space-y-2'>
-                      <h5 className='text-6xl font-semibold'>Kennel Breeders features</h5>
+                      <h5 className='text-4xl font-semibold'>Kennel Breeders features</h5>
                       <h5 className='text-slate-500  '>Wondering why you should join Kennel Breeders? Here is our answer</h5>
 
                   </div>

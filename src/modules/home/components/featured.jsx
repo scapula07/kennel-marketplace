@@ -7,14 +7,14 @@ import { collection,  onSnapshot,
   doc, getDocs,
   query, orderBy, 
   limit,getDoc,setDoc ,
- updateDoc,addDoc,startAt,endAt } from 'firebase/firestore'
+ updateDoc,addDoc,startAt,endAt ,or,where} from 'firebase/firestore'
 import { db } from '../../firebase';
 import { productApi } from '../../api/product';
 import { ClipLoader } from 'react-spinners';
 import { accountTypeState } from '../../recoil/state';
 import { useRecoilValue } from 'recoil';
 import { saveTypeState } from '../../recoil/state';
-
+import { IoTime } from "react-icons/io5";
 import { Link} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +22,12 @@ import { useNavigate } from 'react-router-dom';
 export default function Featured() {
   const [products,setProducts]=useState([])
   useEffect(()=>{
-    const q = query(collection(db, "products"),orderBy("createdAt","desc"),limit(3));
+    const q = query(collection(db, "products"),
+    or(
+      where('status',"==",{ value: 'instock', label: 'In stock' }),
+      where('status',"==",{ value: 'outstock', label: 'Out stock' })
+     ),
+      orderBy("createdAt","desc"),limit(3));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const products = []
         querySnapshot.forEach((doc) => {
@@ -44,7 +49,7 @@ export default function Featured() {
            <div className='flex w-full items-center justify-between' >
 
                   <div className='flex flex-col space-y-2'>
-                      <h5 className='text-6xl font-semibold'>Featured</h5>
+                      <h5 className='text-4xl font-semibold'>Featured</h5>
                       <h5 className='text-slate-500  '>Check the best selling products, services and breeding options from Kennel Breeders sellers</h5>
 
                   </div>
@@ -77,20 +82,18 @@ export default function Featured() {
 
 
 
+
 const Card=({product})=>{
-    const navigate=useNavigate()
   const currentUser=useRecoilValue(accountTypeState)
   const saved=useRecoilValue(saveTypeState)
          const [isLoading,setLoader]=useState(false)
          const [isSaving,setSave]=useState(false)
 
          const addTocart=async()=>{
-           if(currentUser?.id?.length ==undefined){
-                 navigate("/login")
-               }
             setLoader(true)
             try{
-                const res=await productApi.addToCart(product,currentUser)
+                const res=await productApi.addToCart(product,currentUser,"product")
+                logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
                 res&&setLoader(false)
               }catch(e){
               console.log(e)
@@ -102,6 +105,7 @@ const Card=({product})=>{
           setSave(true)
           try{
               const res=await productApi.save(product,currentUser)
+              logEvent(analytics, 'add_to_wishlist', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
               res&&setSave(false)
             }catch(e){
             console.log(e)
@@ -113,7 +117,7 @@ const Card=({product})=>{
     return(
       <div className='flex flex-col w-full space-y-4'>
             
-          <div className='relative h-72 w-full'>
+          <div className='relative h-60 w-full'>
          
                 <img 
                     src={product?.images?.length !=undefined?product?.images[0] :""}
@@ -157,7 +161,7 @@ const Card=({product})=>{
                          {[1,2,3,4,5].map(()=>{
                            return(
                               <MdOutlineStar 
-                                className='text-slate-300 '
+                                className='text-slate-300 text-sm '
                               />
                            )
                          })
@@ -175,15 +179,33 @@ const Card=({product})=>{
           </div>
           
  
-          <div className='flex flex-col space-y-3'>
+          <div className='flex flex-col space-y-3 h-36'>
               <Link  to={`/product`}
                     state={{
                        product
                   }}
-                  >                <h5 className='text-slate-500 text-xl font-semibold'>{product?.name}</h5>
+                  
+                  >          
+                 <h5 className='text-slate-700 text-lg font-semibold' onClick={()=>{
+                         logEvent(analytics, 'select_item',{items:[product]})
+                         console.log("produvct")
+                  }}>{product?.name}</h5>
             </Link>
-             <h5 className='text-slate-400 text-sm '>{product?.description?.slice(0,100)}</h5>
-             <h5 className=' text-2xl font-semibold'>{product?.price} {product?.currency}</h5>
+               
+             <h5 className='text-slate-800 text-xs h-9'>{product?.description?.slice(0,70)}{product?.description?.length>70&&"..."}</h5>
+             <h5 className=' text-xl font-semibold'>{product?.price} {product?.currency}</h5>
+             {product?.status?.value==="preorder"&&
+                <div className='flex w-full items-center py- justify-between'>
+                   <h5 className='flex items-center space-x-1'>
+                      <IoTime />
+                      <span className='text-sm font-semibold text-slate-700'>Available in</span>
+
+                   </h5>
+                   <h5 className='text-lg font-semibold'>{product?.availableDate}</h5>
+
+                </div>
+
+             }
  
           </div>
  
@@ -191,19 +213,31 @@ const Card=({product})=>{
          {isLoading?
               <ClipLoader 
                  color={"#C74A1F"}
+                 size="12"
               />
               :
-             <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}
-                  onClick={addTocart}
-             >
+             <button className='text-white py-2.5 space-x-4 px-4 rounded-lg flex justify-center items-center w-full text-sm' style={{background:"#C74A1F"}}
+                  onClick={()=>{
+                     product?.status?.value==="instock" || product?.status?.value==="outstock"?
+                      addTocart()
+                       :
+                      save()
+                  }
+                   }
+                >
                   
-                            <MdOutlineShoppingCart 
-                                 className='text-xl' 
-                              />
-                              <span>Add to cart</span>
+                    <MdOutlineShoppingCart 
+                          className='text-xl' 
+                      />
+                       {product?.status?.value==="instock" || product?.status?.value==="outstock"?
+                         <span>Add to cart</span>
+                         :
+                         <span>Pre-order</span>
+                       }
+                      
  
-             </button>
-}
+                </button>
+              }
           </div>
  
       </div>

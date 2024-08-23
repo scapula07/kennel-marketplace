@@ -1,7 +1,7 @@
 import axios from "axios"
 
 
-const baseUrl="http://localhost:3003"
+const baseUrl="https://kennel-stripe-apis-2kmp.onrender.com"
 
 export const analyticApi= {
    userAnalytics:async function () {

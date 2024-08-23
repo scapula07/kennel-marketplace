@@ -1,5 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import cover from "../../../assets/cover.png"
+import cat from "../../../assets/catbackground.png"
+import horse from "../../../assets/horsebackground.png"
+import salamander from "../../../assets/salamanderbackground.png"
 import breeder from "../../../assets/breeder.png"
 import { MdOutlineStar,MdOutlineShoppingCart  } from "react-icons/md";
 import {FiArrowRight} from "react-icons/fi"
@@ -19,7 +22,10 @@ export default function Cover({seller}) {
 
       const currentUser=useRecoilValue(accountTypeState)
       const [isLoading,setLoader]=useState(false)
+      const [bg,setBg]=useState(cover)
       const navigate=useNavigate()
+
+      console.log(seller,"user")
 
       const startMsg=async()=>{
         setLoader(true)
@@ -33,11 +39,31 @@ export default function Cover({seller}) {
           }
       }
 
+      useEffect(()=>{
+        switch (seller?.animal?.value) {
+        
+          case 'Calf':
+            setBg(cat)
+          break;
+          case 'Puppy':
+            setBg(cover)
+          break;
+          case 'Kitten':
+            setBg(cat)
+          break;
+          default:
+           setBg(cover)
+           
+          
+        }
+
+       },[seller])
+
   return (
     <div className='flex flex-col w-full'>
           <div className='w-full flex flex-col '>
                 <img 
-                src={cover}
+                src={bg}
                 className="w-full h-56"
                 />
              <div className=' px-28 flex items-center '>

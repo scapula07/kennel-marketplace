@@ -1,5 +1,6 @@
 import React,{useState,useEffect,useRef} from 'react'
 import bg from "../../assets/imgbg.png"
+
 import { IoMdClose } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';

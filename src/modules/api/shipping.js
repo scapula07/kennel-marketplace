@@ -1,6 +1,6 @@
 import axios from "axios"
 import { AddressTo$ } from "shippo";
-const baseUrl="https://kennel-stripe-apis.onrender.com"
+const baseUrl="https://kennel-stripe-apis-2kmp.onrender.com"
 export const shippingApi= {
    
     fetchPercel:async function () {

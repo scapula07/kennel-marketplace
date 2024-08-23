@@ -42,7 +42,7 @@ export default function Breeders() {
            <div className='flex w-full items-center justify-between' >
 
                   <div className='flex flex-col space-y-2'>
-                      <h5 className='text-6xl font-semibold'>Top breeders</h5>
+                      <h5 className='text-4xl font-semibold'>Top breeders</h5>
                       <h5 className='text-slate-500  '>Check out the best breeders who work on Kennel Breeders</h5>
 
                   </div>
@@ -106,21 +106,21 @@ export default function Breeders() {
 
 const Card=({seller})=>{
   return(
-    <div className='flex flex-col w-full space-y-4'>
+    <div className='flex flex-col w-full space-y-2'>
         <div className=' w-full flex flex-col items-center space-y-3'>
            <Link to="/seller" state={{seller:seller}} >
            
               <img 
                 src={seller?.img}
-                className="rounded-full w-56 h-56"
+                className="rounded-full w-44 h-44"
 
               />
           </Link>
 
-        <div className='flex flex-col space-y-2 items-center'>
-           <h5 className='text-slate-500 text-xl font-semibold'>{seller?.name}</h5>
+        <div className='flex flex-col space-y-1 items-center'>
+           <h5 className='text-slate-800 text-lg  font-semibold'>{seller?.name}</h5>
          
-              <h5 className=' text-lg text-slate-500 '>{seller?.animal?.value} Breeder</h5>
+              <h5 className=' text-sm text-slate-900 '>{seller?.animal?.value} Breeder</h5>
          
           
 
@@ -133,17 +133,17 @@ const Card=({seller})=>{
         </div>
 
         
-        <div className='w-full flex justify-center py-6'>
+        <div className='w-full flex justify-center py-2'>
         <Link to="/seller" state={{seller:seller}} >
-            <button className='text-white py-3 space-x-4 px-4 rounded-lg flex justify-center items-center w-full' style={{background:"#C74A1F"}}>
+            <button className='text-white py-2.5 space-x-4 px-4 rounded-lg flex justify-center items-center w-full text-sm' style={{background:"#C74A1F"}}>
                       
                       <MdOutlineShoppingCart 
                           className='text-xl' 
                         />
-                        <span>View profile</span>
+                        <span className='text-xs'>View profile</span>
 
            </button>
-    </Link>
+        </Link>
         </div>
 
     </div>
