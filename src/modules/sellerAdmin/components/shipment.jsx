@@ -101,7 +101,7 @@ export default function Shipment({order,customer,currentUser,setTrigger}) {
               console.log(shipment,"shhio")
               shipment?.object_id?.length>0 && await orderApi.updateOrderShipment(order,shipment?.object_id)
               shipment?.object_id?.length>0 && setLoading(false)
-              setTrigger(false)
+              setLoading(false)
           }catch(e){
             setLoading(false)
             console.log(e)

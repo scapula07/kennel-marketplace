@@ -20,7 +20,9 @@ const monthNames = [
 export default function Overview() {
       const date =new Date()
       const currentUser=useRecoilValue(accountTypeState)
-      const [stats,setStats]=useState([{metrics:{}}])
+      const [stats,setStats]=useState([{metrics:{
+        totalPurchasers:0
+      }}])
       const [productStat,setProductStat]=useState([])
       const day = date.getDate();
       const month = date.getMonth() + 1; // Month is zero-based, so adding 1
@@ -89,6 +91,7 @@ export default function Overview() {
       },[currentUser])
 
 
+      console.log(stats,"stats")
 
   return (
     <div className='w-full'>
@@ -111,7 +114,7 @@ export default function Overview() {
                               },
                               {
                                 title:"Total product purchase",
-                                total:stats[0]?.metrics?.totalPurchasers,
+                                total:stats?.length >0?stats[0]?.metrics?.totalPurchasers:0,
                                 icon:<MdOutlineCardGiftcard  />
                               },             
 
@@ -136,9 +139,14 @@ export default function Overview() {
                         </div>
 
                         <div className='w-1/2'>
-                            <PieChart 
-                               data={[...stats]} 
-                            />
+                          {stats?.length >0&&
+                            (
+                              <PieChart 
+                                data={[...stats]} 
+                              />
+                            )
+                          }
+                           
 
                         </div>
 

@@ -18,7 +18,7 @@ import ReactPaginate from 'react-paginate';
 
 export default function Seller({sellers,setSeller}) {
   const [pageNumber, setPageNumber] = useState(0)
-  const itemsPerPage = 20
+  const itemsPerPage = 18
   const pageVisited = pageNumber * itemsPerPage
 
   useEffect(()=>{

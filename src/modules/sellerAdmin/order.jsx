@@ -23,10 +23,12 @@ import { IoMdCheckbox ,IoMdClose} from "react-icons/io";
 import Modal from '../../components/modal';
 import Shipment from './components/shipment';
 import Cancel from './components/cancel';
+import Contract from './components/contract';
 
 export default function SellerOrder() {
-     const navigate=useNavigate()
-     const currentUser=useRecoilValue(accountTypeState)
+
+    const navigate=useNavigate()
+    const currentUser=useRecoilValue(accountTypeState)
     const [order,setOrder]=useState({images:[]})
     const [file,setFile]=useState({name:""})
     const [isLoading,setLoader]=useState(false)
@@ -37,155 +39,140 @@ export default function SellerOrder() {
     const [customer,setCustomer]=useState({})
     const [product,setProduct]=useState({images:[]})
     const [trigger,setTrigger]=useState(false)
-    const [triggerCancel,setTriggeringCancel]=useState(false)
-  
+    const [triggerCancel,setTriggeringCancel]=useState(false) 
+    const [onSelectContract,setSelectContract]=useState(false) 
+    const [selectContractType,setSelectContractType]=useState(false) 
     const ordered=location?.state.order
 
       
     const handleClick = event => {
         hiddenFileInput.current.click()
-       }
-        const handleChange = async(e)=> {
-        const dir = e.target.files[0]
-    
-        if (dir) {
+    }
+    const handleChange = async(e)=> {
+      const dir = e.target.files[0]
+      if (dir) {
           setFile(dir)
         }
-       }
+     }
   
-
-    
- 
-  
-    useEffect(()=>{
-      
+    useEffect(()=>{ 
         if(ordered?.id?.length != undefined){
           const unsub = onSnapshot(doc(db,"orders",ordered?.id), (doc) => {
             setOrder({...doc.data(),id:doc?.id})
            });
           }
-         },[])
+     },[])
 
+    const uploadContract=async()=>{
+      setLoader(true)
 
-   
+        try{
+            const res=await orderApi.uploadContract(ordered,file,product,currentUser,customer)
+            setLoader(false)
 
-         const uploadContract=async()=>{
-            setLoader(true)
-
-              try{
-                  const res=await orderApi.uploadContract(ordered,file,product,currentUser,customer)
-                  setLoader(false)
-
-              }catch(e){
-                console.log(e)
-                setLoader(false)
-              }
-         }
+        }catch(e){
+          console.log(e)
+          setLoader(false)
+        }
+    }
   
-         const startMsg=async()=>{
-            setLoading(true)
-              try{
-                const res=await messageApi.startConversation({id:customer?.id},currentUser)
-                setLoading(false)
-                res&&navigate("/messages")
-              }catch(e){
-                setLoading(false)
-                console.log(e)
-              }
+    const startMsg=async()=>{
+        setLoading(true)
+        try{
+            const res=await messageApi.startConversation({id:customer?.id},currentUser)
+            setLoading(false)
+            res&&navigate("/messages")
+          }catch(e){
+            setLoading(false)
+            console.log(e)
           }
+      }
 
 
-          const cancelOrder=async()=>{
-            setCanceling(true)
-             try{
-                const res = await orderApi.cancelOrder(order,customer)
-                
-                
-                setCanceling(false)
+    const cancelOrder=async()=>{
+          setCanceling(true)
+        try{
+          const res = await orderApi.cancelOrder(order,customer)        
+          setCanceling(false)
+          setTriggeringCancel(false)
+          }catch(e){
+          setCanceling(false)
+        }
+    }
+    const options = [
+      { value: 'Artificial Insemination Contract', label: 'Artificial Insemination Contract'},
+      { value: 'Animal Sale Contract', label: 'Animal Sale Contract' },
+      { value: 'Animal Exchange Contract', label: 'Animal Exchange Contract' },
+      { value: 'Others', label: 'Others' },
+    ]
 
-                setTriggeringCancel(false)
-               }catch(e){
-                console.log(e)
-              
-                setCanceling(false)
-    
-             }
-          }
-          // console.log(order,"oo")
   return (
-    <>
-  
+  <>
     <div className='w-full'>
-                <div className='flex flex-col space-y-3'>
-                    <h5 className='text-white font-light text-sm'>Admin/Order</h5>
-                    <h5 className='text-lg font-semibold text-white'></h5>
+          <div className='flex flex-col space-y-3'>
+              <h5 className='text-white font-light text-sm'>Admin/Order</h5>
+              <h5 className='text-lg font-semibold text-white'></h5>
+          </div>
 
-                </div>
+          <div className='w-full rounded-lg py-6 px-4 flex justify-center'>
+                   <div className='w-4/5 bg-white  rounded-xl px-6 py-8'>
+                        <div className='flex flex-col border-b pb-4'>
+                              <h5 className='text-lg  text-slate-700'>Order Details</h5>
+                              <h5 className='text-sm font-light  text-slate-700'>Order ID:{order?.id}</h5>
+                        </div>
 
-                <div className='w-full rounded-lg py-6 px-4 flex justify-center'>
-                       <div className='w-4/5 bg-white  rounded-xl px-6 py-8'>
-                            <div className='flex flex-col border-b pb-4'>
-                                    <h5 className='text-lg  text-slate-700'>Order Details</h5>
-                                    <h5 className='text-sm font-light  text-slate-700'>Order ID:{order?.id}</h5>
+
+                        <div className='flex w-full items-center justify-between py-6 border-b '>
+                                <Product 
+                                  item={ordered?.products}
+                                  product={product}
+                                  setProduct={setProduct}
+                                />
+                                {loading?
+                                  <ClipLoader 
+                                    color="orange"
+
+                                  />
+                                  :
+                                  <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs ' onClick={startMsg}>Message customer</button>
+
+                                }
+                        </div>
+                         <div className='flex w-full justify-between py-4'>
+                                <div className='w-1/4'>
+                                  <Tracker 
+                                    order={order}
+                                    customer={customer}
+                                    product={product}
+                                    setProduct={setProduct}
+                                    currentUser={currentUser}
+                                  />
+                                </div>
+
+                              <div className='w-2/4 flex flex-col px-4 space-y-8'>                         
+                                    <div className='flex flex-col space-y-4'>
+                                          <h5 className='text-slate-500 font-semibold'>Customer & Delivery details</h5>
+                                          <div className='bg-slate-100 py-8 px-4'         style={{background: "#F3F3F3"}}>
+                                            <Customer 
+                                                order={ordered}
+                                                customer={customer}
+                                                setCustomer={setCustomer}
+                                            />
+                                            <div className='flex flex-col'>
+                                                <h5 className='font-light text-slate-500 text-xs'>City :{ordered?.delivery?.city}</h5>
+                                                <h5 className='font-light text-slate-500 text-xs'>Delivery service :{ordered?.delivery?.dispatch}</h5>
+                                                <h5 className='font-light text-slate-500 text-xs'>Payment method :{ordered?.delivery?.payment}</h5>
+                                                
+
+                                            </div>
+
                              </div>
-
-
-                             <div className='flex w-full items-center justify-between py-6 border-b '>
-                                     <Product 
-                                       item={ordered?.products}
-                                       product={product}
-                                       setProduct={setProduct}
-                                     />
-                                         {loading?
-                                           <ClipLoader 
-                                              color="orange"
-
-                                           />
-                                           :
-                                           <button className='py-2 px-6 bg-orange-500 rounded-lg text-white text-xs ' onClick={startMsg}>Message customer</button>
-
-                                         }
-                                          
-                                     
-                   
-               
-                             </div>
-
-                             <div className='flex w-full justify-between py-4'>
-                                   <div className='w-1/4'>
-                                      <Tracker 
-                                        order={order}
-                                        customer={customer}
-                                        product={product}
-                                        setProduct={setProduct}
-                                        currentUser={currentUser}
-                                      />
-                                   </div>
-
-                                    <div className='w-2/4 flex flex-col px-4 space-y-8'>                         
-                                          <div className='flex flex-col space-y-4'>
-                                               <h5 className='text-slate-500 font-semibold'>Customer & Delivery details</h5>
-                                               <div className='bg-slate-100 py-8 px-4'         style={{background: "#F3F3F3"}}>
-                                                  <Customer 
-                                                      order={ordered}
-                                                      customer={customer}
-                                                      setCustomer={setCustomer}
-                                                  />
-                                                  <div className='flex flex-col'>
-                                                      <h5 className='font-light text-slate-500 text-xs'>City :{ordered?.delivery?.city}</h5>
-                                                      <h5 className='font-light text-slate-500 text-xs'>Delivery service :{ordered?.delivery?.dispatch}</h5>
-                                                      <h5 className='font-light text-slate-500 text-xs'>Payment method :{ordered?.delivery?.payment}</h5>
-                                                      
-
-                                                  </div>
-
-                                              </div>
-                                            
-                                          </div>
+                                      
+                        </div>
 
                                           <div className=''>
-                                              <h5 className='text-slate-500 font-semibold text-sm'>Payment status:{ordered?.paid?
-                                              <span className='text-green-500 text-xs'> Paid</span>
+                                              <h5 className='text-slate-500 font-bold text-sm'>Payment status:{ordered?.paid?
+                                              <span className='text-green-500 text-'> Paid</span>
                                               :
                                               <span className='text-yellow-500 text-xs'>Pending</span>
                                               
@@ -194,12 +181,7 @@ export default function SellerOrder() {
                                           </div>
 
                                           <div className='flex flex-col w-full space-y-2'>
-                                              <h5 className='text-slate-500 font-semibold'>Contract(
-                                                <Link to="https://firebasestorage.googleapis.com/v0/b/reach-nft-auction.appspot.com/o/order%2Fkb%20contract%20template.pdf?alt=media&token=912fe008-c696-4816-9a3c-a75495435612">
-                                                <span className='text-sm font-light text-orange-500 hover:underline ' >Example contract</span>
-                                                </Link>
-                                                
-                                              )</h5>
+                                              <h5 className='text-slate-500 font-semibold'>Contract </h5>
                                               {ordered?.contract==="waiting"?
                                                    <>
                                                    {file?.name?.length==0?
@@ -210,21 +192,19 @@ export default function SellerOrder() {
                                                       style={{background: "#F3F3F3"}}
                                                       onClick={handleClick}
                                                     >
-                                                         <MdOutlineFileUpload 
-                                                           className='text-xl font-light'
-                                                         />
-                                                         <h5 className='text-slate-500 font-light text-sm'>Upload contract</h5>
+                                                      <MdOutlineFileUpload 
+                                                        className='text-xl font-light'
+                                                      />
+                                                      <h5 className='text-slate-500 font-light text-sm'>Upload contract</h5>
 
-                                                         <input
-                                                            type="file"
-                                                            className='hidden'
-                                                            ref={hiddenFileInput}
-                                                            onChange={handleChange}
-                                                            />
-
-                                                          
+                                                      <input
+                                                        type="file"
+                                                        className='hidden'
+                                                        ref={hiddenFileInput}
+                                                        onChange={handleChange}
+                                                        />    
                                                     </div>
-                                                    :
+                                                        :
                                                     <div className='flex space-x-4 items-center'>
                                                             <div className='flex bg-slate-100 w-3/4 items-center py-2 px-5 rounded-sm space-x-4'
                                                                     style={{background: "#F3F3F3"}}
@@ -238,9 +218,7 @@ export default function SellerOrder() {
                                                                         className='hidden'
                                                                         ref={hiddenFileInput}
                                                                         onChange={handleChange}
-                                                                        />
-
-                                                                        
+                                                                        />                    
                                                                 </div>
                                                                 {isLoading?
 
@@ -252,17 +230,15 @@ export default function SellerOrder() {
                                                                     <h5 className='text-sm font-semibold text-orange-500' onClick={uploadContract}>Upload
                                                                     </h5>
 
-                                                                }
-                                                          
-
+                                                                }          
                                                     </div>
                                        
 
-                                                   }
+                                                     }
                                                     </>
-                                                    :
+                                                         :
                                                     <>
-                                                    {ordered?.contract==="sent"?
+                                                     {ordered?.contract==="sent"?
                                                          <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
                                                                style={{background: "#F3F3F3"}}
                                                            
@@ -278,31 +254,20 @@ export default function SellerOrder() {
                                                                      className='hidden'
                                                                      ref={hiddenFileInput}
                                                                      onChange={handleChange}
-                                                                     />
-
-
-         
-                                                                   
+                                                                     />    
                                                              </div>
                                                           :
-                                                   <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
+                                                      <div className='flex bg-slate-100 w-3/5 items-center py-2 px-5 rounded-sm space-x-4'
                                                           style={{background: "#F3F3F3"}}
-                                                      
-                                                        >
-                                                         
-                                                             <h5 className='text-slate-500 font-light text-sm'>Contract signed</h5>
-                                                             
-                                                             <AiOutlineDownload className='text-xl'
-                                                             />
+                                                         >
+                                                          <h5 className='text-slate-500 font-light text-sm'>Contract signed</h5>
+                                                          
+                                                          <AiOutlineDownload className='text-xl'
+                                                          />              
     
-                                                            
-    
-                                                              
-                                                        </div>
-
-                                                    }
+                                                      </div>
+                                                       }
                                                     </>
-
                                               }
                                             
                                           </div>
@@ -339,12 +304,28 @@ export default function SellerOrder() {
 
                                             
                                              
-                                            
+                                           <div className='py-5 space-y-3'>
+                                           <h5 className='text-sm font-bold text-slate-500'>Download Contact Type</h5>
+                                           <Select 
+                                                options={options}
+                                                defaultInputValue={options[0]?.value}
+                                                className="text-sm"
+                                                // value={reason}
+                                                onChange={(opt) => {
+                                                    // setReason(opt);
+                                                    setSelectContract(true)
+                                                    setSelectContractType(opt.value)
+                                                  
+                                                  }}
+                                            />
+
+                      
+                                          </div>      
                                     
                                     </div>
+                                    
 
                              </div>
-                        
 
                        </div>
                        
@@ -400,6 +381,27 @@ export default function SellerOrder() {
 
       </Modal>
 
+      <Modal trigger={onSelectContract}  cname="w-3/5 py-2  bg-gray-200 px-8 rounded-lg h-screen overflow-y-scroll ">
+              <div className=' w-full  rounded-lg px-4 py-4 space-y-4 h-0full'>
+                      <div className='w-full justify-end flex '>
+                            
+                            <IoMdClose
+                                className='text-2xl font-light'
+                                onClick={()=>setSelectContract(false)}
+                                />
+                            
+                      </div>
+
+                      <div className='w-full h-full py-4'>
+                          <Contract 
+                             selectContractType={selectContractType}
+                          />
+
+                      </div>
+
+                </div>
+      </Modal>
+
     </>
   )
 }
@@ -408,7 +410,7 @@ export default function SellerOrder() {
 
 
 const Product=({item,product,setProduct})=>{
-      //  const [product,setProduct]=useState({images:[]})
+
        console.log(item,"iii")
        useEffect(()=>{
       

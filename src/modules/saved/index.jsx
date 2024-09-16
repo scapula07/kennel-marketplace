@@ -25,11 +25,11 @@ export default function Saved() {
                                saved={saved}
                             />
 
-                            <div className='py-6 '>
+                            {/* <div className='py-6 '>
                                 <h5 className='text-4xl font-semibold '>Saved sellers</h5>
                             </div>
 
-                            <Seller />
+                            <Seller /> */}
 
                         </div>
                     

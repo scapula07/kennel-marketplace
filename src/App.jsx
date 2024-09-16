@@ -64,6 +64,7 @@ import Guide from './modules/sellerAdmin/guide'
 import KYC from './modules/sellerAdmin/kyc'
 import PreOrders from './modules/sellerAdmin/preorders'
 import Litter from './modules/sellerAdmin/litter'
+import Pricing from './modules/sellerAdmin/pricing'
 
 
 function App() {
@@ -145,6 +146,7 @@ function App() {
                   <Route exact path=""  element={<OverviewSeller/>} />
                   <Route exact path="litter"  element={<Litter/>} />
                   <Route exact path="preorders"  element={<PreOrders/>} />
+                  <Route exact path="pricing"  element={<Pricing/>} />
                 
 
               </Route>

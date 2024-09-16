@@ -87,6 +87,7 @@ export const stripeApi= {
           },
 
     checkout:async function (vendor,product,order) {
+      console.log("checkout")
         try{
                           
           const url=`${baseUrl}/api/v1/stripe/payment`

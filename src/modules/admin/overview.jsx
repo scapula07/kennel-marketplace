@@ -159,17 +159,17 @@ export default function Overview() {
                               },
                               {
                                 title:"Total product purchase",
-                                total:`$${stats[0]?.metrics?.totalPurchasers}`,
+                                total:stats?.length >0?`$${stats[0]?.metrics?.totalPurchasers}`:0,
                                 icon:<MdOutlineCardGiftcard  />
                               },
                               {
                                 title:"Active users",
-                                total:stats[0]?.metrics?.activeUsers,
+                                total:stats?.length >0?stats[0]?.metrics?.activeUsers:0,
                                 icon:<HiUsers />
                               },
                               {
                                 title:"Total users",
-                                total:stats[0]?.metrics?.totalUsers,
+                                total:stats?.length >0?stats[0]?.metrics?.totalUsers:0,
                                 icon:< FaUsers/>
                               }
                         

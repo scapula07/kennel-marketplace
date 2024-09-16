@@ -283,14 +283,14 @@ export default function Order({order}) {
                                 <div className='flex items-center space-x-6 '>
                                 {order?.status=="completed"&&
                                     <>
-                                    {loading?
+                                      {loading?
                                        <ClipLoader
                                          color='orange'
                                         />
                                          :
                                        <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl' onClick={()=>setTrigger(true)}>Review</button>
                                           }
-                                    </>
+                                     </>
                                  
                                      }
                                 {order?.status=="active"&&order?.contract=="signed"&&
@@ -317,23 +317,27 @@ export default function Order({order}) {
                                                               </button>
                                                               :
                                                               <>
-                                                                {order?.deliveryStatus=="delivered"&&
+                                                                {order?.deliveryStatus=="pending"?
 
                                                                
-                                                                      <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
-                                                                          onClick={()=>!loader&&confirmDelivery()}
-                                                                        >
-                                                                          {loader?
-                                                                          <ClipLoader color='white' size={10}/>
-                                                                              :
-                                                                              "Confirm delivery"
-                                                                          
-                                                                        
-
-                                                                          }
-                                                                        
-                                                                    </button>
-                                                                         }
+                                                              <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
+                                                          
+                                                                >
+                                                                      Pending delivery                                                           
+                                                                </button>
+                                                                    :
+                                                                <button className='text-white border bg-orange-700 py-2 px-6 rounded-xl text-sm'
+                                                                    onClick={()=>!loader&&confirmDelivery()}
+                                                                  >
+                                                                    {loader?
+                                                                      <ClipLoader color='white' size={10}/>
+                                                                        :
+                                                                        "Confirm delivery"
+                                                                    
+                                                                    }
+                                                                  
+                                                              </button>
+                                                                  }
                                                               </>
                                                       
                                                        }

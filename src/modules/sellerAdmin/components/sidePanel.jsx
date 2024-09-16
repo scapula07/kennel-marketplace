@@ -125,7 +125,7 @@ export default function SidePanel() {
                               {
                                 title:"Pricing",
                                 icon:<IoMdPricetags />,
-                                link:"guide"
+                                link:"pricing"
   
                                },
                             {
