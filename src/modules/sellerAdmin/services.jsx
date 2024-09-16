@@ -34,7 +34,7 @@ export default function Services() {
 
         useEffect(()=>{
            if(currentUser?.id?.length >0){         
-                const q = query(collection(db, "services"),where('creator','==',currentUser?.id));
+                const q = query(collection(db, "services"),where('creator','==',currentUser?.id),orderBy('createdAt', 'desc'));
                     const unsubscribe = onSnapshot(q, (querySnapshot) => {
                     const products = []
                     querySnapshot.forEach((doc) => {
@@ -83,7 +83,7 @@ export default function Services() {
 
                               <div className='flex items-center'>
                               <Link to="/admin-seller/add-service" >
-                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New service</button>
+                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'> New service</button>
                               </Link>
 
 

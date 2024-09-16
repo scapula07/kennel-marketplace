@@ -186,8 +186,8 @@ const Info=({num,setNum,setProduct,product})=>{
 
                                 </div>
 
-                                <div className='flex flex-col space-y-2'>
-                                    <label className='text-sm font-semibold'>Key Features</label>
+                                <div className='flex flex-col space-y-3'>
+                                    <label className='text-sm font-semibold'>Top  domestic animal services</label>
                                     <CreatableSelect 
                                        isMulti 
                                        options={features}
@@ -197,6 +197,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                            setProduct({...product,features:opt})
                                        }}
                                      />
+                                     <h5 className='text-slate-700 text-sm'>These are the top supported services on Kennel Breeder.You can create a service you like to offer.</h5>
                                 </div>
 
 
@@ -204,17 +205,6 @@ const Info=({num,setNum,setProduct,product})=>{
 
 
                         <div className='w-1/2 flex flex-col space-y-4'> 
-
-                             {/* <div className='flex flex-col space-y-2'>
-                                <label className='text-sm font-semibold'>Weight</label>
-                                        <input 
-                                        placeholder='e.g 42'
-                                        className='rounded-lg px-4 py-3 border text-sm'
-                                        value={product?.weight}
-                                        onChange={(e)=>setProduct({...product,weight:e.target.value})}
-                                        />
-
-                                </div> */}
                             {[
                                
                                  {
@@ -225,23 +215,7 @@ const Info=({num,setNum,setProduct,product})=>{
                                     click:(opt)=>setProduct({...product,category:opt})
 
                                   },
-                                // {
-                                //     title:"Sizes",
-                                //     value:product?.sizes,
-                                //     items:[
-                                //       {
-                                //         label:"Large",
-                                //         value:"50"
-                                //       },
-                                //       {
-                                //         label:"Small",
-                                //         value:"10"
-                                //       },
-
-                                //        ],
-                                //     click:(opt)=>setProduct({...product,sizes:opt})
-
-                                // }
+                         
 
                              ]?.map((item)=>{
                                   return(
@@ -267,24 +241,14 @@ const Info=({num,setNum,setProduct,product})=>{
                             })
 
                             }
-                             {/* <div className='flex flex-col space-y-2'>
-                                <label className='text-sm font-semibold'>Quantity</label>
-                                        <input 
-                                        placeholder='1'
-                                        className='rounded-lg px-4 py-3 border text-sm'
-                                        value={product?.qty}
-                                        type="number"
-                                        onChange={(e)=>setProduct({...product,qty:e.target.value})}
-                                        />
-
-                                </div> */}
+                       
                         </div>
                       
 
                 </div>
 
                 <div className='flex w-full justify-end'>
-                      <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
+                      <button className='bg-slate-800 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
                       
 
                  </div>
@@ -385,9 +349,9 @@ const Media=({num,setNum,setProduct,product,url,setUrl,files,setFiles})=>{
               </div>
 
               <div className='flex w-full justify-between'>
-                   <button className='bg-orange-600 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
+                   <button className='bg-orange-600 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                  
-                    <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
+                    <button className='bg-slate-800 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num + 1)}>Next</button>
                     
 
                </div>
@@ -448,33 +412,10 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
 
                         </div>
 
-                       {/* 
-                           <div className='flex flex-col space-y-2 w-1/3'>
-                                    <label className='text-sm font-semibold'>SKU</label>
-                                    <input 
-                                       placeholder='1ABC5689'
-                                       className='rounded-lg px-4 py-2 border text-sm'
-                                       value={product?.sku}
-                                       onChange={(e)=>setProduct({...product,sku:e.target.value})}
-                                    />
-
-                             </div>
-                         */}
 
              </div>
 
-             {/* <div className='flex flex-col w-full space-y-3'>
-                   <h5 className='text-sm font-semibold'>Tags</h5>
-                    <Select
-                        defaultValue={options[0]}
-                        name="colors"
-                        options={options}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        value={product?.status}
-                        onChange={(opt)=>setProduct({...product,status:opt})}
-                    />
-             </div> */}
+      
 
                 <div className='flex flex-col w-full space-y-3'>
                      
@@ -493,15 +434,15 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
          
 
               <div className='flex w-full justify-between'>
-                   <button className='bg-orange-600 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
+                   <button className='bg-orange-600 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                      {isLoading?
                       <ClipLoader
-                        color={"yellow"}
-                        size="12"
+                        color={"black"}
+                        size="14"
                       />
                       :
 
-                       <button className='bg-slate-800 text-white rounded-lg py-2 px-4 text-sm' onClick={create}>Submit</button>
+                       <button className='bg-slate-800 text-white rounded-sm py-2 px-4 text-sm' onClick={create}>Submit</button>
 
                    }
                     
@@ -609,51 +550,55 @@ const items=[
 
 
 
-
-const features=[
-  {
-    label:"Equine Artificial Insemination Kit",
-    value:"Equine Artificial Insemination Kit"
-  },
-  {
-    label:"Breeding Mount",
-    value:"Breeding Mount"
-  },
-  {
-    label:"Semen Collection Equipmen",
-    value:"Semen Collection Equipmen"
-  },
-  {
-    label:"Ultrasound Machine",
-    value:"Ultrasound Machine"
-  },
-  {
-    label:"Breeding Stocks",
-    value:"Breeding Stocks"
-  },
-  {
-    label:"Breeding Halter",
-    value:"Breeding Halter"
-  },
-  {
-    label:"Breeding Supplies",
-    value:"Breeding Supplies"
-  },
-  {
-    label:"Foaling Alarm System",
-    value:"Foaling Alarm System"
-  },
-  {
-    label:"Teasing Equipment",
-    value:"Teasing Equipment"
-  },
-  {
-    label:"Equine Breeding Management Software",
-    value:"Equine Breeding Management Software"
-  },
-  {
-    label:"Canine Artificial Insemination Kit",
-    value:"Canine Artificial Insemination Kit"
-  },
- 
-]
+const features = [
+  { label: "Dog Walking", value: "Dog Walking" },
+  { label: "Pet Sitting", value: "Pet Sitting" },
+  { label: "House Sitting for Pets", value: "House Sitting for Pets" },
+  { label: "Dog Boarding", value: "Dog Boarding" },
+  { label: "Cat Boarding", value: "Cat Boarding" },
+  { label: "Small Animal Boarding", value: "Small Animal Boarding" },
+  { label: "Horse/Livestock Boarding", value: "Horse/Livestock Boarding" },
+  { label: "Pet Grooming", value: "Pet Grooming" },
+  { label: "Mobile Pet Grooming", value: "Mobile Pet Grooming" },
+  { label: "Dog Training", value: "Dog Training" },
+  { label: "Cat Training", value: "Cat Training" },
+  { label: "Horse Training", value: "Horse Training" },
+  { label: "Pet Photography", value: "Pet Photography" },
+  { label: "Pet Portraiture", value: "Pet Portraiture" },
+  { label: "Pet Clothing/Accessories Design and Sales", value: "Pet Clothing/Accessories Design and Sales" },
+  { label: "Pet Toy Making and Sales", value: "Pet Toy Making and Sales" },
+  { label: "Pet Bakery/Treats", value: "Pet Bakery/Treats" },
+  { label: "Pet Massage Therapy", value: "Pet Massage Therapy" },
+  { label: "Animal Nail Trimming", value: "Animal Nail Trimming" },
+  { label: "Equine Massage Therapy", value: "Equine Massage Therapy" },
+  { label: "Equine Farrier Services", value: "Equine Farrier Services" },
+  { label: "Dog Bathing", value: "Dog Bathing" },
+  { label: "Cat Grooming", value: "Cat Grooming" },
+  { label: "Equine Grooming", value: "Equine Grooming" },
+  { label: "Small Animal Grooming", value: "Small Animal Grooming" },
+  { label: "Poop Scooping/Yard Clean-up", value: "Poop Scooping/Yard Clean-up" },
+  { label: "Pet-Sitting/House-Sitting Booking Service", value: "Pet-Sitting/House-Sitting Booking Service" },
+  { label: "Dog Walking Service", value: "Dog Walking Service" },
+  { label: "Pet Taxi/Transportation", value: "Pet Taxi/Transportation" },
+  { label: "Pet Waste Removal Service", value: "Pet Waste Removal Service" },
+  { label: "Pet Concierge Services", value: "Pet Concierge Services" },
+  { label: "Pet Apparel/Accessory Sales", value: "Pet Apparel/Accessory Sales" },
+  { label: "Homemade Pet Food Delivery", value: "Homemade Pet Food Delivery" },
+  { label: "Dog Daycare Services", value: "Dog Daycare Services" },
+  { label: "Cat Hotel/Boarding Services", value: "Cat Hotel/Boarding Services" },
+  { label: "Reptile/Exotic Pet Boarding", value: "Reptile/Exotic Pet Boarding" },
+  { label: "Horse Training/Lessons", value: "Horse Training/Lessons" },
+  { label: "Equine Boarding Facility Management", value: "Equine Boarding Facility Management" },
+  { label: "Livestock Sitting/Chores", value: "Livestock Sitting/Chores" },
+  { label: "Aquarium Maintenance", value: "Aquarium Maintenance" },
+  { label: "Poultry/Livestock Sales", value: "Poultry/Livestock Sales" },
+  { label: "Micro-Chipping Services", value: "Micro-Chipping Services" },
+  { label: "Pet Hospice/End-of-Life Care", value: "Pet Hospice/End-of-Life Care" },
+  { label: "Pet Bereavement Counseling", value: "Pet Bereavement Counseling" },
+  { label: "Pet Loss Memorial Services", value: "Pet Loss Memorial Services" },
+  { label: "Wildlife Rehabilitation Volunteer", value: "Wildlife Rehabilitation Volunteer" },
+  { label: "Animal Rescue Foster Care", value: "Animal Rescue Foster Care" },
+  { label: "Breed-Specific Rescue Coordination", value: "Breed-Specific Rescue Coordination" },
+  { label: "Pet Sitting Network/Referrals", value: "Pet Sitting Network/Referrals" },
+  { label: "Pet First Aid/CPR Training", value: "Pet First Aid/CPR Training" }
+];

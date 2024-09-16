@@ -92,7 +92,7 @@ export default function SellerProductList() {
 
                               <div className='flex items-center'>
                               <Link to="/admin-seller/new-product" >
-                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New product</button>
+                              <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>New product</button>
                               </Link>
 
 

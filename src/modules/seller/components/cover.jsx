@@ -15,6 +15,8 @@ import { messageApi } from '../../api/message';
 
 import { useRecoilValue } from 'recoil';
 import { accountTypeState } from '../../recoil/state';
+import Modal from '../../../components/modal'
+import Qrcode from './qrcode'
 
 
 
@@ -23,9 +25,10 @@ export default function Cover({seller}) {
       const currentUser=useRecoilValue(accountTypeState)
       const [isLoading,setLoader]=useState(false)
       const [bg,setBg]=useState(cover)
+      const [trigger,setTrigger]=useState(false)
       const navigate=useNavigate()
+       
 
-      console.log(seller,"user")
 
       const startMsg=async()=>{
         setLoader(true)
@@ -60,6 +63,8 @@ export default function Cover({seller}) {
        },[seller])
 
   return (
+    <>
+
     <div className='flex flex-col w-full'>
           <div className='w-full flex flex-col '>
                 <img 
@@ -110,17 +115,18 @@ export default function Cover({seller}) {
 
           <div className='w-full flex justify-end w-full px-28 -mt-20'>
 
-                   <div className='flex  space-x-4 w-1/3'>
+                   <div className='flex  space-x-4 w-1/3 items-center'>
                          {isLoading?
                               <div className='flex justify-center'>
                                    <ClipLoader 
                                       color='#C74A1F'
+                                      size={14}
                                    />
 
                               </div>
 
                              :
-                            <button className='text-white py-2 px-4 rounded-lg  w-full' style={{background:"#C74A1F"}}
+                            <button className='text-white py-1 px-4 text-sm rounded-sm  w-full' style={{background:"#C74A1F"}}
                                onClick={startMsg}
                             >
 
@@ -129,7 +135,9 @@ export default function Cover({seller}) {
                             </button>
                            }
 
-                            <button className='text-blue-600 py-3 space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center w-full border border-blue-600 ' >
+                            <button className='text-blue-600 py-3 space-x-4 px-4 rounded-sm text-sm flex justify-center space-x-4 items-center w-full border border-blue-600 ' 
+                               onClick={()=>setTrigger(true)}
+                             >
                                 <span>Copy sharing link</span>
                                 <FiArrowRight
                                     className='text-xl' 
@@ -140,12 +148,14 @@ export default function Cover({seller}) {
 
                     </div>
 
-          </div>
-
-
-
-
-
+          </div>     
     </div>
+      <Modal trigger={trigger}  cname="w-1/4 py-2  px-8 rounded-lg ">
+           <Qrcode
+             setTrigger={setTrigger}
+            />
+      </Modal>
+      
+    </>
   )
 }

@@ -12,15 +12,9 @@ export default function Seller() {
   const sellerInfo=location?.state?.seller
   const [seller,setSeller]=useState(sellerInfo)
 
-  
-
-  console.log(seller,"prodyct ")
-  useEffect(() => {
-       
-    window.scrollTo(0, 0);
-
-  
-}, []);
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   return (
     <Layout>
           <div className='h-full w-full'>
