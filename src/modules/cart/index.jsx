@@ -199,13 +199,15 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
                    <h5 className='text-xs text-slate-500 '>{product?.description?.slice(0,50)}...</h5>
               </div>
 
-              <div className='flex items-center space-x-1'>
-                <IoWarningOutline className='text-sm text-red-500' />
-                <h5 className='text-xs text-red-500'>{product?.qty} units left</h5>
-              </div>
+              {product?.type==="product"&&
+                  <div className='flex items-center space-x-1'>
+                    <IoWarningOutline className='text-sm text-red-500' />
+                    <h5 className='text-xs text-red-500'>{product?.qty} units left</h5>
+                  </div>
+              }
         </div>
       
-
+        {product?.type==="product"&&
          <div className='flex items-center w-1/4'>
                <div className='flex items-center space-x-5'>
                      <BsDash
@@ -224,7 +226,8 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
 
                </div>
          </div>
-         <div className='flex space-x-3'>
+            }
+         <div className='flex space-x-3 items-center'>
              <h5 className='font-semibold'>${product?.price}</h5>
             <>
                {isLoading?
@@ -232,7 +235,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
 
                       <ClipLoader 
                         color='orange'
-                        size={12}
+                        size={14}
                       />
                       :
 
@@ -245,17 +248,8 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
                       }
           
              </>
-            
-            
-            
-          
-
          </div>
-       
-
     </div>
-   
- 
 </div>
 
    )

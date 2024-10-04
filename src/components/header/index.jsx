@@ -11,7 +11,7 @@ import { collection,  onSnapshot,
   limit,getDoc,setDoc ,
  updateDoc,addDoc } from 'firebase/firestore'
 import { db } from '../../modules/firebase';
-import { saveTypeState ,accountTypeState} from '../../modules/recoil/state';
+import { saveTypeState ,accountTypeState,preOrdersTypeState} from '../../modules/recoil/state';
 import { useRecoilState ,useRecoilValue} from 'recoil';
 import Modal from "../modal"
 import { searchApi } from '../../modules/api/search';
@@ -24,6 +24,7 @@ export default function Header() {
      const currentUser=useRecoilValue(accountTypeState)
      const [misc,setMisc]=useState({})
      const [saved,setSaved]=useRecoilState(saveTypeState)
+     const [preorders,setPreorders]=useRecoilState(preOrdersTypeState)
      const user = localStorage.getItem("user");
      const [isLoading,setLoading]=useState(false)
      
@@ -42,20 +43,15 @@ export default function Header() {
    
  
      useEffect(()=>{
-         if(currentUser?.id?.length >0){
-            const ref =doc(db,"misc",currentUser?.id)
-            const unsub = onSnapshot(ref, (doc) => {
-            console.log(doc?.data(),"unseee nn")
-            setUnseen(doc?.data())
-            });
-  
-  
-         }
+        if(currentUser?.id?.length >0){
+          const ref =doc(db,"misc",currentUser?.id)
+          const unsub = onSnapshot(ref, (doc) => {
+        
+          setUnseen(doc?.data())
+          });
+        }
        },[currentUser])
- 
-
-   
-   
+    
     useEffect(()=>{
     
       if(JSON.parse(user)?.id?.length >0){
@@ -63,12 +59,11 @@ export default function Header() {
          const unsub = onSnapshot(ref, (doc) => {
          setMisc(doc?.data())
          setSaved(doc?.data()?.saved)
+         setPreorders(doc?.data()?.preOrder)
          });
-
-
-      }
+       }
     },[])
-
+   
 
 
     const onSearch=async()=>{
@@ -92,14 +87,14 @@ export default function Header() {
 
            <div className='flex items-center w-full px-10'>
                  <div className='w-1/2 flex justify-center space-x-6'>
-                    <div>
+                    <div className='w-full'>
                         <img 
                           src={logo}
                           className="w-20 h-8"
                         />
 
                     </div>
-                     <div className='border py-1 px-3 rounded-lg flex w-1/2 justify-between items-center'>
+                     {/* <div className='border py-1 px-3 rounded-lg flex w-1/2 justify-between items-center'>
                         <input
                            placeholder='Search products,sellers and category'
                            className='outline-none border-0 w-full text-xs text-black'
@@ -128,7 +123,7 @@ export default function Header() {
                          }
                       
 
-                     </div>
+                     </div> */}
 
 
                  </div>
@@ -165,7 +160,7 @@ export default function Header() {
                                       <>
                                        {currentUser?.status==="active"?
                                         <Link to="/admin-seller">
-                                            <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>I'm a breader</button>
+                                            <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>I'm a breeder</button>
                                         </Link>
                                         :
                                         <>
@@ -179,7 +174,7 @@ export default function Header() {
                                               <Link to="/admin-seller">
                                                   <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>
                                                     
-                                                      I'm a breader
+                                                      I'm a breeder
                                                   </button>
                                               </Link>
                                             }
@@ -191,7 +186,7 @@ export default function Header() {
                                       :
                                   
                                       <Link to={`${currentUser?.id?.length ==undefined? "/login":"/breeder" }`}>
-                                          <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breader</button>
+                                          <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breeder</button>
                                       </Link>
                                     }
                                     </>

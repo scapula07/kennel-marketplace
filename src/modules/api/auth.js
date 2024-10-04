@@ -23,6 +23,7 @@ export const authApi= {
                    notifications:false,
                    cart:[],
                    saved:[],
+                   preOrder:[],
                    msg:false
                  });
               await setDoc(doc(db, "stats",user?.uid), {

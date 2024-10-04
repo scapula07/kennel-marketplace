@@ -42,15 +42,18 @@ export const orderApi= {
 
 
                               try{
-                                const ref=doc(db,"products",product?.id)
+                                const ref=doc(db,product?.type==="product"?"products":"services",product?.id)
                                 const docSnap = await getDoc(ref);
                                 const newQty=Number(docSnap?.data()?.qty)-Number(product?.qty)
-                                await updateDoc(doc(db,"products",product?.id),
-                                  {
-                                     qty:newQty
-                                
-                                  }
-                               )
+                                if(product?.type==="product"){
+                                    await updateDoc(doc(db,"products",product?.id),
+                                      {
+                                        qty:newQty
+                                    
+                                      })
+
+                                   }
+                          
                                     await addDoc(collection(db, "notifications"), {
                                           type:"Order update",
                                           to:product.vendor,

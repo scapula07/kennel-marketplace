@@ -25,7 +25,7 @@ const analytics = getAnalytics();
 export default function Products({products,setProducts}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageNumber, setPageNumber] = useState(0)
-  const itemsPerPage = 4
+  const itemsPerPage = 20
   const pageVisited = pageNumber * itemsPerPage
 
 
@@ -121,7 +121,7 @@ const Card=({product})=>{
             setLoader(true)
             try{
                 const res=await productApi.addToCart(product,currentUser,"product")
-                logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
+                logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:product?.categories[0]}]});
                 res&&setLoader(false)
               }catch(e){
               console.log(e)
@@ -129,17 +129,29 @@ const Card=({product})=>{
             }
          }
 
-         const save=async()=>{
+       const save=async()=>{
           setSave(true)
           try{
               const res=await productApi.save(product,currentUser)
-              logEvent(analytics, 'add_to_wishlist', {items:[{...product,affiliation:product?.creator,category:`${categories[0]}`}]});
+              logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:product?.categories[0]}]});
               res&&setSave(false)
             }catch(e){
             console.log(e)
             setSave(false)
-          }
+           }
        }
+
+       const preOrder=async()=>{
+        setLoader(true)
+        try{
+            const res=await productApi.preOrder(product,currentUser)
+            logEvent(analytics, 'add_to_cart', {items:[{...product,affiliation:product?.creator,category:product?.categories[0]}]});
+            res&&setLoader(false)
+          }catch(e){
+          console.log(e)
+          setLoader(false)
+         }
+     }
 
       
     return(
@@ -249,7 +261,7 @@ const Card=({product})=>{
                      product?.status?.value==="instock" || product?.status?.value==="outstock"?
                       addTocart()
                        :
-                      save()
+                       preOrder()
                   }
                    }
                 >

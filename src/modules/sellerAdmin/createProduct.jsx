@@ -23,7 +23,8 @@ export default function CreateProductSeller() {
                                            features:[],
                                            sku:"",
                                            price:0,
-                                           status:{ value: 'instock', label: 'In stock'}
+                                           status:{ value: 'instock', label: 'In stock'},
+                                           preOrderIds:[]
                                           })
       const [url,setUrl]=useState([])
       const [files,setFiles]=useState([])
@@ -506,11 +507,12 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
 
          
 
-              <div className='flex w-full justify-between'>
+              <div className='flex w-full justify-between items-center'>
                    <button className='bg-orange-300 text-white rounded-lg py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                      {isLoading?
                       <ClipLoader
                         color={"black"}
+                        size={14}
                       />
                       :
 

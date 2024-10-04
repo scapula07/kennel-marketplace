@@ -89,7 +89,7 @@ export default function Cover({seller}) {
                   } 
 
                     <div className='flex items-center -mt-12'>
-                        <h5 className='text text-slate-500'>Seller rating 0 of 5</h5>
+                        {/* <h5 className='text text-slate-500'>Seller rating 0 of 5</h5>
                         <h5 className='bg-white flex items-center p-2 rounded-full'>
                                 {[1,2,3,4,5].map(()=>{
                                 return(
@@ -102,7 +102,7 @@ export default function Cover({seller}) {
                                 }
 
                             </h5>
-                        
+                         */}
                       </div>
 
 
@@ -126,7 +126,7 @@ export default function Cover({seller}) {
                               </div>
 
                              :
-                            <button className='text-white py-1 px-4 text-sm rounded-sm  w-full' style={{background:"#C74A1F"}}
+                            <button className='text-white py-3 px-4 text-sm rounded-sm  w-full' style={{background:"#C74A1F"}}
                                onClick={startMsg}
                             >
 

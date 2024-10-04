@@ -1,21 +1,18 @@
 import axios from "axios"
 const baseUrl="https://kennel-stripe-apis-2kmp.onrender.com"
+// const baseUrl="http://localhost:3003"
 export const stripeApi= {
     createAccount:async function () {
           try{
               
-        const url=`${baseUrl}/api/v1/stripe/get-link`
-    
-
-        const config = {
-            headers:{
-                'Content-Type': 'application/json',
-                },
-            };
-
-        
-           
-        
+          const url=`${baseUrl}/api/v1/stripe/get-link`
+      
+          const config = {
+              headers:{
+                  'Content-Type': 'application/json',
+                  },
+              };
+     
             const response= await axios.get(
                     url,
                     config
@@ -27,6 +24,30 @@ export const stripeApi= {
           }
 
     },
+    updatePreOrder:async function (product) {
+      try{
+          
+      const url=`${baseUrl}/api/v1/stripe/update-pre-orders`
+  
+      const config = {
+          headers:{
+              'Content-Type': 'application/json',
+              },
+          };
+      const response= await axios.post(
+        url,
+        {
+          product
+        },
+        config
+       )
+       return response
+           
+      }catch(e){
+        console.log(e)
+      }
+
+},
     retrieveAccount:async function (user) {
           try{
               
@@ -38,18 +59,14 @@ export const stripeApi= {
                 'Content-Type': 'application/json',
                 },
             };
-
-        
-          
-        
-            const response= await axios.post(
-                    url,
-                    {
-                        accountId:user?.payments[0]?.accountId
-                    },
-                    config
-              )
-              return response
+        const response= await axios.post(
+                url,
+                {
+                    accountId:user?.payments[0]?.accountId
+                },
+                config
+          )
+          return response
               
           }catch(e){
             console.log(e)

@@ -51,7 +51,7 @@ export default function Order({products,delivery,setDelivery}) {
 
 
               <div className='flex flex-col space-y-4 w-full'>
-                   <h5 className='text-lg font-semibold'>3. Delivery</h5>
+                   <h5 className='text-lg font-semibold'>3. Location</h5>
                    <Delivery 
                           delivery={delivery}
                           setDelivery={setDelivery}

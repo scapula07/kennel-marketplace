@@ -37,12 +37,10 @@ export default function SellerOrderList() {
   }
   
   },[])
-
-console.log(orders,"orooo")
   return (
     <div className='w-full space-y-4'>
                 <div className='flex flex-col space-y-2 '>
-                    <h5 className='text-black font-light text-sm'>Breeder/orders</h5>
+                    <h5 className='text-black font-bold text-sm'>Breeder/orders</h5>
                 </div>
 
 
@@ -160,6 +158,7 @@ const Table=({orders})=>{
 const Row=({order})=>{
   const [customer,setCustomer]=useState({})
   const [products,setProducts]=useState()
+  
  
     useEffect(()=>{
     
@@ -176,10 +175,8 @@ const Row=({order})=>{
   
           if(order?.products?.length >0){
             const ids = order?.products?.map(obj => obj.id);
-            
-            const unsub = onSnapshot(doc(db,"products",ids[0]), (doc) => {
-              console.log(doc.data(),"daa")
-          
+            const product=order?.products[0]
+            const unsub = onSnapshot(doc(db,product?.type=="product" ? "products":"services",ids[0]), (doc) => {
               setProducts({...doc.data(),id:doc?.id})
              });
 

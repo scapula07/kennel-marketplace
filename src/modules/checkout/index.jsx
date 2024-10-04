@@ -43,6 +43,28 @@ export default function Checkout() {
               
                 return;
               }
+              if (delivery?.state?.length < 3) {
+                setErrorMsg(' State is required! ');
+                setAlert({color:"danger",text:"City is required!"})
+                setLoader(false)
+              
+                return;
+              }
+              if (delivery?.address?.length < 3) {
+                setErrorMsg(' City is required! ');
+                setAlert({color:"danger",text:"City is required!"})
+                setLoader(false)
+              
+                return;
+              }
+
+              if (delivery?.postalCode?.length < 3) {
+                setErrorMsg(' Zip code is required! ');
+                setAlert({color:"danger",text:"City is required!"})
+                setLoader(false)
+              
+                return;
+              }
               try{
                   const res=await orderApi.create(products,currentUser,delivery,total)
                   logEvent(analytics, 'begin_checkout',{items:products})

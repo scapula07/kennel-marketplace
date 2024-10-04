@@ -1,6 +1,11 @@
 import React from 'react'
 import logo from "../assets/logo white.png"
+import { Link } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { accountTypeState } from '../modules/recoil/state'
+
 export default function Footer() {
+     const currentUser=useRecoilValue(accountTypeState)
   return (
     <div className='w-full flex  px-20 py-8 text-sm'  style={{background: "#282828"}}>
           <div className='w-1/2 flex flex-col space-y-10'>
@@ -46,17 +51,24 @@ export default function Footer() {
                <div className='w-full flex justify-between text-sm'>
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Main menu</h5>
-                        <h5 className='font-extralight'>Home</h5>
-                        <h5 className='font-extralight'>Marketplace</h5>
-                        <h5 className='font-extralight'>Sellers</h5>
+                        <Link to="/">
+                            <h5 className='font-extralight'>Home</h5>
+                        </Link>
+                    <Link to="/market">
+                       <h5 className='font-extralight'>Marketplace</h5>
+                    </Link>
+                    <Link to="/sellers">
+                          <h5 className='font-extralight'>Sellers</h5>
+                    </Link>
+                  
 
                    </div>
 
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Personal</h5>
-                        <h5 className='font-extralight'>My profile</h5>
-                        <h5 className='font-extralight'>Cart</h5>
-                        <h5 className='font-extralight'>Settings</h5>
+                        <Link to={currentUser?.id?.length >0?"/account":""}>
+                           <h5 className='font-extralight'>My profile</h5>
+                        </Link>
 
                    </div>
 

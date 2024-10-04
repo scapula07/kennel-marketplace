@@ -76,14 +76,14 @@ export default function ProductList() {
                 <div className='w-full bg-white rounded-lg py-6 px-8 flex flex-col space-y-10'>
                         <div className='flex items-center justify-between'>
                               <h5 className='text-xl font-semibold text-black'>All Products</h5>
-
+{/* 
                               <div className='flex items-center'>
                               <Link to="/admin/new-product" >
                               <button className='bg-orange-400 text-white rounded-sm py-2 px-4 text-sm'>+ New product</button>
                               </Link>
 
 
-                              </div>
+                              </div> */}
 
                         </div>
 

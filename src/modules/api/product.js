@@ -103,13 +103,17 @@ export const productApi= {
          }
 
     },
-      save:async function (product,user) {
+    save:async function (product,user) {
         try{
-          const ref =doc(db,"misc",user?.id)
-          const docSnap = await getDoc(ref);
+            const ref =doc(db,"misc",user?.id)
+            const docSnap = await getDoc(ref);
+            if(docSnap?.data()?.saved?.some(item=>item?.id==product?.id)){
+              return true
+            }else{
              await updateDoc(doc(db,"misc",user?.id), {
                  saved:[...docSnap?.data()?.saved,product?.id]
               })
+            }
 
              return true
 
@@ -118,7 +122,34 @@ export const productApi= {
             console.log(e)
          }
 
-    },
+      },
+     preOrder:async function (product,user) {
+        try{
+       
+            const ref =doc(db,"misc",user?.id)
+            const docSnap = await getDoc(ref);
+            console.log(product?.preOrderIds,docSnap?.data()?.preOrder,"here")
+            if(docSnap?.data()?.preOrder?.some(item=>item?.id==product?.id)){
+              return true
+            }else{
+              
+              await updateDoc(doc(db,"misc",user?.id), {
+                 preOrder:[...docSnap?.data()?.preOrder,product?.id]
+              })
+              await updateDoc(doc(db,"products",product?.id),
+               {
+                 preOrderIds:[...product?.preOrderIds, user?.id]
+               }    
+             )
+             console.log("here")
+              }
+
+             return true
+
+         }catch(e){
+            console.log(e)
+         }
+      },
     editProduct:async function (product,files,urls) {
       try{
           // const img=await uploadFile(file)

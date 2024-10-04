@@ -158,7 +158,7 @@ const Table=({products,result})=>{
                               // "Catagories",
                             "Price",
                             "SKU",
-                            "Quantity",
+                            "Total Pre-orders",
                             "status",
                             "Action"
 
@@ -269,7 +269,7 @@ const Row=({product})=>{
         </td> */}
       <td className='text-sm font-light text-slate-500 py-2 border px-2'>${product?.price}</td>
       <td className='text-sm font-light text-slate-500 py-2 border px-2 '>{product?.sku}</td>
-      <td className='text-sm font-light text-slate-500 py-2 border px-2'>{product?.qty}</td>
+      <td className='text-sm font-light text-slate-500 py-2 border px-2'>{product?.preOrderIds?.length}</td>
   
       <td className='text-xs font-semibold   py-2 border px-2 '>
              <span className={product?.status?.value=="instock"?'font-semibold  text-green-600 px-4 py-1.5 rounded-lg':

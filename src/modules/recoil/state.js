@@ -15,6 +15,11 @@ export const saveTypeState =atom({
    default:[]
 })
 
+export const preOrdersTypeState =atom({
+   key:"preorders",
+   default:[]
+})
+
 
 
 

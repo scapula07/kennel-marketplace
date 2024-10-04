@@ -7,13 +7,14 @@ import { productApi } from '../api/product';
 import { BeatLoader } from 'react-spinners';
 import { IoMdClose } from "react-icons/io";
 import CreatableSelect from 'react-select/creatable';
+import { stripeApi } from '../api/stripe';
 
 export default function EditProduct() {
   const [product,setProduct]=useState({images:[]})
   const location =useLocation()
   const [isLoading,setLoading]=useState(false)
   const [urls,setUrl]=useState([])
-      const [files,setFiles]=useState([])
+  const [files,setFiles]=useState([])
 
   const item=location?.state.product
 
@@ -31,12 +32,17 @@ export default function EditProduct() {
         }
        },[])
 
-       console.log(product,"prod")
+       
        const edit=async()=>{
           setLoading(true)
           try{
             const res=await productApi.editProduct(product,files,urls)
             setLoading(false)
+            if(product?.preOrderIds !=undefined &&product?.preOrderIds.length>0){
+                console.log("yes")
+                await stripeApi.updatePreOrder(product)
+            }
+
           }catch(e){
             setLoading(false)
             console.log(e)
@@ -295,10 +301,12 @@ const Pricing=({setProduct,product})=>{
   const options = [
       { value: 'instock', label: 'In stock' },
       { value: 'outstock', label: 'Out stock' },
+      { value: 'preorder', label: 'Pre-order' },
 
     ]
+    console.log(product,"product")
   return(
-     <div className='bg-white rounded-lg flex flex-col w-full  px-6 space-y-6'>
+     <div className='bg-white rounded-lg flex flex-col w-full  px-6 space-y-6 pb-10'>
            <div className='flex space-x-3'>
                    <div className='flex flex-col space-y-2 w-1/3'>
                                   <label className='text-sm font-semibold'>Price</label>
@@ -351,10 +359,10 @@ const Pricing=({setProduct,product})=>{
                       defaultValue={[options[0],options[1]]}
                       name="colors"
                       options={options}
-                      className="basic-multi-select"
+                      className="basic-multi-select text-black"
                       classNamePrefix="select"
                       value={product?.status}
-                      onChange={(opt)=>setProduct({...product,status:opt?.value})}
+                      onChange={(opt)=>setProduct({...product,status:opt})}
                   />
            </div>
 

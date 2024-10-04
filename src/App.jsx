@@ -70,20 +70,15 @@ import Pricing from './modules/sellerAdmin/pricing'
 function App() {
   const [currentUser,setcurrentUser]=useRecoilState(accountTypeState)
   const user = localStorage.getItem("user");
-  console.log(user,"user >>>>>")
   useEffect( ()=>{ 
-    console.log("here>>>>>")
     setcurrentUser(JSON.parse(user))
     },[])
   useEffect( ()=>{ 
       setcurrentUser(JSON.parse(user))
     if(JSON.parse(user)?.id?.length >0){
-      const unsub = onSnapshot(doc(db,"users",JSON.parse(user)?.id), (doc) => {
-        
+      const unsub = onSnapshot(doc(db,"users",JSON.parse(user)?.id), (doc) => {   
         setcurrentUser({...doc.data(),id:doc?.id})
        });
-
-    
       }else{
         const userLogged = localStorage.getItem("user");
         setcurrentUser(JSON.parse(userLogged ))

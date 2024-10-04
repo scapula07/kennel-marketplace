@@ -23,7 +23,8 @@ export default function Litter() {
                                            features:[],
                                            sku:"",
                                            price:0,
-                                           status:{ value: 'pre-order', label: 'Pre-order'}
+                                           status:null,
+                                           preOrderIds:[]
                                           })
       const [url,setUrl]=useState([])
       const [files,setFiles]=useState([])
@@ -69,15 +70,22 @@ export default function Litter() {
             return;
           }
           if (product?.categories.length == 0) {
-            setErrorMsg( "Select a category" );
+            setErrorMsg( "Select A Category" );
             setLoading(false);
             setNum(1)
             return;
           }
           if (product?.features.length == 0) {
-            setErrorMsg( "Select a feature" );
+            setErrorMsg( "Select a Feature" );
             setLoading(false);
             setNum(1)
+            return;
+          }
+
+          if (!product?.status) {
+            setErrorMsg( "Select Product Status" );
+            setLoading(false);
+            setNum(3)
             return;
           }
          try{
@@ -110,7 +118,7 @@ export default function Litter() {
                     
                 {errorMsg && (
                 
-                  <h5 className='text-xs text-center font-semibold text-red-500'>{errorMsg}</h5>
+                  <h5 className='text-lg text-center font-semibold text-red-500'>{errorMsg}</h5>
                  )}
 
                       {num==1&&
@@ -505,12 +513,12 @@ const Pricing=({num,setNum,setProduct,product,isLoading,create})=>{
 
          
 
-              <div className='flex w-full justify-between'>
+              <div className='flex w-full justify-between items-center'>
                    <button className='bg-orange-300 text-white rounded-sm py-2 px-4 text-sm' onClick={()=>setNum(num - 1)}>Back</button>
                      {isLoading?
                       <ClipLoader
                         color={"black"}
-                        size="12"
+                        size="14"
                       />
                       :
 

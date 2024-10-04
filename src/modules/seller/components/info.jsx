@@ -7,15 +7,13 @@ export default function Info({seller}) {
     <div className='flex flex-col w-full px-28 py-10'>
           <div className='flex items-center space-x-5'>
              <h5 className='font-semibold text-3xl'>{seller?.name}</h5>
-             <FaRegBookmark 
-                className='text-blue-600 text-xl'
-             />
+            
          </div>
 
          <div className='w-full py-4'>
              <p className='font-light text-slate-700 w-3/4'>{seller?.bio}</p>
          </div>
-
+{/* 
          <div className='flex flex-col w-full'>
               <h5 className='text-lg font-semibold'>Statistics</h5>
               <div className='flex items-center w-2/5 justify-between py-4'>
@@ -32,7 +30,7 @@ export default function Info({seller}) {
 
               </div>
              
-         </div>
+         </div> */}
 
     </div>
   )

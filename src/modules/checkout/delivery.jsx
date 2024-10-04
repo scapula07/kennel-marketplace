@@ -69,6 +69,7 @@ export default function Delivery({delivery,setDelivery}) {
                                         value={state}
                                         menuPlacement="auto"
                                         menuPosition="fixed"
+                                        className='outline-orange-500'
                                         noOptionsMessage={(opt) => {
                                           if (opt.inputValue === "") {
                                             return "Select your  State";

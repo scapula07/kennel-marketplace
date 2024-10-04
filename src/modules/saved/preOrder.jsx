@@ -1,74 +1,31 @@
 import React ,{useState,useEffect} from 'react'
+import comb from "../../assets/comb.png"
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlineStar } from "react-icons/md";
+import { CiBookmarkRemove } from "react-icons/ci";
+import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
+import { db } from '../firebase';
+import { IoTime } from "react-icons/io5";
 import { useRecoilValue } from 'recoil';
 import { accountTypeState,saveTypeState } from '../recoil/state';
-import { ClipLoader } from 'react-spinners';
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { FaRegBookmark,FaRegStar,FaBookmark  } from "react-icons/fa";
-import { MdOutlineStar } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import { collection,  onSnapshot,
-  doc, getDocs,
-  query, orderBy, 
-  limit,getDoc,setDoc ,
- updateDoc,addDoc ,where,or,and} from 'firebase/firestore'
- import { db } from '../firebase';
- import { useOutletContext } from 'react-router-dom';
- import { productApi } from '../api/product';
- import { getAnalytics, logEvent } from "firebase/analytics";
+import { MdDelete } from "react-icons/md";
 
 
-export default function SellerProducts() {
-  const [seller]= useOutletContext();
-    const currentUser=useRecoilValue(accountTypeState)
-    const [products,setProducts]=useState([])
-     
-    useEffect(()=>{
-      if(seller?.id?.length >0){
-            const q = query(collection(db, "products"),
-             and(where('creator',"==",seller?.id),
-              or(
-                where('status',"==",{ value: 'instock', label: 'In stock' }),
-                where('status',"==",{ value: 'outstock', label: 'Out stock' })
-               )
-              )
-              );
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
-                const products = []
-                querySnapshot.forEach((doc) => {
-                  products.push({ ...doc.data(), id: doc.id })
-        
-                });
-        
-        
-                setProducts(products)
-        
-        
-          
-              });
-        
-      }
-   
-     },[seller])
-  
-     console.log(products,"producys")
+export default function PreOrdered({preorders}) {
+       console.log(preorders,"orders")
   return (
-    <div className='w-full py-8'>
-               <div className='flex flex-col space-y-2'>
-                      <h5 className='text-4xl font-semibold'>All products</h5>
-                      <h5 className='text-slate-500  '>Check all products from this seller</h5>
-
-                  </div>
+    <div className='w-full'>
          
-         <div  className='grid grid-flow-row grid-cols-4  gap-4 gap-y-8 h-full w-full py-6'>
-                  {products?.map((product)=>{
+         <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
+                  {preorders?.map((order)=>{
                       return(
-                         <Card 
-                            product={product}
+                         <Card
+                           id={order} 
                          />
                        )
-                  })}
-
-
+                   })}
          </div>
 
     </div>
@@ -79,12 +36,20 @@ export default function SellerProducts() {
 
 
 
-
-
-
-const Card=({product})=>{
-  const currentUser=useRecoilValue(accountTypeState)
-  const saved=useRecoilValue(saveTypeState)
+const Card=({id})=>{
+      const [product,setProduct]=useState({images:[]})
+      useEffect(()=>{
+      
+      if(id?.length != undefined){
+        const unsub = onSnapshot(doc(db,"products",id), (doc) => {
+       
+      
+          setProduct({...doc.data(),id:doc?.id})
+          });
+        }
+        },[])
+          const currentUser=useRecoilValue(accountTypeState)
+          const saved=useRecoilValue(saveTypeState)
          const [isLoading,setLoader]=useState(false)
          const [isSaving,setSave]=useState(false)
 
@@ -151,12 +116,12 @@ const Card=({product})=>{
                                 onClick={save}
                               >
                                 {saved?.includes(product?.id)?
-                                      <FaBookmark  
-                                         className='text-orange-700'
+                                      <MdDelete 
+                                         className='text-red-700 text-xl'
                                  
                                       />
                                       :
-                                      <FaRegBookmark 
+                                      <MdDelete
                                  
                                       />
 
