@@ -1,20 +1,29 @@
 import React ,{useRef} from 'react'
 import { useReactToPrint } from 'react-to-print';
 
-export default function Contract({selectContractType}) {
+export default function Contract({selectContractType,currentUser,customer,product}) {
       
   return (
     <div className='w-full h-screen no-scrollbar overflow-y-scroll '>
            {selectContractType==="Artificial Insemination Contract"&&
                <Insemination
+                    currentUser={currentUser}
+                    customer={customer}
+                    product={product}
                 />
            }
            {selectContractType==="Animal Sale Contract"&&
                <Sale
+                currentUser={currentUser}
+                customer={customer}
+                product={product}
                 />
            }
           {selectContractType==="Animal Exchange Contract"&&
                <Exchange
+                currentUser={currentUser}
+                customer={customer}
+                product={product}
                 />
            }
 
@@ -25,7 +34,7 @@ export default function Contract({selectContractType}) {
 
 
 
-const Insemination=()=>{
+const Insemination=({currentUser,customer,product})=>{
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
       
@@ -34,10 +43,13 @@ const Insemination=()=>{
     });
     return(
         <div className='w-full h-full flex flex-col space-y-4'>
-           <button className='bg-orange-700 w-1/4 text-sm py-2' 
-            onClick={handlePrint}
-           >Confirm your signature
-           </button>
+            <div className='w-full flex justify-end'>
+                        <button className='bg-orange-700 w-1/4 text-sm py-2' 
+                        onClick={handlePrint}
+                        >Confirm
+                        </button>
+                </div>
+    
         <div className='w-full h-full flex flex-col space-y-4 px-4 py-4' 
            ref={componentRef}
            >
@@ -118,8 +130,22 @@ const Insemination=()=>{
 
                  </div>
             </div>  
-            <div className='w-full'>
-                <h5 className='font-semibold'>By signing this Contract, the parties acknowledge that they have read, understood, and agree to be bound by the terms and conditions set forth herein.</h5>
+            <div className='w-full space-y-6'>
+                   <h5 className='font-semibold'>By signing this Contract, the parties acknowledge that they have read, understood, and agree to be bound by the terms and conditions set forth herein.</h5>
+
+                        <div className='flex flex-col'>
+                            <div className='flex space-x-4'>
+                                <h5>Breeder Signature:<span className='font-bold'>{currentUser?.name}</span></h5>
+                                <h5>Date:</h5>
+                            </div>
+                            <div className='flex space-x-4'>
+                                <h5>Buyer Signature:<span className='font-bold'>{customer?.name}</span></h5>
+                                <h5>Date:</h5>
+                            </div>
+                        </div>
+
+                      
+                
 
             </div>
 
@@ -135,7 +161,7 @@ const Insemination=()=>{
 
 
 
-const Sale=()=>{
+const Sale=({currentUser,customer,product})=>{
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
       
@@ -144,10 +170,13 @@ const Sale=()=>{
     });
     return(
         <div className='w-full h-full flex flex-col space-y-4'>
-                <button className='bg-orange-700 w-1/4 text-sm py-2' 
-                    onClick={handlePrint}
-                >Confirm your signature
-                </button>
+                 <div className='w-full flex justify-end'>
+                        <button className='bg-orange-700 w-1/4 text-sm py-2' 
+                           onClick={handlePrint}
+                        >Confirm
+                        </button>
+                </div>
+             
            <div className='w-full h-full flex flex-col space-y-4 px-4 py-4' 
                ref={componentRef}
            >
@@ -239,8 +268,21 @@ const Sale=()=>{
                  </div>
             </div>
 
-            <div className='w-full'>
+            <div className='w-full flex flex-col space-y-4'>
                 <h5 className='font-semibold'>By signing this Contract, the parties acknowledge that they have read, understood, and agree to be bound by the terms and conditions set forth herein.</h5>
+
+                <div className='flex flex-col'>
+                     <div className='flex space-x-4'>
+                        <h5>Breeder Signature:<span className='font-bold'>{currentUser?.name}</span></h5>
+                        <h5>Date:</h5>
+                    </div>
+                    <div className='flex space-x-4'>
+                        <h5>Buyer Signature:<span className='font-bold'>{customer?.name}</span></h5>
+                        <h5>Date:</h5>
+                    </div>
+                </div>
+
+            
 
             </div>
 
@@ -254,7 +296,7 @@ const Sale=()=>{
 
 
 
-const  Exchange=()=>{
+const  Exchange=({currentUser,customer,product})=>{
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
       
@@ -263,10 +305,13 @@ const  Exchange=()=>{
     });
     return(
         <div className='w-full h-full flex flex-col space-y-4'>
-                <button className='bg-orange-700 w-1/4 text-sm py-2' 
-                    onClick={handlePrint}
-                >Confirm your signature
-                </button>
+                  <div className='w-full flex justify-end'>
+                        <button className='bg-orange-700 w-1/4 text-sm py-2' 
+                           onClick={handlePrint}
+                        >Confirm
+                        </button>
+                </div>
+            
            <div className='w-full h-full flex flex-col space-y-4 px-4 py-4' 
                ref={componentRef}
            >
@@ -274,8 +319,8 @@ const  Exchange=()=>{
             <div className='w-full'>
                <h5>This Animal Exchange Contract ("Contract") is entered into on [DATE] by and between:</h5>
                
-               <h5 className='px-4'>1. Breeder 1: Name: [Breeder 1's Name] Address: [Breeder 1's Address] Phone: [Breeder 1's Phone Number] Email: [Breeder 1's Email Address]</h5>
-               <h5 className='px-4'>2. Breeder 2: Name: [Breeder 2's Name] Address: [Breeder 2's Address] Phone: [Breeder 2's Phone Number] Email: [Breeder 2's Email Address]</h5>
+               <h5 className='px-4'>1. Breeder 1: Name: {currentUser?.name} Address: [Breeder 1's Address] Phone: [Breeder 1's Phone Number] Email: {currentUser?.name}</h5>
+               <h5 className='px-4'>2. Breeder 2: Name: {customer?.name}  Address: [Breeder 2's Address] Phone: [Breeder 2's Phone Number] Email: [Breeder 2's Email Address]</h5>
             
             </div>
             <div className='w-full space-y-4'>
@@ -349,13 +394,21 @@ const  Exchange=()=>{
                  </div>
             </div>
 
-            <div className='w-full'>
-                <h5 className='font-semibold'>By signing this Contract, the parties acknowledge that they have read, understood, and agree to be bound by the terms and conditions set forth herein.</h5>
+            <div className='w-full space-y-6'>
+                   <h5 className='font-semibold'>By signing this Contract, the parties acknowledge that they have read, understood, and agree to be bound by the terms and conditions set forth herein.</h5>
 
-            </div>
-
-
-        </div>
+                        <div className='flex flex-col'>
+                            <div className='flex space-x-4'>
+                                <h5>Breeder Signature:<span className='font-bold'>{currentUser?.name}</span></h5>
+                                <h5>Date:</h5>
+                            </div>
+                            <div className='flex space-x-4'>
+                                <h5>Buyer Signature:<span className='font-bold'>{customer?.name}</span></h5>
+                                <h5>Date:</h5>
+                            </div>
+                        </div>
+               </div>
+          </div>
         </div>
     )
 }

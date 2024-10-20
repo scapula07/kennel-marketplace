@@ -1,6 +1,6 @@
 import axios from "axios"
-const baseUrl="https://kennel-stripe-apis-2kmp.onrender.com"
-// const baseUrl="http://localhost:3003"
+// const baseUrl="https://kennel-stripe-apis-2kmp.onrender.com"
+const baseUrl="http://localhost:3003"
 export const stripeApi= {
     createAccount:async function () {
           try{

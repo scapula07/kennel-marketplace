@@ -19,11 +19,8 @@ export default function Filters({filters,setFilter,apply,isLoading,prices,setPri
                    <span className='font-semibold text-orange-500 text-xs  hover:bg-orange-100 hover:py-1.5 hover:rounded-lg hover:px-3' onClick={apply}> Apply</span>
                    :
                    <ClipLoader size={12} color={"orange"}/>
-
-
-              }
-             
-              <span className=' text-red-500  ' onClick={()=>setFilter([])}> Clear all</span>
+              }           
+            <span className=' text-red-500  ' onClick={()=>setFilter([])}> Clear all</span>
              
               </h5>
               
@@ -134,9 +131,7 @@ const Card=({filter,filters,setFilter})=>{
                         <FiSearch
                         className='text-slate-600'
                         />
-
                 </div>
-
              }
              <div className='flex flex-col space-y-3 overflow-y-scroll h-36'>
                 {filter?.items.map((item,index)=>{
@@ -163,16 +158,12 @@ const Card=({filter,filters,setFilter})=>{
 
 const Item=({item,filters,setFilter,index})=>{
   const [onRadio,setRadio]=useState()
-  const remove=()=>{
-    
+
+  const remove=()=>{   
     const newFilters=[...filters]
- 
     newFilters.splice(index, 1);
     setFilter(newFilters)
-
-
   }
-  console.log(filters,"filters")
    return(
     <div className='flex items-center space-x-2 '>
     {!onRadio?

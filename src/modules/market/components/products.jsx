@@ -27,10 +27,7 @@ export default function Products({products,setProducts}) {
   const [pageNumber, setPageNumber] = useState(0)
   const itemsPerPage = 20
   const pageVisited = pageNumber * itemsPerPage
-
-
-
-     
+  
   useEffect(()=>{
     const q = query(collection(db, "products"),orderBy("createdAt","desc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -39,23 +36,15 @@ export default function Products({products,setProducts}) {
           products.push({ ...doc.data(), id: doc.id })
 
         });
-
-
-        setProducts(products)
-   
+        setProducts(products) 
       });
    },[])
 
-
-
-
    const currentItems = products?.slice(pageVisited, pageVisited + itemsPerPage)
    const pageCount = Math.ceil(products?.length / itemsPerPage)
-
-   console.log(products,"producys")
    const handlePageClick = ({ selected }) => {
     setPageNumber(selected)
-}
+   }
 
 
 

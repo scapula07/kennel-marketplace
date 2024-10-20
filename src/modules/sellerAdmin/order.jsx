@@ -395,6 +395,11 @@ export default function SellerOrder() {
                       <div className='w-full h-full py-4'>
                           <Contract 
                              selectContractType={selectContractType}
+                             currentUser={currentUser}
+                             customer={customer}
+                             product={product}
+
+
                           />
 
                       </div>
@@ -411,11 +416,11 @@ export default function SellerOrder() {
 
 const Product=({item,product,setProduct})=>{
 
-       console.log(item,"iii")
+       console.log(item?.type,"iii")
        useEffect(()=>{
       
         if(item[0]?.id?.length != undefined){
-          const unsub = onSnapshot(doc(db,product?.type=="product"?"products":"services",item[0]?.id), (doc) => {
+          const unsub = onSnapshot(doc(db,item?.type==="product"?"products":"services",item[0]?.id), (doc) => {
             console.log(doc.data(),"daa")
         
             setProduct({...doc.data(),id:doc?.id})
@@ -428,7 +433,7 @@ const Product=({item,product,setProduct})=>{
       return(
         <div className='flex space-x-4'>
              <img 
-               src={product?.images[0] !=undefined ?product?.images[0]:""}
+               src={product?.img !=undefined ?product?.img:""}
                className="h-36"
              />
              <div className='flex flex-col'>

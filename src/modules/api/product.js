@@ -68,17 +68,12 @@ export const productApi= {
                         await updateDoc(doc(db,"misc",user?.id), {
                       cart:[...docSnap?.data()?.cart,{id:product?.id,qty:1,price:product?.price,vendor:product?.creator,img:product?.images[0],type:type}]
                     })
-
-               return true
+                return true
 
                 }
-             
- 
-
            }catch(e){
               console.log(e)
            }
-
       },
       removeFromCart:async function (product,user) {
         try{
@@ -96,8 +91,6 @@ export const productApi= {
             
 
              return docNewSnap?.data()?.cart
-
-
          }catch(e){
             console.log(e)
          }
@@ -187,6 +180,7 @@ export const productApi= {
       }
       },
       filterProducts:async function (filters) {
+        console.log(filters,"product")
         try{
           const q = query(
             collection(db, 'products'),
@@ -203,6 +197,8 @@ export const productApi= {
                 console.log(doc.id, " => ", doc.data());
                 products.push({...doc?.data(),id:doc?.id});
               });
+
+              console.log(products,"products")
 
               return products
 

@@ -14,7 +14,8 @@ import { BeatLoader, ClipLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import { calculateTime } from '../util';
 import { uploadFile } from '../api/order';
-
+import Zoom from "react-medium-image-zoom";
+import 'react-medium-image-zoom/dist/styles.css'
 
  
 
@@ -500,9 +501,12 @@ const Msg=({msg,currentChat,currentUser,index})=>{
            {msg?.img?.length >0 &&
                
                <div className={`flex px-4 ${msg?.sender !=currentUser?.id?`justify-start` :`justify-end`} w-full`}>
-                    <img src={msg?.img}
-                     className="w-16 h-16 rounded-sm"
-                    />
+                       <Zoom>
+                           <img src={msg?.img}
+                              className="w-16 h-16 rounded-sm"
+                              />
+                       </Zoom>
+                 
                </div>
                 }
              
@@ -511,10 +515,13 @@ const Msg=({msg,currentChat,currentUser,index})=>{
                {msg?.sender !=currentUser?.id&&
                      <> 
                      {currentChat?.img?.length >0?
-                         <img 
+                       <Zoom>
+                        <img 
                          src={currentChat?.img}
                          className="h-6 w-6 rounded-full"
                          />
+                       </Zoom>
+                     
                          :
                          <h5 className='rounded-full bg-orange-400 text-white text-xs font-semibold h-6 w-6 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
                     
