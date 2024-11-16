@@ -62,7 +62,7 @@ export default function Order({products,delivery,setDelivery}) {
                    <h5 className='text-slate-600'>Choose option</h5>
                      {["Payment with Stripe"].map((text)=>{
                           return(
-                            <div className='rounded-full border w-1/2 px-4 py-1 flex items-center space-x-3'> 
+                            <div className='rounded-full border md:w-1/2 w-full px-4 py-1 flex items-center space-x-3'> 
                           {payment===text?
                               <IoMdRadioButtonOn 
                                 className='text-blue-400'

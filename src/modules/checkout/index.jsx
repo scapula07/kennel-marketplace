@@ -79,8 +79,8 @@ export default function Checkout() {
   return (
     <Layout>
              <div className='w-full h-full flex justify-center py-10'>
-                   <div className='flex flex-col w-3/4 space-y-10'> 
-                            <div className='flex w-full justify-between '>
+                   <div className='flex flex-col md:w-3/4 w-full space-y-10'> 
+                            <div className='flex w-full justify-between px-4 md:px-0 '>
                                 <h5 className='text-xl font-semibold '>Checkout</h5>
 
                             </div>
@@ -88,8 +88,8 @@ export default function Checkout() {
 
 
 
-                            <div className='flex w-full space-x-10 '>
-                                   <div className='w-3/4'> 
+                            <div className='flex w-full md:flex-row flex-col md:space-x-10 space-y-6 md:space-y-0 px-4 md:px-0 '>
+                                   <div className='md:w-3/4 w-full'> 
                                        <Order 
                                          products={products}
                                          delivery={delivery}
@@ -99,7 +99,7 @@ export default function Checkout() {
                                    </div>
 
 
-                                     <div className='w-1/4'> 
+                                     <div className='md:w-1/4 w-full'> 
                                           <div className='bg-white flex-col flex rounded-lg w-full space-y-5 px-3 shadow py-5'>
                                                <h5 className='text-lg font-semibold'>Total:</h5>
                                                <div className='flex flex-col space-y-1'>

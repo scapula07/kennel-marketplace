@@ -7,8 +7,8 @@ import { accountTypeState } from '../modules/recoil/state'
 export default function Footer() {
      const currentUser=useRecoilValue(accountTypeState)
   return (
-    <div className='w-full flex  px-20 py-8 text-sm'  style={{background: "#282828"}}>
-          <div className='w-1/2 flex flex-col space-y-10'>
+    <div className='w-full flex md:flex-row flex-col md:px-20 px-4 py-8 text-sm'  style={{background: "#282828"}}>
+          <div className='md:w-1/2 flex flex-col space-y-10'>
                <div className='flex '>
                     <img
                       src={logo} 
@@ -23,11 +23,11 @@ export default function Footer() {
                </div>
 
                <div className='w-full'>
-                   <h5 className='text-white font-semibold w-1/2 text-xl'>Join our newsletter to stay up to date on features and releases</h5>
+                   <h5 className='text-white font-semibold md:w-1/2 text-xl w-full'>Join our newsletter to stay up to date on features and releases</h5>
 
                </div>
 
-               <div className='flex flex-col space-y-4'>
+               <div className='flex flex-col space-y-4 w-full'>
                      <div className='flex  space-x-3'>
                           <input
                               className='py-2 rounded-lg w-1/3 px-2'
@@ -37,17 +37,15 @@ export default function Footer() {
 
                      </div>
 
-                     <h5 className='text-xs text-slate-400 w-3/5'>By subscribing you agree to with our Privacy Policy and provide consent to receive updates from our company.</h5>
+                     <h5 className='text-xs text-slate-400 md:w-3/5 w-full'>By subscribing you agree to with our Privacy Policy and provide consent to receive updates from our company.</h5>
 
                </div>
 
                <div>
-                  <h5 className='text-white font-light'>2024. Kennel Breeders. All rights reserved</h5>
+                  <h5 className='text-white font-light hidden md:flex'>2024. Kennel Breeders. All rights reserved</h5>
                </div>
-
-
           </div>
-          <div className='w-1/2 text-white'>
+          <div className='md:w-1/2 w-full text-white md:py-0 py-4'>
                <div className='w-full flex justify-between text-sm'>
                    <div className='flex flex-col space-y-4'>
                         <h5 className='font-semibold text-lg'>Main menu</h5>
@@ -82,6 +80,7 @@ export default function Footer() {
                    </div>
 
                </div>
+               <h5 className='text-white font-light md:hidden flex'>2024. Kennel Breeders. All rights reserved</h5>
 
           </div>
 

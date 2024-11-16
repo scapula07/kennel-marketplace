@@ -1,24 +1,17 @@
 import React,{useEffect,useState} from 'react'
-import { FiSearch } from "react-icons/fi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import logo from "../../assets/logo-b.png"
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { IoIosNotificationsOutline } from "react-icons/io";
-import { collection,  onSnapshot,
-  doc, getDocs,
-  query, orderBy, 
-  limit,getDoc,setDoc ,
- updateDoc,addDoc } from 'firebase/firestore'
+import { onSnapshot,doc } from 'firebase/firestore'
 import { db } from '../../modules/firebase';
 import { saveTypeState ,accountTypeState,preOrdersTypeState} from '../../modules/recoil/state';
 import { useRecoilState ,useRecoilValue} from 'recoil';
-import Modal from "../modal"
 import { searchApi } from '../../modules/api/search';
-import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
-import { MdBlock,MdOutlineLock } from "react-icons/md";
-import { IoMdLock } from "react-icons/io";
+import { MdBlock} from "react-icons/md";
+
 
 export default function Header() {
      const currentUser=useRecoilValue(accountTypeState)
@@ -92,7 +85,6 @@ export default function Header() {
                           src={logo}
                           className="w-20 h-8"
                         />
-
                     </div>
                      {/* <div className='border py-1 px-3 rounded-lg flex w-1/2 justify-between items-center'>
                         <input
@@ -121,11 +113,7 @@ export default function Header() {
 
 
                          }
-                      
-
-                     </div> */}
-
-
+                        </div> */}
                  </div>
 
 
@@ -138,23 +126,13 @@ export default function Header() {
                                    <Link to={item?.link}>
                                        <h5 className={`${active ==item?.link ? 'font-light font-semibold text-orange-800':"font-light hover:font-semibold hover:text-orange-800"}`}>{item?.text}</h5>
                                    </Link>
-                          
-
-                                )
-                              })
-
-                             }
-
-                            
-
+                               )})}
                            
                             {currentUser?.role==="admin"?
                                <Link to="/admin">
                                     <h5 className=' font-light hover:font-semibold hover:text-orange-800 text-sm'>Admin Dashboard</h5>
                                </Link>
-                                
-
-                                 :
+                                   :
                                  <>
                                  {currentUser?.role==="breeder"?
                                       <>
@@ -172,23 +150,18 @@ export default function Header() {
                                               </button>
                                               :
                                               <Link to="/admin-seller">
-                                                  <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>
-                                                    
+                                                  <button className='text-white py-1.5 text-sm px-4 rounded-lg border-orange-700 border-2 ' style={{color:"#C74A1F"}}>                                         
                                                       I'm a breeder
                                                   </button>
                                               </Link>
                                             }
-                                        </>
-
-
-                                        }
+                                        </> }
                                       </>
-                                      :
-                                  
+                                           :             
                                       <Link to={`${currentUser?.id?.length ==undefined? "/login":"/breeder" }`}>
                                           <button className='text-white py-1.5 text-sm px-4 rounded-lg ' style={{background:"#C74A1F"}}>I'm a breeder</button>
                                       </Link>
-                                    }
+                                      }
                                     </>
                                 }
                            
@@ -197,21 +170,15 @@ export default function Header() {
                                        <Link to={"/account"}>
                                           {currentUser?.img?.length ===0?
                                                <h5 className='rounded-full bg-orange-400 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-6 h-6 flex items-center justify-center'
-                                               >
-                                                                      {currentUser?.name?.slice(0,1) }
-                                                                    
-                                                    
-                                                 </h5>
+                                                  >
+                                                    {currentUser?.name?.slice(0,1)}                                           
+                                               </h5>
                                                  :
                                                  <img 
                                                     src={currentUser?.img}
                                                     className="rounded-full lg:w-8 lg:h-8 w-6 h-6"
-                                                 
                                                  />
-
-
-                                              }
-                                     
+                                              }      
                                         </Link>
                                         <Link to={"/messages"}>
                                           <h5 className='flex '>
@@ -222,7 +189,7 @@ export default function Header() {
                                                     <span className='bg-red-500 lg:h-3 lg:w-3 h-1 w-1 rounded-full -ml-3 mt-0.5'></span>
                                                   }
                                           </h5>
-                                     </Link>
+                                      </Link>
                                      <Link to={`/notifications`}>
                                            <h5 className='flex '>
                                                 <IoIosNotificationsOutline
@@ -235,43 +202,28 @@ export default function Header() {
                                      </Link>
 
                                 </div>
-                                :
-                              <Link to={"/login"}>
-                              <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Login</button>
-                              </Link>
-
-                              }
+                                  :
+                                <Link to={"/login"}>
+                                    <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Login</button>
+                                </Link>
+                                 }
                                 {currentUser?.id?.length >0&&
-                              <Link to={"/cart"}
-                                  state={{
-                                    products:misc?.cart
-                                    }}
-                                >
-                                <div className='flex'>
-                                  <MdOutlineShoppingCart 
-                                      className='text-2xl' 
-                                  />
-                                  {misc?.cart?.length >0&&
+                                <Link to={"/cart"}
+                                   state={{
+                                      products:misc?.cart
+                                    }}>
+                                    <div className='flex'>
+                                      <MdOutlineShoppingCart 
+                                          className='text-2xl' 
+                                      />
+                                      {misc?.cart?.length >0&&
                                           <h5 className='text-xs bg-orange-600 rounded-full flex items-center justify-center h-4 w-4 text-white '>{misc?.cart?.length}</h5>
-
-
-                                  }
-                            
-                                </div>
-                            
+                                        }                       
+                                    </div> 
                               </Link>}
-
-
-                     </div>
-                   
-           
-                    
+                     </div>              
                  </div>
-
            </div>
-
-        
-
         </div>
        
         </>

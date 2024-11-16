@@ -1,35 +1,35 @@
 import React ,{useState,useEffect} from 'react'
 import Layout from '../../layout'
-import { MdShoppingCart,MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlineShoppingCart } from "react-icons/md";
 import { db } from '../firebase';
-import { collection,  onSnapshot,
-      doc, getDocs,
-      query, orderBy, 
-      limit,getDoc,setDoc ,
-     updateDoc,addDoc ,deleteDoc, where,or} from 'firebase/firestore'
-import { accountTypeState, saveTypeState } from '../recoil/state';
+import { collection,  onSnapshot, doc,query, orderBy,updateDoc,where} from 'firebase/firestore'
+import { accountTypeState} from '../recoil/state';
 import { useRecoilValue } from 'recoil';
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { ClipLoader } from 'react-spinners';
 import { calculateTime } from '../util';
 import { Link } from 'react-router-dom';
+
+
+
+
 export default function Notifications() {
+
       useEffect(() => {
          window.scrollTo(0, 0);
         }, []);
+
+
       const currentUser=useRecoilValue(accountTypeState)
       const [notifications,setNotifications]=useState([])
       const [isLoading,setLoading]=useState(false)
       const [areNotification,setAre]=useState("")
 
 
-      useEffect(()=>{
-
-      
-
+        useEffect(()=>{
             if(currentUser?.id?.length >0){
-                 const q = query(collection(db,"notifications"),where('to', '==', currentUser?.id),orderBy('date', 'desc'));
+                  const q = query(collection(db,"notifications"),where('to', '==', currentUser?.id),orderBy('date', 'desc'));
                 
                   const notifications= [];
                   const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -42,13 +42,9 @@ export default function Notifications() {
                   
                   }
                   notifications?.length===0 &&setAre("No notfications")
-                  notifications?.length >0 &&setAre("")
-          
-                  
+                  notifications?.length >0 &&setAre("")     
                   });
-              
               }
-          
           },[currentUser?.id])
 
           useEffect(()=>{
@@ -57,30 +53,29 @@ export default function Notifications() {
                  notifications:false
                })
             }
-             currentUser?.id?.length >0&& seen()
-            
-          },[currentUser?.id])    
+             currentUser?.id?.length >0&& seen()  
+           },[currentUser?.id]) 
+           
+           
   return (
     <Layout>
           <div className='h-full w-full flex px-20 py-4'>
-                <div className='flex flex-col w-3/5 space-y-10'> 
-                        <h5 className='text-xl font-semibold'>Notifications</h5>
-                              {areNotification?.length===0&&notifications?.length ===0&&
-                                    <div className='w-full flex justify-center py-10 items-center space-x-2'>
-                                          <ClipLoader 
-                                                color={"brown"}
-                                                size="16"
-                                                loading={true}
+                <div className='flex flex-col md:w-3/5 w-full space-y-10'> 
+                        <h5 className='text-xl font-semibold w-full'>Notifications</h5>
+                                  {areNotification?.length===0&&notifications?.length ===0&&
+                                        <div className='w-full flex justify-center py-10 items-center space-x-2'>
+                                                <ClipLoader 
+                                                    color={"brown"}
+                                                    size="16"
+                                                    loading={true}
                                                 />
-                                          <h5 className='text-slate-700 font-light'>Loading...</h5>
-                                          </div>
-                                          }
-
-                                          {areNotification?.length >0&&
-                                          <div className='w-full flex justify-center py-10'>
-                                                <h5 className="text-lg font-semibold">You do not have any notifications.</h5>
-                                          </div>
-
+                                              <h5 className='text-slate-700 font-light'>Loading...</h5>
+                                        </div>
+                                      }
+                                     {areNotification?.length >0&&
+                                            <div className='w-full flex justify-center py-10'>
+                                                 <h5 className="text-lg font-semibold">You do not have any notifications.</h5>
+                                            </div>
                                       }
 
                         <div className='flex flex-col space-y-8'>
@@ -94,15 +89,8 @@ export default function Notifications() {
                             })
 
                             }
-                        </div>
-
-
-                 
-
-                </div>
-          
-                
-            
+                        </div>          
+                </div>              
           </div>
     </Layout>
 
@@ -116,24 +104,19 @@ const Card=({notification,currentUser})=>{
       return(
         <div className='flex w-full justify-between px-4 py-4 rounded-lg shadow-lg'>
               <Link className='w-2/3'
-                to={
-                  currentUser?.role==="breeder"?
-                   "/admin-seller/orders"
-                   :
-                   "/orders"
-                 }
-               
-               >
+                 to={
+                     currentUser?.role==="breeder"?
+                         "/admin-seller/orders"
+                          :
+                         "/orders"
+                      }>
             
                  <div className='flex w-full items-center space-x-4'>
                        <h5 className='p-3 bg-blue-100 rounded-lg'>
-                        {notification?.type==="Order update"?
-
-                       
+                        {notification?.type==="Order update"?       
                            <MdOutlineShoppingCart className='text-slate-600 text-xl'/>
-                           :
-                           <IoChatbubbleEllipsesOutline  />
-
+                             :
+                           <IoChatbubbleEllipsesOutline  /> 
                         }
                        </h5>
                        <h5 className='font-semibold text-sm text-slate-800 flex flex-col '>
@@ -150,23 +133,20 @@ const Card=({notification,currentUser})=>{
                  </Link>
 
                  <div className='flex items-center space-x-4'>
-                 
-                        {notification?.type==="Order update"?  
+                         {notification?.type==="Order update"?  
                                    <img 
                                      src={notification?.product?.img}
                                      className="w-10 h-10 rounded-full"
                                    />
                                     :
-                                    <IoChatbubbleEllipsesOutline 
+                                   <IoChatbubbleEllipsesOutline 
                                       className='text-slate-700 text-xl'
-                                     />
-
-                            }
+                                    />
+                             }
                       
                        <RiDeleteBinLine 
                          className='text-slate-600 text-xl'
                        />
-                    
                 </div>
 
         </div>

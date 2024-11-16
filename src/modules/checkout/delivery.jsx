@@ -167,7 +167,7 @@ export default function Delivery({delivery,setDelivery}) {
                  <div className='flex flex-col space-y-1.5'>
                        <h5 className='text-slate-600'>Choose option</h5>
 
-                        <div className='rounded-full border w-1/3 px-4 py-1 flex items-center space-x-3'> 
+                        <div className='rounded-full border md:w-1/3 w-full px-4 py-1 flex items-center space-x-3'> 
                            {radio==="FedEx Office"?
                               <IoMdRadioButtonOn 
                                 className='text-blue-400'
@@ -199,7 +199,7 @@ export default function Delivery({delivery,setDelivery}) {
                 <div className='flex flex-col space-y-2.5 py-5'>
                      {["United States Postal Service","UPS (United Parcel Service)","Blue Dart Shipping","Directly from seller"].map((text)=>{
                           return(
-                            <div className='rounded-full border w-1/2 px-4 py-1 flex items-center space-x-3'> 
+                            <div className='rounded-full border md:w-1/2 w-full px-4 py-1 flex items-center space-x-3'> 
                          {radio===text?
                               <IoMdRadioButtonOn 
                                 className='text-blue-400'
