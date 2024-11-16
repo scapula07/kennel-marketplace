@@ -50,7 +50,7 @@ export default function SellerHome() {
 
                   </div>
          
-         <div  className='grid grid-flow-row grid-cols-4  gap-4 gap-y-8 h-full w-full py-6'>
+         <div  className='grid grid-flow-row md:grid-cols-4 grid-cols-2 gap-4 gap-y-8 h-full w-full py-6'>
                   {products?.map((product)=>{
                       return(
                          <Card 
@@ -58,8 +58,6 @@ export default function SellerHome() {
                          />
                        )
                   })}
-
-
          </div>
 
     </div>

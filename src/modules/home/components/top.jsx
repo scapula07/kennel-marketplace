@@ -6,22 +6,19 @@ import { MdOutlineStar } from "react-icons/md";
 
 export default function TopProduct() {
   return (
-    <div className='w-4/6  py-20 flex flex-col '>
-
-
-           <div className='flex w-full items-center justify-between' >
+    <div className='md:w-4/6 w-full px-4 md:px-0 md:py-20 flex flex-col '>
+        <div className='flex md:flex-row flex-col w-full items-center md:justify-between space-y-6 md:space-y-0' >
 
                   <div className='flex flex-col space-y-2'>
                       <h5 className='text-4xl font-semibold'>Top selling products</h5>
                       <h5 className='text-slate-500  '>Want to pre-order favourite animal? Check upcoming litter drops</h5>
 
                   </div>
-                  <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>{"View all ->"}</button>
+                  <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600 w-full md:w-28'>{"View all ->"}</button>
 
              </div>
 
-
-               <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
+               <div  className='grid grid-flow-row md:grid-cols-3 grid-cols-2  gap-4 gap-y-8 h-full w-full py-6'>
                   {[1,2,3].map(()=>{
                       return(
                          <Card />
@@ -35,7 +32,6 @@ export default function TopProduct() {
     </div>
   )
 }
-
 
 
 

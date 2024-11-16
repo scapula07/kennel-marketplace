@@ -43,11 +43,11 @@ export default function Market() {
 
   return (
     <Layout>
-        <div className='w-full px-28 py-10 '>
+        <div className='w-full md:px-28 px-4 py-10 '>
              <h5 className='text-2xl font-semibold '>Marketplace</h5>
 
-             <div className='flex w-full py-6 space-x-10'>
-                   <div className='w-1/5 overflow-y-scroll '>
+             <div className='flex w-full md:py-6 md:space-x-10'>
+                   <div className='md:w-1/5 hidden md:flex overflow-y-scroll '>
                        <Filters 
                           filters={filters}
                           setFilter={setFilter}
@@ -60,7 +60,7 @@ export default function Market() {
                        />
  
                    </div>
-                    <div className='flex flex-col w-4/6 '>
+                    <div className='flex flex-col md:w-4/6 w-full'>
 
 
                           <Products 

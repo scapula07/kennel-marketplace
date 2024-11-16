@@ -36,37 +36,36 @@ export default function Breeders() {
           });
        },[])
   return (
-    <div className='w-4/6  py-20 flex flex-col '>
+    <div className='md:w-4/6 w-full px-4 md:px-0 md:py-20 py-5 flex flex-col '>    
+           <div className='flex md:flex-row flex-col w-full items-center md:justify-between space-y-6 md:space-y-0' >
 
-
-           <div className='flex w-full items-center justify-between' >
 
                   <div className='flex flex-col space-y-2'>
                       <h5 className='text-4xl font-semibold'>Top breeders</h5>
                       <h5 className='text-slate-500  '>Check out the best breeders who work on Kennel Breeders</h5>
 
                   </div>
-                  <Link to="/sellers">
-                  <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>{"View all ->"}</button>
+                  <Link to="/sellers" className='w-full md:w-28 px-4 md:px-0'>
+                  <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600 w-full'>{"View all ->"}</button>
                  </Link>
              </div>
 
 
-               <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
-               {sellers?.length >0&&sellers?.map((seller)=>{
+               <div  className='grid grid-flow-row md:grid-cols-3 grid-cols-2  gap-4 gap-y-8 h-full w-full py-6'>
+                      {sellers?.length >0&&sellers?.map((seller)=>{
                           return(
                             <Card 
                               seller={seller}
                             />
                           )
-                      })}
+                       })}
 
 
 
                 </div>
 
-                <div className='bg-white rounded-lg flex w-full px-8 py-4 shadow justify-between'>
-                      <div className='flex flex-col space-y-4 w-1/3'>
+                <div className='bg-white rounded-lg flex md:flex-row flex-col w-full px-8 py-4 shadow justify-between'>
+                      <div className='flex flex-col space-y-4 md:w-1/3 w-full'>
                            <h5 className='text-2xl font-semibold'>Want to become a breeder?</h5>
                            <h5 className='text-xs font-light '>Join Kennel Breeders and grow your breeding business with us. Sell products and services along with animal breeding activity</h5>
                         <Link to={`${currentUser?.id?.length ==undefined? "/login":"/breeder" }`}>
@@ -89,7 +88,7 @@ export default function Breeders() {
                              </div>
 
 
-                      <div className='w-1/2'>
+                      <div className='md:w-1/2'>
                            <img 
                               src={card}
                            />

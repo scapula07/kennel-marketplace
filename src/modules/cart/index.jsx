@@ -56,7 +56,7 @@ export default function Cart() {
   return (
     <Layout>
         <div className='w-full h-full flex justify-center py-10'>
-                <div className='flex flex-col w-3/4'> 
+                <div className='flex flex-col md:w-3/4 w-full px-4 md:px-0'> 
                         <div className='flex w-full justify-between '>
                             <h5 className='text-xl font-semibold '>My cart</h5>
                        </div>
@@ -90,7 +90,7 @@ export default function Cart() {
 
                           }
                     {cart?.length >0&&
-                    <div className='flex w-3/5 justify-end'>
+                    <div className='flex md:w-3/5 w-5/6 justify-end'>
                              <div className='flex items-center space-x-4'>
                                  <h5 className='text-sm'>Total:${total}</h5>
                                  <Link to="/checkout"
@@ -186,7 +186,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
 
        }
    return(
-    <div className='flex w-3/5 bg-white rounded-lg px-4 space-x-6 h-28 py-4 px-4 shadow'>
+    <div className='flex md:w-3/5 w-full bg-white rounded-lg px-4 space-x-6 h-28 py-4 px-4 shadow'>
     <img 
       src={product?.images?.length !=undefined&&product?.images[0]}
       className="w-20 h-20"
@@ -199,7 +199,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
                    <h5 className='text-xs text-slate-500 '>{product?.description?.slice(0,50)}...</h5>
               </div>
 
-              {product?.type==="product"&&
+              {item?.type==="product"&&
                   <div className='flex items-center space-x-1'>
                     <IoWarningOutline className='text-sm text-red-500' />
                     <h5 className='text-xs text-red-500'>{product?.qty} units left</h5>
@@ -207,7 +207,7 @@ const Card=({item,setTotal,total,currentUser,setCart,cart,index})=>{
               }
         </div>
       
-        {product?.type==="product"&&
+        {item?.type==="product"&&
          <div className='flex items-center w-1/4'>
                <div className='flex items-center space-x-5'>
                      <BsDash

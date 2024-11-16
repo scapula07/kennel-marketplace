@@ -82,7 +82,7 @@ export default function SellerServices() {
 
                   </div>
          
-         <div  className='grid grid-flow-row grid-cols-4  gap-x-1 gap-y-8 h-full w-full py-6'>
+         <div  className='grid grid-flow-row md:grid-cols-4 grid-cols-2 gap-x-1 gap-y-8 h-full w-full py-6'>
                   {products?.map((product)=>{
                       return(
                          <Card 

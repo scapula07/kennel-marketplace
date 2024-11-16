@@ -120,10 +120,10 @@ export default function Profile() {
 
   return (
     <Layout>
-            <div className='w-full h-full flex justify-center py-10'>
-                 <div className='flex flex-col w-4/6 space-y-10'> 
+            <div className='w-full h-full flex md:px-0 px-4 justify-center py-10'>
+                 <div className='flex flex-col md:w-4/6 w-full  space-y-10'> 
                          <div className='flex w-full justify-between '>
-                              <h5 className='text-4xl font-semibold '>Account information</h5>
+                              <h5 className='md:text-4xl text-xl font-semibold '>Account information</h5>
                               {loading?
                                   <ClipLoader 
                                     color="black"
@@ -139,8 +139,8 @@ export default function Profile() {
                                   <div className='border-b flex justify-between py-4'>
                                         <h5 className='text-xl text-slate-600 font-light'>Username</h5>
 
-                                        <div className='flex items-center w-1/2 space-x-6 '>
-                                                 <div className='flex flex-col w-1/2 space-y-2'>
+                                        <div className='flex items-center md:w-1/2 w-3/5 space-x-6 '>
+                                                 <div className='flex flex-col md:w-1/2 space-y-2'>
                                                        <label className='font-light text-slate-600'>Full name</label>
                                                        <input 
                                                           placeholder={`${profile?.name}`}
@@ -162,8 +162,8 @@ export default function Profile() {
                                             <div className='border-b flex justify-between py-4'>
                                                     <h5 className='text-xl text-slate-600 font-light'>Your photo</h5>
 
-                                                    <div className='flex w-1/2 space-x-6 '>
-                                                            <div className='flex flex-col w-1/2 space-y-2'>
+                                                    <div className='flex md:w-1/2 w-3/5 space-x-6 '>
+                                                            <div className='flex flex-col md:w-1/2 space-y-2'>
                                                                 {url?.length ==0&&profile?.img?.length >0?
                                                                     <div>
                                                                         <img 
@@ -251,8 +251,8 @@ export default function Profile() {
                                 <div className='border-b flex justify-between py-4'>
                                         <h5 className='text-xl text-slate-600 font-light'>Your Phone number</h5>
 
-                                        <div className='flex  w-1/2 space-x-6 '>
-                                                 <div className='flex flex-col w-1/2 space-y-2'>
+                                        <div className='flex  md:w-1/2 w-3/5 space-x-6 '>
+                                                 <div className='flex flex-col md:w-1/2 space-y-2'>
                                                        <label className='font-light text-slate-600'>Phone number</label>
                                                        <input 
                                                           placeholder=''
@@ -272,8 +272,8 @@ export default function Profile() {
                                    <div className='border-b flex justify-between py-4'>
                                         <h5 className='text-xl text-slate-600 font-light'>Your Email</h5>
 
-                                        <div className='flex  w-1/2 space-x-6 '>
-                                                 <div className='flex flex-col w-1/2 space-y-2'>
+                                        <div className='flex  md:w-1/2 w-3/5 space-x-6 '>
+                                                 <div className='flex flex-col md:w-1/2 space-y-2'>
                                                        <label className='font-light text-slate-600'>Email</label>
                                                        <input 
                                                           placeholder={`${profile?.email}`}
@@ -284,7 +284,7 @@ export default function Profile() {
 
                                                  </div>
 
-                                                 <div className='w-1/2 justify-end flex '>
+                                                 <div className='md:w-1/2 w-[60%] justify-end flex '>
                                                       <h5 className='text-blue-600'>Edit email</h5>
                                                  </div>
 
@@ -298,8 +298,8 @@ export default function Profile() {
                                    <div className='border-b flex justify-between py-4'>
                                         <h5 className='text-xl text-slate-600 font-light'>Your password</h5>
 
-                                        <div className='flex  w-1/2 space-x-6 '>
-                                                 <div className='flex flex-col w-1/2 space-y-2'>
+                                        <div className='flex  md:w-1/2 w-3/5 space-x-6 '>
+                                                 <div className='flex flex-col md:w-1/2 space-y-2'>
                                                        <label className='font-light text-slate-600'>Password</label>
                                                        <input 
                                                           placeholder=''
@@ -310,7 +310,7 @@ export default function Profile() {
 
                                                  </div>
 
-                                                 <div className='w-1/2 justify-end flex '>
+                                                 <div className='md:w-1/2 w-full justify-end flex '>
                                                  {editing?
                                                     <BeatLoader 
                                                         color="black"
@@ -332,9 +332,9 @@ export default function Profile() {
                                    <div className='border-b flex justify-between py-4'>
                                         <h5 className='text-xl text-slate-600 font-light'>Your Bio</h5>
 
-                                        <div className='flex  w-1/2 space-x-6 '>
+                                        <div className='flex  md:w-1/2 w-full space-x-6 '>
                                                  <div className='flex flex-col w-full space-y-2'>
-                                                       <label className='font-light text-slate-600'>Bio</label>
+                                                       <label className='font-light text-slate-600 hidden md:flex'>Bio</label>
                                                        <textarea 
                                                           placeholder=''
                                                           value={profile?.bio}

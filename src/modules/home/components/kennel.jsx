@@ -7,10 +7,8 @@ import cart from "../../../assets/cart.png"
 import picture from "../../../assets/picture.png"
 export default function Kennel() {
   return (
-    <div className='w-4/6  py-20 flex flex-col '>
-
-
-           <div className='flex w-full items-center justify-between' >
+    <div className='md:w-4/6 w-full px-4 md:px-0 md:py-20 py-5 flex flex-col '>    
+        <div className='flex md:flex-row flex-col w-full items-center md:justify-between space-y-6 md:space-y-0' >
 
                   <div className='flex flex-col space-y-2'>
                       <h5 className='text-4xl font-semibold'>Kennel Breeders features</h5>
@@ -20,7 +18,7 @@ export default function Kennel() {
              </div>
 
 
-               <div  className='flex justify-between items-center py-10'>
+               <div  className='flex md:flex-row flex-col justify-between items-center py-10'>
                   {[
                     {
                       img:picture,
@@ -78,14 +76,7 @@ const Card=({item})=>{
  
            </div>
  
-              
-
- 
- 
-          </div>
- 
-          
-         
+        </div>  
       </div>
      )
  }

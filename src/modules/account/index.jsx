@@ -31,7 +31,7 @@ export default function Accoount() {
   return (
     <Layout>
             <div className='w-full h-full flex justify-center py-10'>
-                 <div className='flex flex-col w-3/4 space-y-10'> 
+                 <div className='flex flex-col md:w-3/4 w-full px-4 md:px-0 space-y-10'> 
                           <div className='flex w-full justify-between '>
                               <h5 className='text-xl font-semibold '>My account</h5>
 
@@ -39,16 +39,16 @@ export default function Accoount() {
 
                           </div>
 
-                          <div className='flex items-center space-x-8'>
+                          <div className='flex items-center md:space-x-8 space-x-3' >
                           {currentUser?.img?.length >0?
 
                                 <img 
                                   src={currentUser?.img}
-                                  className="w-56 h-56 rounded-full"
+                                  className="md:w-56 md:h-56 w-44 h-44 rounded-full"
                             
                                 />
                               :
-                                <div  className="w-44 h-44 rounded-full flex justify-center items-center" style={{background:"white"}}>
+                                <div  className="md:w-44 md:h-44 w-36 h-36 rounded-full flex justify-center items-center" style={{background:"white"}}>
                                       <h5 className='rounded-full bg-orange-400 text-white text-7xl font-semibold h-36 w-36 flex items-center justify-center'>{currentUser?.name?.slice(0,1)}</h5>
                                 </div>
 

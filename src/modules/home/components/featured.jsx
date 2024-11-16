@@ -43,26 +43,21 @@ export default function Featured() {
       });
    },[])
   return (
-    <div className='w-4/6  py-20 flex flex-col '>
+    <div className='md:w-4/6 w-full px-4 md:px-0 md:py-20 py-10 flex flex-col '>
+           <div className='flex md:flex-row flex-col w-full items-center md:justify-between space-y-6 md:space-y-0' >
 
-
-           <div className='flex w-full items-center justify-between' >
-
-                  <div className='flex flex-col space-y-2'>
+                  <div className='flex flex-col space-y-2 '>
                       <h5 className='text-4xl font-semibold'>Featured</h5>
                       <h5 className='text-slate-500  '>Check the best selling products, services and breeding options from Kennel Breeders sellers</h5>
-
                   </div>
-                  <Link to="/market">
-                  <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>{"View all ->"}</button>
-
-                  
+                  <Link to="/market" className='w-full md:w-28 px-4 md:px-0'>
+                       <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600 w-[100%]'>{"View all ->"}</button>
                   </Link>
                   
              </div>
 
 
-               <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
+               <div  className='grid grid-flow-row md:grid-cols-3 grid-cols-2  gap-4 gap-y-8 h-full w-full py-6'>
                {products?.length>0&&products?.map((product)=>{
                       return(
                         <Card 

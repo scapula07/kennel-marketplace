@@ -9,9 +9,9 @@ export default function Sections({seller}) {
   const part =`${"" +lastPart}`
      
   return (
-      <div className='py-4 flex flex-col w-full px-28'>
+      <div className='py-4 flex flex-col w-full md:px-28 px-2'>
            <div className='w-full'>
-                <div className='border rounded-full flex items-center w-1/2 justify-between '>
+                <div className='border rounded-full flex items-center md:w-1/2 justify-between '>
                 {[
                   {text:"Home",link:""},
                   {text:"Products",link:"products"},
@@ -28,15 +28,9 @@ export default function Sections({seller}) {
                               <Link to={item?.link}>
                               <button className={`${part ==item?.link?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`}>{item?.text}</button>
                            </Link>
-
-
-                      }
-                   
+                      }               
                       </>
-                   
-
                      )
-
                 })}
 
                 </div>

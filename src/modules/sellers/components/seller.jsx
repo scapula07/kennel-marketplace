@@ -61,7 +61,7 @@ export default function Seller({sellers,setSeller}) {
 
 
         <div className='flex flex-col space-y-20 w-full' >
-            <div  className='grid grid-flow-row grid-cols-3  gap-4 gap-y-8 h-full w-full py-6'>
+            <div  className='grid grid-flow-row md:grid-cols-3 grid-cols-2 gap-4 gap-y-8 h-full w-full py-6'>
                       {sellers?.length >0&&currentItems?.map((seller)=>{
                           return(
                             <Card 

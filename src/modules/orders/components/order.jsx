@@ -1,10 +1,10 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { IoIosArrowUp,IoIosArrowDown } from "react-icons/io";
-import { doc,getDoc,setDoc , updateDoc,collection,addDoc,getDocs,query,where,onSnapshot}  from "firebase/firestore";
+import { doc,onSnapshot}  from "firebase/firestore";
 import { db } from '../../firebase';
 import { accountTypeState } from '../../recoil/state';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { BeatLoader, ClipLoader } from 'react-spinners';
 import { Link, useNavigate } from 'react-router-dom';
 import { messageApi } from '../../api/message';
@@ -29,24 +29,21 @@ export default function Order({order}) {
         const [vendor,setVendor]=useState({})
         const [trigger,setTrigger]=useState(false)
         const [triggerCancel,setCancel]=useState(false)
+        const [open,setOpen]=useState(false)
 
         useEffect(()=>{
           const getShippingRate=async()=>{
               try{
                   const result =await shippingApi.getShippingRates("9cbf5727f9564801818fb3692b3a2d00")
-                  console.log(result)
                }catch(e){
                   console.log(e)
                }
-  
           }
           getShippingRate()
         },[order])
   
 
-
-       console.log(order,"order ")
-      const [open,setOpen]=useState(false)
+    
       const startMsg=async()=>{
         setLoader(true)
           try{
@@ -63,8 +60,7 @@ export default function Order({order}) {
       const signContract=async()=>{
            setLoading(true)
           try{
-            const res=await orderApi.signContract(order,vendor,product,currentUser)
-            
+            const res=await orderApi.signContract(order,vendor,product,currentUser)    
             setLoading(false)
             
           }catch(e){
@@ -120,9 +116,6 @@ export default function Order({order}) {
          }
       }
 
-
-      console.log(product,"state")
- 
   return (
     <>
     <div className="bg-slate-200 w-4/5 py-4 px-4 flex flex-col rounded-xl space-y-6"
@@ -164,9 +157,7 @@ export default function Order({order}) {
                                   }
                                   {order?.status==="cancelled"&&
                                     <h5 className='bg-slate-100 text-slate-600 py-1 px-2 text-sm font-semibold'>
-                                          Cancelled
-                                     
-                                   
+                                          Cancelled                
                                     </h5>
                                   }
 
@@ -177,10 +168,7 @@ export default function Order({order}) {
                               <div className='flex items-center space-x-8'>
                                     <h5 className='text-sm font-light text-slate-400'>Numnber:</h5>
                                     <h5 className='text-sm font-light text-slate-400'>Date of creation:</h5>
-
                               </div>
-
-
                         </div>
 
                    </div>
@@ -397,31 +385,20 @@ export default function Order({order}) {
                        <h5 className='text-slate-500 '>All the details about deal and contract you can discuss in chat with seller</h5>
 
               </div>
-            
-
-
     </div>
     <Modal trigger={trigger}  cname="w-1/2 py-2   px-8 rounded-lg ">
             <div className='bg-white w-full  rounded-lg px-4 py-4'>
-                    <div className='w-full justify-end flex '>
-                           
-                                <IoMdClose
-                                      className='text-2xl font-light'
-                                      onClick={()=>setTrigger(false)}
-                               />
-
-                     
-                          
-                    </div>
-
+                    <div className='w-full justify-end flex '>      
+                              <IoMdClose
+                                  className='text-2xl font-light'
+                                  onClick={()=>setTrigger(false)}
+                               />                
+                     </div>
                  <div>
                      <Review
                        product={product}
                        setTrigger={setTrigger}
                      />
-
-
-
                  </div>
 
             </div>
@@ -432,39 +409,24 @@ export default function Order({order}) {
      <Modal trigger={triggerCancel}  cname="w-1/2 py-2   px-8 rounded-lg ">
               <div className='bg-white w-full  rounded-lg px-4 py-4 space-y-4'>
                       <div className='w-full justify-end flex '>
-                            
-                                  <IoMdClose
-                                        className='text-2xl font-light'
-                                        onClick={()=>setCancel(false)}
-                                />
-
-                      
-                            
+                            <IoMdClose
+                                className='text-2xl font-light'
+                                onClick={()=>setCancel(false)}
+                              />                       
                       </div>
-
                   <div>
                       <Cancel 
                         product={product}
                         cancelOrder={cancelOrder}
                         cancel={cancel}
                       />
-
-
-
                   </div>
-
               </div>
-
-
       </Modal>
 
     </>
   )
 }
-
-
-
-
 
 
 
@@ -489,12 +451,8 @@ const Product=({item,order,product,setProduct,setVendor})=>{
         }
       },[])
 
-    
 
-      
-  
-      console.log(product?.images[0],"prod")
-        return(
+   return(
       <div className='flex w-full bg-white rounded-lg px-4 space-x-6 h-28 py-4'>
           <img 
               src={product?.images[0]}

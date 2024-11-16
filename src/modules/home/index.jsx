@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <Layout>
         <div className='w-full'>
-             <HeroSection />
+                <HeroSection />
              <div className='w-full flex justify-center'>
                 <Featured />
               </div>
@@ -63,16 +63,7 @@ export default function Home() {
               </div>
               <div className='w-full flex justify-center'>
                 <TopProduct />
-              </div>
-
-              
-
-
-
-  
-
-
-            
+              </div>       
         </div>
 
     </Layout>

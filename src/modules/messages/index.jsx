@@ -151,13 +151,13 @@ export default function Messages() {
       
   return (
     <Layout>
-                <div className='w-full flex justify-center h-screen py-8'>
-                      <div className='flex bg-white w-4/6 h-full rounded-lg'>
-                            <div className='w-2/5 border-r h-full flex-col px-6'>
-                                  <div className='py-6 '>
+                <div className='w-full flex justify-center h-screen md:py-20'>
+                      <div className='flex bg-white md:w-4/6 w-full md:flex-row  flex-col h-full rounded-lg'>
+                            <div className='md:w-2/5 w-full border-r md:h-full flex-col px-6'>
+                                  <div className='md:py-6 py-2'>
                                      <h5 className='text-xl font-semibold'>All messages</h5>
                                   </div>
-                                  <div className='border py-2 px-3 rounded-lg flex w-full justify-between'>
+                                  <div className='border py-2 px-3 rounded-lg md:flex w-full justify-between hidden'>
                                          <input
                                             placeholder='Search'
                                             className='outline-none border-0 w-full'
@@ -168,9 +168,8 @@ export default function Messages() {
 
                                         </div>
                                     
-                                    <div className='flex flex-col py-4 space-y-8'>
+                                    <div className='flex md:flex-col flex-row items-center md:py-4 md:space-y-8 space-x-6 md:space-x-0 no-scrollbar overflow-x-scroll md:overflow-x-hidden w-full'>
                                          {conversations?.map((conv,index)=>{
-                                                  console.log(index,"")
                                                  return(
                                                    <Contact 
                                                        conv={conv}
@@ -203,45 +202,34 @@ export default function Messages() {
 
                             </div>
 
-                           <div className='w-full h-full flex flex-col relative  '>
+                           <div className='w-full h-full flex flex-col relative md:-mt-20 '>
                                   <div className='flex items-center justify-between absolute top-0 py-4 border-b w-full px-5 '>
                                   {currentChat?.id?.length >0&&
                                         <div className='flex items-center space-x-6'>
-                                        {currentChat?.img?.length >0?
-                                             <img
-                                                 src={currentChat?.img} 
-                                                 className="h-10 w-10 rounded-full"
-                                             />
+                                           {currentChat?.img?.length >0?
+                                                <img
+                                                    src={currentChat?.img} 
+                                                    className="h-10 w-10 rounded-full"
+                                                 />
                                                   :
                                                   <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{currentChat?.name?.slice(0,1)}</h5>
                                                        
                                              }
-                                             
-
-                                            <h5 className='text-lg font-light'>{currentChat?.name}</h5>
-
-
+                                           <h5 className='text-lg font-light'>{currentChat?.name}</h5>
                                         </div>
 
                                        }
 
                                         <div className='flex items-center space-x-8 justify-end'>
-                                                  {/* <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
-                                                        Archive
-                                                
-
-                                                    </button> */}
-                                             {currentChat?.id?.length >0&&
-                                                   
+                                               
+                                             {currentChat?.id?.length >0&&                                 
                                                     <button className='text-blue-600 py-1.5 text-sm space-x-4 px-4 rounded-lg flex justify-center space-x-4 items-center  border border-blue-600 ' >
                                                         <span>Go to seller page</span>
                                                         <FiArrowRight
                                                             className='text-xl' 
                                                         />
-                                                
-
                                                     </button>
-                                                            }
+                                               }
                                              
 
                                         </div>
@@ -258,10 +246,10 @@ export default function Messages() {
                                                  
 
                                           </div>
-                                          <div className=' h-1/3 w-full px-6 py-3'>
+                                          <div className=' md:h-1/3 w-full px-6 py-3'>
                                               <div className='flex flex-col border rounded-xl bg-white h-full px-6 py-2 space-y-2' >
                                                   {url?.length==0?
-                                                          <input 
+                                                      <input 
                                                           placeholder='Enter a message'
                                                           className='outline-none text-black'
                                                           value={newMessage}
@@ -375,21 +363,18 @@ const Contact=({conv,setCurrentChat,index,currentUser})=>{
            }
           },[])
 
-   
-         
-       console.log(conv,"oo")
       return(
 
           <div className='w-full flex flex-col space-y-1 hover:bg-slate-100 rounded-lg px-2 py-1 border-b border-slate-100' 
             onClick={()=>setCurrentChat({...conv,...receiver})}
           >
-          <div className='w-full flex items-center space-x-3'>
-               <div className='flex items-center space-x-2'>
-                    <h5 className='h-2 w-2 rounded-full bg-green-900'></h5>
+          <div className='w-full flex md:flex-row flex-col items-center space-x-3'>
+               <div className='flex items-center '>
+                    {/* <h5 className='h-2 w-2 rounded-full bg-green-900 '></h5> */}
                     {receiver?.img?.length >0?
-                          <img
+                     <img
                           src={receiver?.img} 
-                         className="h-10 w-10 rounded-full"
+                         className="md:h-10 md:w-10 h-14 w-14 rounded-full"
                         />
                         :
                         <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{receiver?.name?.slice(0,1)}</h5>
@@ -397,16 +382,16 @@ const Contact=({conv,setCurrentChat,index,currentUser})=>{
                    
                </div>
 
-               <div className='flex flex-col '>
-                    <h5 className='text-slate-700 text-sm font-semibold'>{receiver?.name}</h5>
-                    <h5 className='text-xs font-light text-slate-600'>{calculateTime(conv?.lastMessage)}</h5>
+               <div className='flex flex-col w-full'>
+                    <h5 className='text-slate-700 text-sm font-semibold w-full text-center md:text-left'>{receiver?.name}</h5>
+                    <h5 className='text-xs font-light text-slate-600 hidden md:flex'>{calculateTime(conv?.lastMessage)}</h5>
                     
                </div>
             
 
           </div>
 
-          <div className='w-full'>
+          <div className='w-full hidden md:flex'>
             <p className=' text-xs font-light text-slate-800'>{conv?.lastText?.slice(0,100)}...</p>
           </div>
 
@@ -458,7 +443,7 @@ const ChatBox=({currentChat,currentUser})=>{
 
 
       return(
-          <div className='flex flex-col py-4 overflow-y-scroll space-y-6 h-full'  ref={chatRef}>
+          <div className='flex flex-col md:py-4 py-6 md:px-0 px-6 overflow-y-scroll space-y-6 h-full'  ref={chatRef}>
                {msgs?.map((msg,index)=>{
                      return(
 

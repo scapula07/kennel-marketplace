@@ -42,11 +42,7 @@ export default function Order({products,delivery,setDelivery}) {
                          />
                       )
                    })
-
                    }
-                
-                 
-
               </div>
 
 

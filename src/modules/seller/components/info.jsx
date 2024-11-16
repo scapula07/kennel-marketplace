@@ -4,7 +4,7 @@ import { FaRegBookmark,FaRegStar } from "react-icons/fa";
 
 export default function Info({seller}) {
   return (
-    <div className='flex flex-col w-full px-28 py-10'>
+    <div className='flex flex-col w-full md:px-28 px-4 md:py-10 py-4'>
           <div className='flex items-center space-x-5'>
              <h5 className='font-semibold text-3xl'>{seller?.name}</h5>
             

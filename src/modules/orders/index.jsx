@@ -7,11 +7,8 @@ import { useState } from 'react'
 
 export default function Orders() {
     const [active,setActive]=useState("")
-    useEffect(() => {
-       
+    useEffect(() => {  
         window.scrollTo(0, 0);
-   
-      
     }, []);
   
     useEffect(()=>{
@@ -21,10 +18,6 @@ export default function Orders() {
         setActive(lastPart )
 
     })
-
-    console.log(active)
-
- 
   return (
 
     <Layout>
@@ -32,7 +25,6 @@ export default function Orders() {
                 <div className='flex flex-col w-3/4 space-y-6'> 
                         <div className='flex w-full justify-between '>
                             <h5 className='text-4xl font-semibold '>My orders</h5>
-
                         </div>
 
 
@@ -55,10 +47,10 @@ export default function Orders() {
 
                         <div className='w-full py-10 '>
                                 <div className='border rounded-full flex items-center w-1/3 justify-between'>
-                                {[{text:"Active",link:""},{text:"Completed",link:"completed"},{text:"Cancelled",link:"cancelled"}].map((item)=>{
-                                                const part =`${"/" +item?.link}`
-                                                return(
-                                                <>
+                                     {[{text:"Active",link:""},{text:"Completed",link:"completed"},{text:"Cancelled",link:"cancelled"}].map((item)=>{
+                                            const part =`${"/" +item?.link}`
+                                        return(
+                                           <>
                                                 {active ==="orders"?
                                                         <Link to={item?.link}>
                                                                 <button className={`${"" ==item?.link?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setActive(item?.link)}>{item?.text}</button>
@@ -66,17 +58,12 @@ export default function Orders() {
                                                         :
                                                         <Link to={item?.link}>
                                                         <button className={`${active ==item?.link?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setActive(item?.link)}>{item?.text}</button>
-                                                    </Link>
-
-
-                                                }
-                                            
-                                                </>
-                                            
-
+                                                    </Link>   
+                                                    } 
+                                             </>
                                                 )
 
-                                            })}
+                                         })}
                                 </div>
 
                         </div>
