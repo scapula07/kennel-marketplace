@@ -27,7 +27,7 @@ export default function Product() {
       },[product])
   return (
     <Layout>
-            <div className='h-full w-full flex flex-col px-28 py-10'>
+            <div className='h-full w-full flex flex-col md:px-28 py-10'>
                   <div>
 
                   </div>
@@ -39,7 +39,7 @@ export default function Product() {
 
                   </div>
 
-                  <div className='flex w-full space-x-8 '>
+                  <div className='flex md:flex-row flex-col w-full space-x-8 '>
                          <Details
                             product={product} 
                          />

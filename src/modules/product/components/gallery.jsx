@@ -7,7 +7,7 @@ import gal5 from "../../../assets/gal5.png"
 
 export default function Gallery({images}) {
   return (
-    <div className='flex w-full space-x-8 justify-between'>
+    <div className='flex w-full space-x-8 justify-between md:px-0 px-4'>
          <div className='w-1/2'>
               <img 
                 src={images[0]}

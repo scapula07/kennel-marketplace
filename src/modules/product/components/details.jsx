@@ -5,10 +5,10 @@ import { FaStar } from "react-icons/fa";
 export default function Details({product}) {
      const [select,setSelect]=useState("info")
   return (
-    <div className='flex flex-col w-3/5 py-6 space-y-4 '>
+    <div className='flex flex-col md:w-3/5 w-full py-6 space-y-4 px-4 md:px-0'>
           <h5 className='text-2xl font-semibold'>{product?.name}</h5>
 
-          <div className='border rounded-full flex items-center w-2/5 justify-between'>
+          <div className='border rounded-full flex items-center md:w-2/5 w-3/5 justify-between'>
               <button className={`${select =="info"?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setSelect("info")}>Information</button>
               <button className={`${select =="payment"?'rounded-full py-3 bg-green-900 px-6 text-white text-sm':'rounded-full py-3 hover:bg-green-900 px-6 text-black hover:text-white text-sm'}`} onClick={()=>setSelect("payment")}>Reviews</button>
 

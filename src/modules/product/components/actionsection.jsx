@@ -77,12 +77,10 @@ export default function Actionsection({product}) {
         }
  
 
-        function calculateAverageRating(reviews) {
-    
+      function calculateAverageRating(reviews) { 
           let sum = 0;
           let count = 0;
       
-   
           reviews.forEach(review => {
               sum += review.rating;
               count++;
@@ -93,40 +91,31 @@ export default function Actionsection({product}) {
       }
         
   return (
-    <div className='flex w-1/2 flex-col py-6 space-y-6'>
-
-         <div className='flex flex-col'>
+    <div className='flex md:w-1/2 w-full flex-col py-6 space-y-6  md:px-0'>
+         <div className='flex flex-col w-5/6 md:w-full'>
                 <div className='flex items-center justify-between'> 
                     <h5 className='font-semibold text-3xl'>{product?.price} {product?.currency}</h5>
-                    <h5 className='bg-white flex items-center justify-center p-1.5 rounded-full'>
+                     <h5 className='bg-white flex items-center justify-center p-1.5 rounded-full'>
                             <FaRegBookmark 
                                 className='text-blue-600 text-xl'
-                            />
-
-                        </h5>
+                             />
+                       </h5>
                 </div>
-
-               <div className='flex items-center'>
-                  <h5 className='text-sm text-slate-500'>Rating {product?.reviews?.length >0&&calculateAverageRating(product?.reviews)} of 5</h5>
-                  <h5 className='bg-white flex items-center p-2 rounded-full'>
+               <div className='flex items-center w-full'>
+                    <h5 className='text-sm text-slate-500'>Rating {product?.reviews?.length >0&&calculateAverageRating(product?.reviews)} of 5</h5>
+                    <h5 className='bg-white flex items-center p-2 rounded-full'>
                         {product?.reviews?.length >0&&Array(calculateAverageRating(product?.reviews)).fill(1)?.map(()=>{
                           return(
                              <MdOutlineStar 
-                               className='text-yellow-500 '
+                                 className='text-yellow-500'
                              />
                           )
-                        })
-
-                        }
-
-                      </h5>
-                
+                        })}
+                   </h5>   
               </div>
-
          </div>
 
-
-         <div className='flex flex-col space-y-4'>
+         <div className='flex flex-col space-y-4 w-4/5 md:w-full'>
                     <div className='bg-white rounded-lg py-3 px-4 flex items-center rounded-xl shadow-sm justify-between'>
                             <div className='flex items-center space-x-4'>
                                   {seller?.img?.length !=undefined?
@@ -136,16 +125,13 @@ export default function Actionsection({product}) {
                                         />
                                         :
                                         <h5 className='rounded-full bg-orange-400 text-white text-lg font-semibold h-10 w-10 flex items-center justify-center'>{seller?.name?.slice(0,1)}</h5>
-
-
-                                  }
-                               
-                                    <div className='flex flex-col'>
+                                  }                       
+                                  <div className='flex flex-col'>
                                         <h5 className='text-xl font-semibold text-slate-600'>{seller?.name}</h5>
                                         <h5 className='text-sm text-slate-400 font-light'>{""}</h5>
-
                                     </div>
                               </div>
+
                               <Link to="/seller"
                                        state={{
                                         seller
@@ -155,12 +141,7 @@ export default function Actionsection({product}) {
                                     className='text-blue-500 text-3xl '
                                   />
                             </Link>
-                          
-
-
                     </div>
-
-
 
                     <div className='bg-slate-200 rounded-lg py-3 px-4 flex items-center rounded-xl shadow-sm justify-between'>
                             <div className='flex items-center space-x-4'>
@@ -172,23 +153,16 @@ export default function Actionsection({product}) {
                                  
 
                                     </div>
-                              </div>
-
-                            
-
+                              </div>                  
                     </div>
-
-         </div>
-
-
+          </div>
          <div className='flex flex-col space-y-4'>
-              {product?.sizes.map((text)=>{
+              {product?.sizes?.map((text)=>{
                  return(
                      <div className='rounded-full border px-4 py-2 flex items-center space-x-3'> 
                        <input 
                           type={"radio"}
                        />
-
                        <h5 className='font-light text-slate-700 text-lg'>{text?.label}({text?.value}kg)</h5>
                     </div>
                  )
@@ -197,7 +171,7 @@ export default function Actionsection({product}) {
          </div>
 
 
-         <div className='flex flex-col space-y-12'>
+         <div className='flex flex-col space-y-12 md:w-full w-4/5'>
 
                     <div className='flex flex-col w-1/5 space-y-1'>
                          <h5 className='text-slate-600'>Quantity</h5>
