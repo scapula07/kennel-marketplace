@@ -82,6 +82,19 @@ useEffect(()=>{
                                  </div> 
                        </Link>
                     }
+                  <Link to={"/account"}>
+                                {currentUser?.img?.length ===0?
+                                      <h5 className='rounded-full bg-orange-400 text-white font-semibold text-sm p-1 border-2 border-white lg:w-8 lg:h-8 w-10 h-10 flex items-center justify-center'
+                                        >
+                                          {currentUser?.name?.slice(0,1)}                                           
+                                      </h5>
+                                        :
+                                        <img 
+                                          src={currentUser?.img}
+                                          className="rounded-full lg:w-8 lg:h-8 w-10 h-10"
+                                        />
+                                    }      
+                      </Link>
               {isMenu?
                  <MdOutlineClose
                       className='text-4xl text-gray-700'

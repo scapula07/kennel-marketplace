@@ -60,9 +60,14 @@ export default function Menu() {
              {[{text:"Home",link:"/"},{text:"Marketplace",link:"/market"},{text:"Sellers",link:"/sellers"}].map((item)=>{
                     return(
                         <Link to={item?.link}>
-                            <h5 className={`${active ==item?.link ? 'font-light font-semibold text-orange-800':"font-light hover:font-semibold hover:text-orange-800"}`}>{item?.text}</h5>
+                            <h5 className={`${active ==item?.link ? ' text-2xl text-orange-800':"font-light hover:font-semibold hover:text-orange-800"}`}>{item?.text}</h5>
                         </Link>
                     )})}
+                       <Link to={"/profile"}>
+                            <h5 className='flex '>
+                                <span>Profile</span>
+                            </h5>
+                        </Link>
                        <Link to={"/messages"}>
                             <h5 className='flex '>
                                 <span>Messages</span>
@@ -80,7 +85,9 @@ export default function Menu() {
                                 }
                             </h5>
                         </Link>
-               <>
+                   <>
+             
+              
                 {currentUser?.role==="breeder"?
                     <>
                     {currentUser?.status==="active"?
@@ -110,6 +117,11 @@ export default function Menu() {
                     </Link>
                     }
                 </>
+                {currentUser?.id?.length ==undefined&&
+                     <Link to={"/login"}>
+                           <button className='text-slate-600 py-1.5 text-sm px-4 rounded-lg border border-blue-600'>Login</button>
+                       </Link>
+                   }
 
 
 

@@ -110,8 +110,8 @@ export default function Breader() {
           />
 
           <div className='absolute top-0 w-full h-full '>
-              <div className='w-full h-full flex items-center justify-center relative z-30'>
-                   <div className='bg-white w-2/5  rounded-lg  relative z-30 px-6 py-4' style={{background: "#F3F3F3"}}>
+              <div className='w-full h-full flex items-center justify-center relative z-30 px-4 md:px-0'>
+                   <div className='bg-white md:w-2/5 w-full rounded-lg  relative z-30 px-6 py-4' style={{background: "#F3F3F3"}}>
                             <div className='flex justify-end '>
                                 <IoMdClose 
                                 className='text-3xl'
